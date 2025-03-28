@@ -269,6 +269,7 @@ defmodule TourinItWeb.CoreComponents do
       <.input name="my-input" errors={["oh no!"]} />
   """
   attr :id, :any, default: nil
+  attr :live, :boolean, default: false
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
@@ -292,7 +293,7 @@ defmodule TourinItWeb.CoreComponents do
                 multiple pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+    errors = if !assigns[:live] || Phoenix.Component.used_input?(field), do: field.errors, else: []
 
     assigns
     |> assign(field: nil, id: assigns.id || field.id)

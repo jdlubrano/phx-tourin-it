@@ -1,0 +1,24 @@
+<.header>
+  Listing Tours
+  <:actions>
+    <.link href={~p"/organize/tours/new"}>
+      <.button>New Tour</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="tours" rows={@tours} row_click={&JS.navigate(~p"/organize/tours/#{&1}")}>
+  <:col :let={tour} label="Name">{tour.name}</:col>
+  <:col :let={tour} label="Slug">{tour.slug}</:col>
+  <:action :let={tour}>
+    <div class="sr-only">
+      <.link navigate={~p"/organize/tours/#{tour}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/organize/tours/#{tour}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={tour}>
+    <.link href={~p"/organize/tours/#{tour}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

@@ -20,6 +20,12 @@ defmodule TourinItWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/organize", TourinItWeb.Organize do
+    pipe_through :browser
+
+    resources "/tours", TourController
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", TourinItWeb do
   #   pipe_through :api

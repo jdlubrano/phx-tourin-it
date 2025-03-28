@@ -3,6 +3,7 @@ defmodule TourinIt.Organize do
   The Organize context.
   """
 
+  import Ecto.Changeset
   import Ecto.Query, warn: false
   alias TourinIt.Repo
 
@@ -50,11 +51,12 @@ defmodule TourinIt.Organize do
 
   """
   def create_tour(attrs \\ %{}, attempt \\ 0) do
-    name = Map.get(attrs, :name)
-    attrs_with_slug = Map.put(attrs, :slug, generate_slug(name, attempt))
+    changeset = change_tour(%Tour{}, attrs)
+    name = get_change(changeset, :name)
+    changeset = put_change(changeset, :slug, generate_slug(name, attempt))
 
     result = %Tour{}
-             |> Tour.changeset(attrs_with_slug)
+             |> Tour.changeset(changeset.changes)
              |> Repo.insert()
 
     case result do
@@ -99,7 +101,7 @@ defmodule TourinIt.Organize do
   """
   def update_tour(%Tour{} = tour, attrs) do
     tour
-    |> Tour.changeset(Map.delete(attrs, :slug))
+    |> change_tour(attrs)
     |> Repo.update()
   end
 
@@ -129,6 +131,8 @@ defmodule TourinIt.Organize do
 
   """
   def change_tour(%Tour{} = tour, attrs \\ %{}) do
-    Tour.changeset(tour, attrs)
+    tour
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
   end
 end
