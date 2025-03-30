@@ -28,7 +28,8 @@ defmodule TourinItWeb.Organize.TourController do
 
   def show(conn, %{"id" => id}) do
     tour = Organize.get_tour!(id)
-    render(conn, :show, tour: tour)
+    tour_sessions = Organize.list_tour_sessions(tour)
+    render(conn, :show, tour: tour, tour_sessions: tour_sessions)
   end
 
   def edit(conn, %{"id" => id}) do
