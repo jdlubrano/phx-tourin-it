@@ -1,8 +1,8 @@
+<.back navigate={~p"/organize/tours"}>Back to tours</.back>
+
 <.header>
   Edit Tour {@tour.id}
   <:subtitle>Use this form to manage tour records in your database.</:subtitle>
 </.header>
 
 <.tour_form changeset={@changeset} action={~p"/organize/tours/#{@tour}"} />
-
-<.back navigate={~p"/organize/tours"}>Back to tours</.back>

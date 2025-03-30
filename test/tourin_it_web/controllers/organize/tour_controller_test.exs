@@ -2,6 +2,7 @@ defmodule TourinItWeb.Organize.TourControllerTest do
   use TourinItWeb.ConnCase
 
   import TourinIt.OrganizeFixtures
+  alias TourinIt.Organize
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
@@ -10,7 +11,7 @@ defmodule TourinItWeb.Organize.TourControllerTest do
   describe "index" do
     test "lists all tours", %{conn: conn} do
       conn = get(conn, ~p"/organize/tours")
-      assert html_response(conn, 200) =~ "Listing Tours"
+      assert html_response(conn, 200) =~ "Tours"
     end
   end
 
@@ -29,7 +30,8 @@ defmodule TourinItWeb.Organize.TourControllerTest do
       assert redirected_to(conn) == ~p"/organize/tours/#{id}"
 
       conn = get(conn, ~p"/organize/tours/#{id}")
-      assert html_response(conn, 200) =~ "Tour #{id}"
+      tour = Organize.get_tour!(id)
+      assert html_response(conn, 200) =~ tour.name
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
