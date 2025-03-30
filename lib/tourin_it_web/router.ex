@@ -23,7 +23,9 @@ defmodule TourinItWeb.Router do
   scope "/organize", TourinItWeb.Organize do
     pipe_through :browser
 
-    resources "/tours", TourController
+    resources "/tours", TourController do
+      resources "/tour_sessions", TourSessionController, except: [:index, :show]
+    end
   end
 
   # Other scopes may use custom stacks.

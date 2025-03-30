@@ -25,6 +25,22 @@ defmodule TourinIt.Organize do
   @doc """
   Gets a single tour.
 
+  Returns nil if the Tour does not exist.
+
+  ## Examples
+
+      iex> get_tour!(123)
+      %Tour{}
+
+      iex> get_tour!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tour(id), do: Repo.get(Tour, id)
+
+  @doc """
+  Gets a single tour.
+
   Raises `Ecto.NoResultsError` if the Tour does not exist.
 
   ## Examples
@@ -150,6 +166,7 @@ defmodule TourinIt.Organize do
   def list_tour_sessions(tour) do
     TourSession
     |> where([ts], ts.tour_id == ^tour.id)
+    |> order_by(asc: :id)
     |> Repo.all()
   end
 
@@ -160,13 +177,25 @@ defmodule TourinIt.Organize do
 
   ## Examples
 
-      iex> get_tour_session!(123)
+      iex> get_tour_session!(%{id: 123, tour_id: 456})
       %TourSession{}
+
+      iex> get_tour_session!(id)
+      %TourSession{}
+
+      iex> get_tour_session!(id: 456, tour_id: 0)
+      ** (Ecto.NoResultsError)
 
       iex> get_tour_session!(456)
       ** (Ecto.NoResultsError)
 
   """
+  def get_tour_session!(%{id: id, tour_id: tour_id}) do
+    TourSession
+    |> Repo.get_by!(id: id, tour_id: tour_id)
+    |> Repo.preload(:tour)
+  end
+
   def get_tour_session!(id), do: Repo.get!(TourSession, id)
 
   @doc """

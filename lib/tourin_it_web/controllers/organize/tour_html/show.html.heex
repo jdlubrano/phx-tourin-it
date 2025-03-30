@@ -27,10 +27,10 @@
     <:col :let={tour_session} label="id">{tour_session.id}</:col>
     <:col :let={tour_session} label="identifier">{tour_session.identifier}</:col>
     <:action :let={tour_session}>
-      <.link navigate={~p"/organize/tour_sessions/#{tour_session}/edit"}>Edit</.link>
+      <.link navigate={~p"/organize/tours/#{@tour}/tour_sessions/#{tour_session}/edit"}>Edit</.link>
     </:action>
     <:action :let={tour_session}>
-      <.link href={~p"/organize/tour_sessions/#{tour_session}"} method="delete" data-confirm="Are you sure?">
+      <.link href={~p"/organize/tours/#{@tour}/tour_sessions/#{tour_session}"} method="delete" data-confirm="Are you sure?">
         Delete
       </.link>
     </:action>

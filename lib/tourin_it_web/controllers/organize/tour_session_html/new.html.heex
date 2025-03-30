@@ -1,0 +1,9 @@
+<.header>
+  New Tour Session
+</.header>
+
+<.tour_session_form changeset={@changeset} action={~p"/organize/tours/#{@tour}/tour_sessions"} />
+
+<div class="mt-16">
+  <.back navigate={~p"/organize/tours/#{@tour}"}>Back to {@tour.name}</.back>
+</div>
