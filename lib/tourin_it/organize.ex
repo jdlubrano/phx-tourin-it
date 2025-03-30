@@ -135,4 +135,102 @@ defmodule TourinIt.Organize do
     |> cast(attrs, [:name])
     |> validate_required([:name])
   end
+
+  alias TourinIt.Organize.TourSession
+
+  @doc """
+  Returns the list of tour_sessions.
+
+  ## Examples
+
+      iex> list_tour_sessions()
+      [%TourSession{}, ...]
+
+  """
+  def list_tour_sessions(tour) do
+    TourSession
+    |> where([ts], ts.tour_id == ^tour.id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a single tour_session.
+
+  Raises `Ecto.NoResultsError` if the Tour session does not exist.
+
+  ## Examples
+
+      iex> get_tour_session!(123)
+      %TourSession{}
+
+      iex> get_tour_session!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tour_session!(id), do: Repo.get!(TourSession, id)
+
+  @doc """
+  Creates a tour_session.
+
+  ## Examples
+
+      iex> create_tour_session(%{field: value})
+      {:ok, %TourSession{}}
+
+      iex> create_tour_session(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tour_session(attrs \\ %{}) do
+    %TourSession{}
+    |> TourSession.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a tour_session.
+
+  ## Examples
+
+      iex> update_tour_session(tour_session, %{field: new_value})
+      {:ok, %TourSession{}}
+
+      iex> update_tour_session(tour_session, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_tour_session(%TourSession{} = tour_session, attrs) do
+    tour_session
+    |> TourSession.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a tour_session.
+
+  ## Examples
+
+      iex> delete_tour_session(tour_session)
+      {:ok, %TourSession{}}
+
+      iex> delete_tour_session(tour_session)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_tour_session(%TourSession{} = tour_session) do
+    Repo.delete(tour_session)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking tour_session changes.
+
+  ## Examples
+
+      iex> change_tour_session(tour_session)
+      %Ecto.Changeset{data: %TourSession{}}
+
+  """
+  def change_tour_session(%TourSession{} = tour_session, attrs \\ %{}) do
+    TourSession.changeset(tour_session, attrs)
+  end
 end

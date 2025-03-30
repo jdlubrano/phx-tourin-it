@@ -92,4 +92,64 @@ defmodule TourinIt.OrganizeTest do
       assert %Ecto.Changeset{} = Organize.change_tour(tour)
     end
   end
+
+  describe "tour_sessions" do
+    alias TourinIt.Organize.TourSession
+
+    import TourinIt.OrganizeFixtures
+
+    @invalid_attrs %{identifier: nil}
+
+    setup do
+      {:ok, tour: tour_fixture()}
+    end
+
+    test "list_tour_sessions/0 returns all tour_sessions", %{tour: tour} do
+      tour_session = tour_session_fixture(tour)
+      other_tour = tour_fixture()
+      assert Organize.list_tour_sessions(tour) == [tour_session]
+      assert Organize.list_tour_sessions(other_tour) == []
+    end
+
+    test "get_tour_session!/1 returns the tour_session with given id", %{tour: tour} do
+      tour_session = tour_session_fixture(tour)
+      assert Organize.get_tour_session!(tour_session.id) == tour_session
+    end
+
+    test "create_tour_session/1 with valid data creates a tour_session", %{tour: tour} do
+      valid_attrs = %{identifier: "some identifier", tour_id: tour.id}
+
+      assert {:ok, %TourSession{} = tour_session} = Organize.create_tour_session(valid_attrs)
+      assert tour_session.identifier == "some identifier"
+    end
+
+    test "create_tour_session/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Organize.create_tour_session(@invalid_attrs)
+    end
+
+    test "update_tour_session/2 with valid data updates the tour_session", %{tour: tour} do
+      tour_session = tour_session_fixture(tour)
+      update_attrs = %{identifier: "some updated identifier"}
+
+      assert {:ok, %TourSession{} = tour_session} = Organize.update_tour_session(tour_session, update_attrs)
+      assert tour_session.identifier == "some updated identifier"
+    end
+
+    test "update_tour_session/2 with invalid data returns error changeset", %{tour: tour} do
+      tour_session = tour_session_fixture(tour)
+      assert {:error, %Ecto.Changeset{}} = Organize.update_tour_session(tour_session, @invalid_attrs)
+      assert tour_session == Organize.get_tour_session!(tour_session.id)
+    end
+
+    test "delete_tour_session/1 deletes the tour_session", %{tour: tour} do
+      tour_session = tour_session_fixture(tour)
+      assert {:ok, %TourSession{}} = Organize.delete_tour_session(tour_session)
+      assert_raise Ecto.NoResultsError, fn -> Organize.get_tour_session!(tour_session.id) end
+    end
+
+    test "change_tour_session/1 returns a tour_session changeset" do
+      tour_session = %TourSession{}
+      assert %Ecto.Changeset{} = Organize.change_tour_session(tour_session)
+    end
+  end
 end

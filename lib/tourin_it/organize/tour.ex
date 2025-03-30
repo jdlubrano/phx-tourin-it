@@ -1,8 +1,11 @@
 defmodule TourinIt.Organize.Tour do
   use Ecto.Schema
   import Ecto.Changeset
+  alias TourinIt.Organize.TourSession
 
   schema "tours" do
+    has_many :tour_sessions, TourSession
+
     field :name, :string
     field :slug, :string
 
