@@ -36,6 +36,11 @@ defmodule TourinItWeb.ConnCase do
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
+  def create_and_log_in_admin(%{conn: conn}) do
+    admin = TourinIt.AccountsFixtures.admin_user_fixture()
+    %{conn: log_in_user(conn, admin), admin: admin}
+  end
+
   @doc """
   Setup helper that registers and logs in users.
 

@@ -7,7 +7,7 @@ defmodule TourinIt.AccountsFixtures do
   def unique_username, do: "user#{System.unique_integer()}"
 
   def valid_user_attributes(attrs \\ %{}) do
-    Enum.into(attrs, %{username: unique_username})
+    Enum.into(attrs, %{username: unique_username()})
   end
 
   def user_fixture(attrs \\ %{}) do
@@ -16,6 +16,11 @@ defmodule TourinIt.AccountsFixtures do
       |> valid_user_attributes()
       |> TourinIt.Accounts.register_user()
 
+    user
+  end
+
+  def admin_user_fixture(attrs \\ %{}) do
+    {:ok, user} = TourinIt.Accounts.create_admin(valid_user_attributes(attrs))
     user
   end
 

@@ -1,5 +1,6 @@
 defmodule TourinItWeb.Router do
   use TourinItWeb, :router
+  import TourinItWeb.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -8,6 +9,13 @@ defmodule TourinItWeb.Router do
     plug :put_root_layout, html: {TourinItWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :maybe_create_session_from_access_token
+    plug :fetch_current_user
+  end
+
+  pipeline :admin_auth do
+    plug :browser
+    plug :require_admin_user
   end
 
   pipeline :api do
@@ -21,7 +29,7 @@ defmodule TourinItWeb.Router do
   end
 
   scope "/organize", TourinItWeb.Organize do
-    pipe_through :browser
+    pipe_through :admin_auth
 
     resources "/tours", TourController do
       resources "/tour_sessions", TourSessionController, except: [:index, :show]

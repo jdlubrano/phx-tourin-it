@@ -17,4 +17,10 @@ defmodule TourinIt.Accounts.User do
     |> validate_required([:username])
     |> unique_constraint(:username)
   end
+
+  @doc false
+  def admin_changeset(user, attrs) do
+    changeset(user, attrs)
+    |> put_change(:admin, true)
+  end
 end

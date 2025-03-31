@@ -8,6 +8,8 @@ defmodule TourinItWeb.Organize.TourControllerTest do
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
 
+  setup :create_and_log_in_admin
+
   describe "index" do
     test "lists all tours", %{conn: conn} do
       conn = get(conn, ~p"/organize/tours")

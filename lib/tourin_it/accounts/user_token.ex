@@ -11,6 +11,7 @@ defmodule TourinIt.Accounts.UserToken do
   @reset_password_validity_in_days 1
   @confirm_validity_in_days 7
   @change_email_validity_in_days 7
+  @access_validity_in_days 14
   @session_validity_in_days 60
 
   schema "users_tokens" do
@@ -20,6 +21,21 @@ defmodule TourinIt.Accounts.UserToken do
     belongs_to :user, TourinIt.Accounts.User
 
     timestamps(type: :utc_datetime, updated_at: false)
+  end
+
+  def verify_access_token_query(token) do
+    query =
+      from token in by_token_and_context_query(token, "access"),
+        join: user in assoc(token, :user),
+        where: token.inserted_at > ago(@access_validity_in_days, "day"),
+        select: user
+
+    {:ok, query}
+  end
+
+  def build_access_token(user) do
+    token = :crypto.strong_rand_bytes(@rand_size)
+    {token, %UserToken{token: token, context: "access", user_id: user.id}}
   end
 
   @doc """

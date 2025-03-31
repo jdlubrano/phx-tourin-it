@@ -13,6 +13,17 @@ defmodule TourinItWeb.UserAuth do
   @remember_me_cookie "_tourin_it_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
+  def maybe_create_session_from_access_token(conn, _opts) do
+    user = Accounts.get_user_by_access_token(conn.params["token"])
+
+    if user do
+      session_token = Accounts.generate_user_session_token(user)
+      put_token_in_session(conn, session_token)
+    else
+      conn
+    end
+  end
+
   @doc """
   Logs the user in.
 
@@ -192,6 +203,18 @@ defmodule TourinItWeb.UserAuth do
       |> halt()
     else
       conn
+    end
+  end
+
+  def require_admin_user(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You do not have access to this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/")
+      |> halt()
     end
   end
 

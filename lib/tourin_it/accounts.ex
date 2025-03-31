@@ -9,6 +9,19 @@ defmodule TourinIt.Accounts do
   alias TourinIt.Accounts.{User, UserToken}
 
   ## Database getters
+  def get_user_by_access_token(nil), do: nil
+
+  def get_user_by_access_token(token) do
+    {:ok, decoded_token} = Base.url_decode64(token, padding: false)
+    {:ok, query} = UserToken.verify_access_token_query(decoded_token)
+    Repo.one(query)
+  end
+
+  def generate_user_access_token(user) do
+    {token, user_token} = UserToken.build_access_token(user)
+    Repo.insert!(user_token)
+    Base.url_encode64(token, padding: false)
+  end
 
   @doc """
   Gets a user by username.
@@ -59,6 +72,12 @@ defmodule TourinIt.Accounts do
   def register_user(attrs) do
     %User{}
     |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_admin(attrs) do
+    %User{}
+    |> User.admin_changeset(attrs)
     |> Repo.insert()
   end
 

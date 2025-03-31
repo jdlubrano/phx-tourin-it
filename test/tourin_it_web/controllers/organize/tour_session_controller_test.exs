@@ -12,6 +12,8 @@ defmodule TourinItWeb.Organize.TourSessionControllerTest do
     {:ok, tour: tour_fixture()}
   end
 
+  setup :create_and_log_in_admin
+
   describe "new tour_session" do
     test "renders form", %{conn: conn, tour: tour} do
       conn = get(conn, ~p"/organize/tours/#{tour}/tour_sessions/new")
