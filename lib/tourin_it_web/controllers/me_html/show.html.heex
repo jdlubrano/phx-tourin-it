@@ -1,0 +1,7 @@
+<%= if @user do %>
+  <.header>
+    Welcome, {@user.username}
+  </.header>
+<% else %>
+  <p>You are not logged in.  Did you receive an access token?</p>
+<% end %>

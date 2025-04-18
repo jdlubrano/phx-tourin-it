@@ -230,11 +230,7 @@ defmodule TourinItWeb.UserAuthTest do
     test "redirects if user is not authenticated", %{conn: conn} do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
-
-      assert redirected_to(conn) == ~p"/"
-
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "You must log in to access this page."
+      assert html_response(conn, 403) =~ "You are not authorized"
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

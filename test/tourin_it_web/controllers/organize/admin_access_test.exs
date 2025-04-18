@@ -20,7 +20,8 @@ defmodule TourinItWeb.Organize.AdminAccessTest do
     test "only admins can access organize pages", %{conn: conn} do
       user = user_fixture()
       conn = get(log_in_user(conn, user), ~p"/organize/tours")
-      assert redirected_to(conn) =~ ~p"/"
+      assert conn.halted
+      assert html_response(conn, 403) =~ "You are not authorized"
     end
   end
 end

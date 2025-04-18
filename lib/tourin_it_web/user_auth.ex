@@ -5,6 +5,7 @@ defmodule TourinItWeb.UserAuth do
   import Phoenix.Controller
 
   alias TourinIt.Accounts
+  alias TourinItWeb.ErrorHTML
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -211,9 +212,9 @@ defmodule TourinItWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You do not have access to this page.")
-      |> maybe_store_return_to()
-      |> redirect(to: ~p"/")
+      |> put_status(403)
+      |> put_view(ErrorHTML)
+      |> render("403.html")
       |> halt()
     end
   end
@@ -229,9 +230,10 @@ defmodule TourinItWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_status(403)
       |> maybe_store_return_to()
-      |> redirect(to: ~p"/")
+      |> put_view(ErrorHTML)
+      |> render("403.html")
       |> halt()
     end
   end

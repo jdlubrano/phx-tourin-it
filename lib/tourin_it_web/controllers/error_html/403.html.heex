@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Tourin' It!</title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
+  </head>
+  <body class="bg-white">
+    <header class="px-4 sm:px-6 lg:px-8 border-b border-zinc-100">
+      <div class="flex items-center justify-between py-3 text-sm">
+        <img src={~p"/images/logo.svg"} width="36" />
+        <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
+          v{Application.spec(:tourin_it, :vsn)}
+        </p>
+      </div>
+    </header>
+    <main class="px-4 py-20 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-center">
+        <p>You are not authorized to view this page.</p>
+      </div>
+    </main>
+  </body>
+</html>

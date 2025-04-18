@@ -13,8 +13,11 @@ defmodule TourinItWeb.Router do
     plug :fetch_current_user
   end
 
+  pipeline :user_auth do
+    plug :require_authenticated_user
+  end
+
   pipeline :admin_auth do
-    plug :browser
     plug :require_admin_user
   end
 
@@ -28,8 +31,14 @@ defmodule TourinItWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/", TourinItWeb do
+    pipe_through [:browser, :user_auth]
+
+    get "/me", MeController, :show
+  end
+
   scope "/organize", TourinItWeb.Organize do
-    pipe_through :admin_auth
+    pipe_through [:browser, :admin_auth]
 
     resources "/tours", TourController do
       resources "/tour_sessions", TourSessionController, except: [:index, :show]
