@@ -172,6 +172,11 @@ defmodule TourinIt.Organize do
 
   @doc """
   Gets a single tour_session.
+  """
+  def get_tour_session(%{id: id, tour_id: tour_id}), do: Repo.get_by(TourSession, %{id: id, tour_id: tour_id})
+
+  @doc """
+  Gets a single tour_session.
 
   Raises `Ecto.NoResultsError` if the Tour session does not exist.
 
@@ -261,5 +266,9 @@ defmodule TourinIt.Organize do
   """
   def change_tour_session(%TourSession{} = tour_session, attrs \\ %{}) do
     TourSession.changeset(tour_session, attrs)
+  end
+
+  def change_tour_goers(%TourSession{} = tour_session, attrs \\ %{}) do
+    TourSession.tour_goers_changeset(tour_session, attrs)
   end
 end

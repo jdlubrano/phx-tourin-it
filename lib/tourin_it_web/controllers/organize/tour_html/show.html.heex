@@ -30,6 +30,9 @@
       <.link navigate={~p"/organize/tours/#{@tour}/tour_sessions/#{tour_session}/edit"}>Edit</.link>
     </:action>
     <:action :let={tour_session}>
+      <.link navigate={~p"/organize/tours/#{@tour}/tour_sessions/#{tour_session}/tour_goers/edit"}>Manage tour goers</.link>
+    </:action>
+    <:action :let={tour_session}>
       <.link href={~p"/organize/tours/#{@tour}/tour_sessions/#{tour_session}"} method="delete" data-confirm="Are you sure?">
         Delete
       </.link>
