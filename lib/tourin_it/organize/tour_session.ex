@@ -3,11 +3,12 @@ defmodule TourinIt.Organize.TourSession do
   import Ecto.Changeset
   alias TourinIt.Organize.Tour
   alias TourinIt.Repo
+  alias TourinIt.TourGoers.TourGoer
 
   schema "tour_sessions" do
     belongs_to :tour, Tour
 
-    has_many :tour_goers, TourinIt.TourGoers.TourGoer, preload_order: [asc: :id]
+    has_many :tour_goers, TourGoer, preload_order: [asc: :id], on_replace: :delete_if_exists
 
     field :identifier, :string
 
@@ -28,6 +29,6 @@ defmodule TourinIt.Organize.TourSession do
     tour_session
     |> Repo.preload(:tour_goers)
     |> cast(attrs, [])
-    |> cast_assoc(:tour_goers, with: &TourinIt.TourGoers.TourGoer.changeset/2)
+    |> cast_assoc(:tour_goers, with: &TourGoer.changeset/2)
   end
 end

@@ -6,4 +6,7 @@
   Edit Tour Session {@tour_session.identifier} Tour Goers
 </.header>
 
-<.tour_goers_form changeset={@changeset} action={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}/tour_goers"} />
+<.tour_goers_form
+  action={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}/tour_goers"}
+  changeset={@changeset}
+/>

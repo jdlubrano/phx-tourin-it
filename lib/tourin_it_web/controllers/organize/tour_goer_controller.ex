@@ -7,9 +7,24 @@ defmodule TourinItWeb.Organize.TourGoerController do
 
   def edit(conn, _params) do
     changeset = Organize.change_tour_goers(conn.assigns.tour_session)
-    # tour_goers = Organize.list_tour_goers(conn.assigns.tour_session)
-
     render(conn, :edit, changeset: changeset)
+  end
+
+  def update(conn, %{"tour_session" => tour_session_params}) do
+    user_ids =
+      tour_session_params["tour_goer_user_ids"] ||
+        Enum.map(conn.assigns.tour_session.tour_goers, &(&1.user_id))
+
+    case Organize.update_tour_goers(conn.assigns.tour_session, user_ids) do
+      {:ok, tour_session} ->
+        conn
+        |> put_flash(:info, "Tour session updated successfully.")
+        |> redirect(to: ~p"/organize/tours/#{tour_session.tour_id}")
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect changeset
+        render(conn, :edit, changeset: changeset)
+    end
   end
 
   defp load_tour_session(conn, _options) do

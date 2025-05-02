@@ -1,1 +1,24 @@
-<p>Form placeholder</p>
+<.simple_form for={@changeset} action={@action}>
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+
+  <ul>
+    <li :for={{username, id, checked} <- tour_goer_user_options(@changeset)}>
+      <label class="flex items-center gap-4 text-zinc-600">
+        <input
+          type="checkbox"
+          name="tour_session[tour_goer_user_ids][]"
+          checked={checked}
+          value={id}
+          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+        />
+        {username}
+      </label>
+    </li>
+  </ul>
+
+  <:actions>
+    <.button>Save</.button>
+  </:actions>
+</.simple_form>

@@ -1,16 +1,38 @@
 defmodule TourinIt.Seeds.Dev do
-  def generate_access_token(admin) when is_binary(admin) do
-    {:ok, admin} = TourinIt.Accounts.create_admin(%{username: admin})
-    generate_access_token(admin)
+  require Logger
+
+  alias TourinIt.Accounts
+  alias TourinIt.Accounts.User
+  alias TourinIt.Repo
+
+  def find_or_create_user(username) do
+    user = Accounts.get_user_by_username(username)
+
+    if is_nil(user) do
+      {:ok, user} = Accounts.register_user(%{username: username})
+      Logger.info("Created User #{user.id} for #{username}")
+      user
+    else
+      Logger.info("User #{user.id} exists for #{username}")
+      user
+    end
   end
 
-  def generate_access_token(admin = %TourinIt.Accounts.User{}) do
-    TourinIt.Accounts.generate_user_access_token(admin)
+  def find_or_create_admin(username) do
+    {:ok, admin} = find_or_create_user(username)
+                   |> User.admin_changeset(%{})
+                   |> Repo.update()
+
+    admin
+  end
+
+  def generate_access_token(user = %TourinIt.Accounts.User{}) do
+    access_token = Accounts.generate_user_access_token(user)
+    Logger.info("Login as #{user.username} at http://localhost:4000/organize/tours?token=#{access_token}")
   end
 end
 
-admin_username = "admin"
-admin = TourinIt.Accounts.get_user_by_username(admin_username)
-access_token = TourinIt.Seeds.Dev.generate_access_token(admin || admin_username)
+Enum.each(["andrew", "scott"], &TourinIt.Seeds.Dev.find_or_create_user/1)
 
-IO.puts "Login as #{admin_username} at http://localhost:4000/organize/tours?token=#{access_token}"
+admin = TourinIt.Seeds.Dev.find_or_create_admin("admin")
+TourinIt.Seeds.Dev.generate_access_token(admin)
