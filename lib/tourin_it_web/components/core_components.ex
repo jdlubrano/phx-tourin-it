@@ -574,6 +574,21 @@ defmodule TourinItWeb.CoreComponents do
     """
   end
 
+  attr :navigate, :any, required: true
+  attr :class, :string, default: ""
+  slot :inner_block, required: true
+
+  def text_link(assigns) do
+    ~H"""
+    <.link
+      navigate={@navigate}
+      class={["text-sm text-zinc-700 hover:text-zinc-500 underline", @class]}
+    >
+      {render_slot(@inner_block)}
+    </.link>
+    """
+  end
+
   @doc """
   Renders a [Heroicon](https://heroicons.com).
 
