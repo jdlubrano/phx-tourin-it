@@ -41,6 +41,8 @@ defmodule TourinItWeb.Router do
     pipe_through [:browser, :admin_auth]
 
     resources "/tours", TourController do
+      live "/tour_sessions/:id", TourSessionLive
+
       resources "/tour_sessions", TourSessionController, except: [:index, :show] do
         get "/tour_goers/edit", TourGoerController, :edit
         put "/tour_goers", TourGoerController, :update

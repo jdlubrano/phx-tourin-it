@@ -19,7 +19,7 @@ defmodule TourinItWeb.Organize.TourGoerController do
       {:ok, tour_session} ->
         conn
         |> put_flash(:info, "Tour session updated successfully.")
-        |> redirect(to: ~p"/organize/tours/#{tour_session.tour_id}")
+        |> redirect(to: ~p"/organize/tours/#{tour_session.tour_id}/tour_sessions/#{tour_session}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         IO.inspect changeset
