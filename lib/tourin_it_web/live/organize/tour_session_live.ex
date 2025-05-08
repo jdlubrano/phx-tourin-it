@@ -40,7 +40,14 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     }
   end
 
-  def handle_event("inc_temperature", _params, socket) do
-    {:noreply, update(socket, :temperature, &(&1 + 1))}
+  def handle_event("generate_access_token", %{"user_id" => user_id}, socket) do
+    user = Accounts.get_user!(user_id)
+    encoded_token = Accounts.generate_user_access_token(user)
+
+    updated = update(socket, :user_access_tokens, fn user_access_tokens ->
+      Map.put(user_access_tokens, user.id, %{encoded_token: encoded_token})
+    end)
+
+    {:noreply, updated}
   end
 end

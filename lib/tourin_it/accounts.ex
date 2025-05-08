@@ -112,11 +112,11 @@ defmodule TourinIt.Accounts do
     :ok
   end
 
-  def newest_tokens_for_users(user_ids) do
+  def newest_tokens_for_users(user_ids, tokens_context \\ "access") do
     query = from t in UserToken,
       left_join: t2 in UserToken,
-      on: t.user_id == t2.user_id and t.inserted_at < t2.inserted_at,
-      where: t.user_id in ^user_ids and is_nil(t2.id),
+      on: t.user_id == t2.user_id and t.context == t2.context and t.inserted_at < t2.inserted_at,
+      where: t.user_id in ^user_ids and t.context == ^tokens_context and is_nil(t2.id),
       select: t
 
     query

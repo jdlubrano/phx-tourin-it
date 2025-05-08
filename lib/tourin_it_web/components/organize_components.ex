@@ -15,8 +15,15 @@ defmodule TourinItWeb.OrganizeComponents do
           {@user_access_tokens[tg.user_id].encoded_token}
         </span>
       </:col>
-      <:action :let={_tg}>
-        <button phx-click="generate_access_token">Generate access token</button>
+      <:action :let={tg}>
+        <button type="button" phx-click="generate_access_token" phx-value-user_id={tg.user_id}
+          class={[
+            "phx-submit-loading:opacity-75 rounded-lg bg-green-200 hover:bg-green-100 py-1 px-2",
+            "text-sm font-semibold leading-6 text-zinc-700 active:text-zinc-700/80",
+          ]}
+        >
+          Generate access token
+        </button>
       </:action>
     </.table>
     """
