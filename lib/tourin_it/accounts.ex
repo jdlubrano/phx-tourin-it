@@ -20,7 +20,7 @@ defmodule TourinIt.Accounts do
   def generate_user_access_token(user) do
     {token, user_token} = UserToken.build_access_token(user)
     Repo.insert!(user_token)
-    Base.url_encode64(token, padding: false)
+    encode_token(token)
   end
 
   @doc """
@@ -110,5 +110,24 @@ defmodule TourinIt.Accounts do
   def delete_user_session_token(token) do
     Repo.delete_all(UserToken.by_token_and_context_query(token, "session"))
     :ok
+  end
+
+  def newest_tokens_for_users(user_ids) do
+    query = from t in UserToken,
+      left_join: t2 in UserToken,
+      on: t.user_id == t2.user_id and t.inserted_at < t2.inserted_at,
+      where: t.user_id in ^user_ids and is_nil(t2.id),
+      select: t
+
+    query
+    |> Repo.all
+    |> Enum.reduce(%{}, fn t, tokens ->
+      val = Map.merge(t, %{encoded_token: encode_token(t.token)})
+      Map.merge(tokens, %{t.user_id => val})
+    end)
+  end
+
+  defp encode_token(token) do
+    Base.url_encode64(token, padding: false)
   end
 end

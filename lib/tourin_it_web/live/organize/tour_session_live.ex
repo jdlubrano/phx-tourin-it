@@ -3,7 +3,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
 
   import TourinItWeb.OrganizeComponents
 
-  alias TourinIt.{Organize, Repo}
+  alias TourinIt.{Accounts, Organize, Repo}
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
@@ -13,7 +13,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     <.header class="mb-8">Tour Session {@tour_session.identifier}</.header>
 
     <section>
-      <.tour_goers_table tour_goers={@tour_session.tour_goers} />
+      <.tour_goers_table tour_goers={@tour_session.tour_goers} user_access_tokens={@user_access_tokens} />
       <div class="mt-2">
         <.text_link navigate={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}/tour_goers/edit"}>
           Edit tour goers
@@ -27,7 +27,17 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     tour_session = Organize.get_tour_session!(%{id: id, tour_id: tour_id})
                    |> Repo.preload([:tour, tour_goers: :user])
 
-    {:ok, assign(socket, :tour_session, tour_session)}
+    user_access_tokens =
+      tour_session.tour_goers
+      |> Enum.map(&(&1.user_id))
+      |> Accounts.newest_tokens_for_users
+
+    {
+      :ok,
+      socket
+      |> assign(:tour_session, tour_session)
+      |> assign(:user_access_tokens, user_access_tokens)
+    }
   end
 
   def handle_event("inc_temperature", _params, socket) do
