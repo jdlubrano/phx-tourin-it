@@ -13,6 +13,10 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     <.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>Back to {@tour_session.tour.name}</.back>
     <.header class="mb-8">Tour Session {@tour_session.identifier}</.header>
 
+    <.live_component module={TourStopsLive} id="tour_stops" tour_session={@tour_session} />
+
+    <hr class="mt-8 mb-16" />
+
     <section>
       <.tour_goers_table tour_goers={@tour_session.tour_goers} user_access_tokens={@user_access_tokens} />
       <div class="mt-2">
@@ -21,16 +25,12 @@ defmodule TourinItWeb.Organize.TourSessionLive do
         </.text_link>
       </div>
     </section>
-
-    <hr class="my-8" />
-
-    <.live_component module={TourStopsLive} id="tour_stops" tour_stops={[1, 2]} />
     """
   end
 
   def mount(%{"tour_id" => tour_id, "id" => id}, _session, socket) do
     tour_session = Organize.get_tour_session!(%{id: id, tour_id: tour_id})
-                   |> Repo.preload([:tour, tour_goers: :user])
+                   |> Repo.preload([:tour, :tour_stops, tour_goers: :user])
 
     user_access_tokens =
       tour_session.tour_goers
