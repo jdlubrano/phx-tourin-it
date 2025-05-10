@@ -4,6 +4,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
   import TourinItWeb.OrganizeComponents
 
   alias TourinIt.{Accounts, Organize, Repo}
+  alias TourinItWeb.Organize.Components.TourStopsLive
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
@@ -20,6 +21,10 @@ defmodule TourinItWeb.Organize.TourSessionLive do
         </.text_link>
       </div>
     </section>
+
+    <hr class="my-8" />
+
+    <.live_component module={TourStopsLive} id="tour_stops" tour_stops={[1, 2]} />
     """
   end
 
