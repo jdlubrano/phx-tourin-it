@@ -11,7 +11,7 @@ defmodule TourinIt.TourGoersFixtures do
   @doc """
   Generate a tour_goer.
   """
-  def tour_goer_fixture(user \\ user_fixture(), tour_session \\ tour_session_fixture(tour_fixture())) do
+  def tour_goer_fixture(user \\ user_fixture(), tour_session \\ tour_session_fixture()) do
     {:ok, tour_goer} = TourinIt.TourGoers.create_tour_goer(
       %{tour_session_id: tour_session.id, user_id: user.id}
     )

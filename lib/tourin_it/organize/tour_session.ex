@@ -4,11 +4,13 @@ defmodule TourinIt.Organize.TourSession do
   alias TourinIt.Organize.Tour
   alias TourinIt.Repo
   alias TourinIt.TourGoers.TourGoer
+  alias TourinIt.TourStops.TourStop
 
   schema "tour_sessions" do
     belongs_to :tour, Tour
 
     has_many :tour_goers, TourGoer, preload_order: [asc: :id], on_replace: :delete_if_exists
+    has_many :tour_stops, TourStop, preload_order: [desc: :start_date], on_replace: :raise
 
     field :identifier, :string
 

@@ -19,7 +19,7 @@ defmodule TourinIt.OrganizeFixtures do
   @doc """
   Generate a tour_session.
   """
-  def tour_session_fixture(tour, attrs \\ %{}) do
+  def tour_session_fixture(tour \\ tour_fixture(), attrs \\ %{}) do
     {:ok, tour_session} =
       attrs
       |> Enum.into(%{
