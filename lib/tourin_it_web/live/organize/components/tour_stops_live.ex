@@ -45,8 +45,8 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
     ~H"""
     <.form :let={f} for={@changeset} phx-submit="save" phx-target={@myself} class="contents">
       <.input field={f[:destination]} label="Destination" />
-      <.input field={f[:start_date]} label="Start date" />
-      <.input field={f[:end_date]} label="End date" />
+      <.input field={f[:start_date]} label="Start date" type="date" />
+      <.input field={f[:end_date]} label="End date" type="date" />
       <span class="justify-self-center self-end">
         <.input field={f[:id]} type="hidden" />
         <.button type="submit">Save</.button>
