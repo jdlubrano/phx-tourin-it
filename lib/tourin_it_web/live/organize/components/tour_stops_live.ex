@@ -5,7 +5,10 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
   alias TourinIt.TourStops.TourStop
 
   def mount(socket) do
-    socket = assign(socket, :new_tour_stop, nil)
+    socket =
+      socket
+      |> assign(:new_tour_stop, nil)
+      |> assign(:editing_tour_stops, %{})
 
     {:ok, socket}
   end
@@ -20,7 +23,10 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
     {:noreply, socket}
   end
 
-  def handle_event("cancel", %{"tour_stop_id" => tour_stop_id}, socket) do
+  def handle_event("cancel", %{"id" => id}, socket) do
+    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, false)
+
+    {:noreply, assign(socket, :editing_tour_stops, editing_tour_stops)}
   end
 
   def handle_event("cancel", _params, socket) do
@@ -28,24 +34,34 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
-    case Integer.parse(id) do
-      {int_id, _} ->
-        Repo.delete(%TourStop{id: int_id})
-        {:noreply, reload_tour_session(socket)}
-
-      :error -> {:noreply, socket}
-    end
-  end
-
-  def handle_event("save", %{"tour_stop" => %{"id" => ""} = tour_stop_params}, socket) do
-    create_params = Map.put(tour_stop_params, "tour_session_id", socket.assigns.tour_session.id)
-    {:ok, tour_stop} = TourStops.create_tour_stop(create_params)
+    int_id = String.to_integer(id)
+    Repo.delete(%TourStop{id: int_id})
 
     {:noreply, reload_tour_session(socket)}
   end
 
-  def handle_event("save", %{"tour_stop" => %{"id" => id, "destination" => destination}}, socket) do
-    {:noreply, socket}
+  def handle_event("edit", %{"id" => id}, socket) do
+    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, true)
+
+    {:noreply, assign(socket, :editing_tour_stops, editing_tour_stops)}
+  end
+
+  def handle_event("save", %{"tour_stop" => %{"id" => ""} = tour_stop_params}, socket) do
+    create_params = Map.put(tour_stop_params, "tour_session_id", socket.assigns.tour_session.id)
+    {:ok, _tour_stop} = TourStops.create_tour_stop(create_params)
+
+    {:noreply, reload_tour_session(socket)}
+  end
+
+  def handle_event("save", %{"tour_stop" => %{"id" => id} = tour_stop_params}, socket) do
+    {:ok, %TourStop{}} = TourStops.update_tour_stop(%TourStop{id: String.to_integer(id)}, tour_stop_params)
+    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, false)
+
+    socket =
+      reload_tour_session(socket)
+      |> assign(:editing_tour_stops, editing_tour_stops)
+
+    {:noreply, reload_tour_session(socket)}
   end
 
   attr :changeset, :any, required: true
@@ -60,7 +76,7 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
       <span class="justify-self-center self-end">
         <.input field={f[:id]} type="hidden" />
         <.button type="submit">Save</.button>
-        <button class="ml-2" type="button" phx-click="cancel" phx-target={@myself} phx-value-tour_stop_id={@changeset.data.id}>Cancel</button>
+        <button class="ml-2" type="button" phx-click="cancel" phx-target={@myself} phx-value-id={@changeset.data.id}>Cancel</button>
       </span>
     </.form>
     """
@@ -78,16 +94,16 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
           <div><!-- Actions --></div>
         </div>
         <div :for={tour_stop <- @tour_session.tour_stops} class="grid grid-cols-4 gap-4 mb-4">
-          <div :if={!editing?(tour_stop)} class="contents">
+          <div :if={!@editing_tour_stops[Integer.to_string(tour_stop.id)]} class="contents">
             <div>{tour_stop.destination}</div>
             <div>{tour_stop.start_date}</div>
             <div>{tour_stop.end_date}</div>
             <div>
-              <button type="button">Edit</button>
+              <button type="button" phx-click="edit" phx-value-id={tour_stop.id} phx-target={@myself}>Edit</button>
               <button class="ml-2" type="button" phx-click="delete" phx-value-id={tour_stop.id} phx-target={@myself}>Delete</button>
             </div>
           </div>
-          <.tour_stop_form :if={editing?(tour_stop)} changeset={changeset(@tour_stop)} myself={@myself} />
+          <.tour_stop_form :if={@editing_tour_stops[Integer.to_string(tour_stop.id)]} changeset={changeset(tour_stop)} myself={@myself} />
         </div>
       </div>
 
@@ -105,10 +121,6 @@ defmodule TourinItWeb.Organize.Components.TourStopsLive do
   end
 
   defp changeset(%TourStop{} = tour_stop), do: TourStops.change_tour_stop(tour_stop)
-
-  defp editing?(%TourStop{} = tour_stop) do
-    false
-  end
 
   defp reload_tour_session(socket) do
     tour_session =

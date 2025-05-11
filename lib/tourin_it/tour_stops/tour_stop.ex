@@ -18,4 +18,11 @@ defmodule TourinIt.TourStops.TourStop do
     |> cast(attrs, [:destination, :start_date, :end_date, :tour_session_id])
     |> validate_required([:destination, :start_date, :end_date, :tour_session_id])
   end
+
+  @doc false
+  def update_changeset(tour_stop, attrs) do
+    tour_stop
+    |> cast(attrs, [:destination, :start_date, :end_date])
+    |> validate_required([:destination, :start_date, :end_date])
+  end
 end

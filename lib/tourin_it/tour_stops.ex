@@ -69,7 +69,7 @@ defmodule TourinIt.TourStops do
   """
   def update_tour_stop(%TourStop{} = tour_stop, attrs) do
     tour_stop
-    |> TourStop.changeset(attrs)
+    |> TourStop.update_changeset(attrs)
     |> Repo.update()
   end
 

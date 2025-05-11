@@ -48,7 +48,9 @@ defmodule TourinIt.TourStopsTest do
       tour_stop = tour_stop_fixture()
       update_attrs = %{destination: "some updated destination", start_date: ~D[2025-05-10], end_date: ~D[2025-05-10]}
 
-      assert {:ok, %TourStop{} = tour_stop} = TourStops.update_tour_stop(tour_stop, update_attrs)
+      assert {:ok, %TourStop{}} = TourStops.update_tour_stop(%TourStop{id: tour_stop.id}, update_attrs)
+
+      tour_stop = TourStops.get_tour_stop!(tour_stop.id)
       assert tour_stop.destination == "some updated destination"
       assert tour_stop.start_date == ~D[2025-05-10]
       assert tour_stop.end_date == ~D[2025-05-10]
