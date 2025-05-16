@@ -201,6 +201,14 @@ defmodule TourinIt.Organize do
     |> Repo.preload(:tour)
   end
 
+  def get_tour_session!(%{identifier: identifier, slug: slug}) do
+    query = from ts in TourSession,
+      join: t in Tour, on: ts.tour_id == t.id,
+      where: t.slug == ^slug and ts.identifier == ^identifier
+
+    Repo.one!(query)
+  end
+
   def get_tour_session!(id), do: Repo.get!(TourSession, id)
 
   @doc """

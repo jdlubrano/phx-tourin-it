@@ -7,6 +7,19 @@ defmodule TourinIt.TourStops do
   alias TourinIt.Repo
 
   alias TourinIt.TourStops.TourStop
+  alias TourinIt.Organize.{Tour, TourSession}
+
+  def upcoming(tour_session_id) do
+    {:ok, now} = DateTime.now("America/New_York")
+    today = DateTime.to_date(now)
+
+    query = from tour_stop in TourStop,
+      where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date > ^today,
+      order_by: tour_stop.end_date,
+      limit: 1
+
+    Repo.one(query)
+  end
 
   @doc """
   Returns the list of tour_stops.

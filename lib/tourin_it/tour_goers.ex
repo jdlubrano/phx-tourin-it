@@ -8,6 +8,11 @@ defmodule TourinIt.TourGoers do
 
   alias TourinIt.TourGoers.TourGoer
 
+  def invited?(user_id, tour_session_id) do
+    query = from tg in TourGoer, where: tg.user_id == ^user_id and tg.tour_session_id == ^tour_session_id
+    Repo.exists?(query)
+  end
+
   @doc """
   Gets a single tour_goer.
 

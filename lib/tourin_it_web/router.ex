@@ -35,6 +35,8 @@ defmodule TourinItWeb.Router do
     pipe_through [:browser, :user_auth]
 
     get "/me", MeController, :show
+
+    live "/tours/:tour_slug/:tour_session_identifier/upcoming", TourStopLive.Show
   end
 
   scope "/organize", TourinItWeb.Organize do

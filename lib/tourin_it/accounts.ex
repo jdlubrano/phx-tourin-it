@@ -79,6 +79,10 @@ defmodule TourinIt.Accounts do
     |> Repo.insert()
   end
 
+  def admin?(user = %User{}) do
+    Repo.exists?(from u in User, where: u.admin == true and u.id == ^user.id)
+  end
+
   def create_admin(attrs) do
     %User{}
     |> User.admin_changeset(attrs)
