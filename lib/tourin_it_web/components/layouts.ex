@@ -10,5 +10,7 @@ defmodule TourinItWeb.Layouts do
   """
   use TourinItWeb, :html
 
+  import TourinItWeb.Navbar
+
   embed_templates "layouts/*"
 end
