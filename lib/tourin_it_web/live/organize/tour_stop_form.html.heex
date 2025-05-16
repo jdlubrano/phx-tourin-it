@@ -1,0 +1,10 @@
+<.form :let={f} for={@changeset} phx-submit="save" phx-target={@target} class="contents">
+  <.input field={f[:destination]} label="Destination" />
+  <.input field={f[:start_date]} label="Start date" type="date" />
+  <.input field={f[:end_date]} label="End date" type="date" />
+  <span class="justify-self-center self-end">
+    <.input field={f[:id]} type="hidden" />
+    <.button type="submit">Save</.button>
+    <button class="ml-2" type="button" phx-click="cancel" phx-target={@target} phx-value-id={@changeset.data.id}>Cancel</button>
+  </span>
+</.form>

@@ -1,0 +1,33 @@
+<section>
+  <p class="mb-6 leading-6 text-zinc-800">Tour stops</p>
+  <div class="flex flex-col mb-4">
+    <div class="grid grid-cols-4 gap-4 text-sm text-zinc-500 border-b border-zinc-200 pb-4 mb-4">
+      <div>Destination</div>
+      <div>Start date</div>
+      <div>End date</div>
+      <div><!-- Actions --></div>
+    </div>
+    <div :for={tour_stop <- @tour_session.tour_stops} class="grid grid-cols-4 gap-4 mb-4">
+      <div :if={!@editing_tour_stops[Integer.to_string(tour_stop.id)]} class="contents">
+        <div>{tour_stop.destination}</div>
+        <div>{tour_stop.start_date}</div>
+        <div>{tour_stop.end_date}</div>
+        <div>
+          <button type="button" phx-click="edit" phx-value-id={tour_stop.id} phx-target={@myself}>Edit</button>
+          <button class="ml-2" type="button" phx-click="delete" phx-value-id={tour_stop.id} phx-target={@myself}>Delete</button>
+        </div>
+      </div>
+      <.tour_stop_form :if={@editing_tour_stops[Integer.to_string(tour_stop.id)]} changeset={changeset(tour_stop)} target={@myself} />
+    </div>
+  </div>
+
+  <%= if is_nil(@new_tour_stop) do %>
+    <button type="button" class="rounded-lg bg-green-200 py-2 px-2" phx-click="add_tour_stop" phx-target={@myself}>
+      Add tour stop
+    </button>
+  <% else %>
+    <div class="grid grid-cols-4 gap-4">
+      <.tour_stop_form changeset={changeset(@new_tour_stop)} myself={@myself} />
+    </div>
+  <% end %>
+</section>

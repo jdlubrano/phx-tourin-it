@@ -4,7 +4,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
   import TourinItWeb.OrganizeComponents
 
   alias TourinIt.{Accounts, Organize, Repo}
-  alias TourinItWeb.Organize.Components.TourStopsLive
+  alias TourinItWeb.Organize.TourStopsComponent
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
@@ -13,7 +13,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     <.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>Back to {@tour_session.tour.name}</.back>
     <.header class="mb-8">Tour Session {@tour_session.identifier}</.header>
 
-    <.live_component module={TourStopsLive} id="tour_stops" tour_session={@tour_session} />
+    <.live_component module={TourStopsComponent} id="tour_stops" tour_session={@tour_session} />
 
     <hr class="mt-8 mb-16" />
 
