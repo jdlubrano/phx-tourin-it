@@ -1,1 +1,25 @@
 <.header class="mb-8">{@tour_session.tour.name} {@tour_session.identifier}</.header>
+
+<%= if is_nil(@tour_stop) do %>
+  <p>Your organizer is still deciding on the next tour stop.</p>
+<% else %>
+  <p class="font-semibold mb-8 text-zinc-700">
+    {format_date(@tour_stop.start_date)} - {format_date(@tour_stop.end_date)}
+  </p>
+  <p class="font-semibold mb-8 text-zinc-700">{@tour_stop.destination}</p>
+
+  <div class="grid grid-cols-6 gap-y-8 text-sm font-semibold text-zinc-700">
+    <div class="contents text-center">
+      <div></div>
+      <div :for={tour_date <- @tour_stop.tour_dates}>
+        {day_of_the_week(tour_date.date)}
+      </div>
+    </div>
+    <div :for={tour_goer <- @tour_goers} class="contents">
+      <div>{tour_goer.user.username}</div>
+      <div :for={tour_date <- @tour_stop.tour_dates}>
+        {day_of_the_week(tour_date.date)}
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -2,12 +2,16 @@ defmodule TourinIt.TourStops.TourStop do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias TourinIt.TourDates.TourDate
+
   schema "tour_stops" do
     field :destination, :string
     field :start_date, :date
     field :end_date, :date
 
     belongs_to :tour_session, TourinIt.Organize.TourSession
+
+    has_many :tour_dates, TourDate, preload_order: [asc: :date]
 
     timestamps(type: :utc_datetime)
   end
