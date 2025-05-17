@@ -44,6 +44,50 @@ defmodule TourinIt.TourStopsTest do
       assert {:error, %Ecto.Changeset{}} = TourStops.create_tour_stop(@invalid_attrs)
     end
 
+    test "create_tour_stop_with_dates/1 with valid data creates a tour_stop with tour_dates" do
+      tour_session = tour_session_fixture()
+
+      valid_attrs = %{
+        destination:     "some destination",
+        start_date:      ~D[2025-05-09],
+        end_date:        ~D[2025-05-10],
+        tour_session_id: tour_session.id
+      }
+
+      assert {:ok, %TourStop{} = tour_stop} = TourStops.create_tour_stop_with_dates(valid_attrs)
+
+      tour_dates = Repo.preload(tour_stop, :tour_dates).tour_dates
+      assert length(tour_dates) == 2
+      assert Enum.map(tour_dates, &(&1.date)) == [~D[2025-05-09], ~D[2025-05-10]]
+    end
+
+    test "create_tour_stop_with_dates/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = TourStops.create_tour_stop_with_dates(@invalid_attrs)
+    end
+
+    test "set_tour_dates/1 ensures a TourDate for each day in the TourStop's date range" do
+      tour_session = tour_session_fixture()
+
+      valid_attrs = %{
+        destination:     "some destination",
+        start_date:      ~D[2025-05-09],
+        end_date:        ~D[2025-05-12],
+        tour_session_id: tour_session.id
+      }
+
+      {:ok, tour_stop} = TourStops.create_tour_stop_with_dates(valid_attrs)
+      tour_dates = Repo.preload(tour_stop, :tour_dates).tour_dates
+      expected_dates = Enum.to_list(Date.range(valid_attrs[:start_date], valid_attrs[:end_date]))
+      assert Enum.map(tour_dates, &(&1.date)) == expected_dates
+
+      retained_tour_dates = Enum.slice(tour_dates, 1..2)
+      {:ok, tour_stop} = TourStops.update_tour_stop(tour_stop, %{start_date: ~D[2025-05-10], end_date: ~D[2025-05-11]})
+      tour_stop = TourStops.set_tour_dates(tour_stop) |> Repo.preload(:tour_dates)
+
+      assert length(tour_stop.tour_dates) == 2
+      assert tour_stop.tour_dates == retained_tour_dates
+    end
+
     test "update_tour_stop/2 with valid data updates the tour_stop" do
       tour_stop = tour_stop_fixture()
       update_attrs = %{destination: "some updated destination", start_date: ~D[2025-05-10], end_date: ~D[2025-05-10]}

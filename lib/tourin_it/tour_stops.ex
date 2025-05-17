@@ -6,8 +6,8 @@ defmodule TourinIt.TourStops do
   import Ecto.Query, warn: false
   alias TourinIt.Repo
 
+  alias TourinIt.TourDates.TourDate
   alias TourinIt.TourStops.TourStop
-  alias TourinIt.Organize.{Tour, TourSession}
 
   def upcoming(tour_session_id) do
     {:ok, now} = DateTime.now("America/New_York")
@@ -66,6 +66,48 @@ defmodule TourinIt.TourStops do
     %TourStop{}
     |> TourStop.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_tour_stop_with_dates(attrs \\ %{}) do
+    Repo.transaction(fn ->
+      case create_tour_stop(attrs) do
+        {:ok, tour_stop} ->
+          set_tour_dates(tour_stop)
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
+    end)
+  end
+
+  def set_tour_dates(tour_stop = %TourStop{}) do
+    date_range = Date.range(tour_stop.start_date, tour_stop.end_date)
+
+    now = DateTime.now!("Etc/UTC") |> DateTime.truncate(:second)
+
+    placeholders = %{timestamp: now}
+
+    tour_dates = Enum.map(date_range, &%{
+      date: &1,
+      tour_stop_id: tour_stop.id,
+      inserted_at: {:placeholder, :timestamp},
+      updated_at: {:placeholder, :timestamp}
+    })
+
+    Repo.insert_all(
+      TourDate,
+      tour_dates,
+      placeholders: placeholders,
+      on_conflict: :nothing,
+      conflict_target: [:date, :tour_stop_id]
+    )
+
+    Repo.delete_all(
+      from td in TourDate,
+      where: td.tour_stop_id == ^tour_stop.id and td.date not in ^Enum.to_list(date_range)
+    )
+
+    tour_stop
   end
 
   @doc """
