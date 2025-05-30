@@ -4,7 +4,14 @@ defmodule TourinItWeb.TourStopLive.Show do
   alias TourinIt.Repo
   alias TourinIt.{Accounts, Organize, TourDates, TourGoers ,TourStops}
   alias TourinIt.TourDates.TourDate
+  alias TourinIt.TourGoers.TourGoer
   alias TourinIt.TourStops.TourStop
+
+  @availability_classes %{
+    "available"   => ["capitalize", "bg-green-100"],
+    "tbd"         => ["uppercase", "bg-yellow-100"],
+    "unavailable" => ["capitalize", "bg-red-100"]
+  }
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
@@ -15,12 +22,14 @@ defmodule TourinItWeb.TourStopLive.Show do
     tour_session = Repo.preload(tour_session, [:tour, tour_goers: :user])
     tour_stop = TourStops.upcoming(tour_session.id) |> Repo.preload(:tour_dates)
     tour_goers = Enum.sort_by(tour_session.tour_goers, &(&1.user.username), :asc)
+    surveys = TourDates.map_surveys_by_tour_date_and_tour_goer(tour_stop.tour_dates)
 
     socket =
       socket
       |> assign(:tour_session, tour_session)
       |> assign(:tour_stop, tour_stop)
       |> assign(:tour_goers, tour_goers)
+      |> assign(:surveys, surveys)
 
     {:ok, socket}
   end
@@ -32,5 +41,23 @@ defmodule TourinItWeb.TourStopLive.Show do
   end
 
   defp format_date(date), do: Calendar.strftime(date, "%B %d, %Y")
-  defp day_of_the_week(date), do: Calendar.strftime(date, "%A")
+  defp day_of_the_week(date), do: Calendar.strftime(date, "%a")
+
+  defp availability(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do
+    survey = Map.get(surveys, [tour_date.id, tour_goer.id])
+
+    if is_nil(survey), do: "tbd", else: survey.availability
+  end
+
+  defp availability_classes(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do
+    [
+      "overflow-hidden",
+      "text-center",
+      "text-ellipsis",
+      "mx-1",
+      "py-1",
+      "px-2",
+      "rounded-md"
+    ] ++ @availability_classes[availability(surveys, tour_date, tour_goer)]
+  end
 end
