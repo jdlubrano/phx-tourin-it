@@ -568,7 +568,7 @@ defmodule TourinItWeb.CoreComponents do
 
   def back(assigns) do
     ~H"""
-    <div class="mb-16">
+    <div class="mb-8 lg:mb-16">
       <.link
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
