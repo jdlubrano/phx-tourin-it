@@ -35,13 +35,12 @@ defmodule TourinItWeb.TourStopLive.Show do
   end
 
   defp ensure_invited!(current_user, tour_session) do
-    unless TourGoers.invited?(current_user.id, tour_session.id) || Accounts.admin?(current_user) do
+    unless invited?(current_user, tour_session) || Accounts.admin?(current_user) do
       raise TourinItWeb.UserNotInvitedError, "User ##{current_user.id} not invited to TourSession ##{tour_session.id}"
     end
   end
 
-  defp format_date(date), do: Calendar.strftime(date, "%B %d, %Y")
-  defp day_of_the_week(date), do: Calendar.strftime(date, "%a")
+  defp invited?(current_user, tour_session), do: TourGoers.invited?(current_user.id, tour_session.id)
 
   defp availability(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do
     survey = Map.get(surveys, [tour_date.id, tour_goer.id])

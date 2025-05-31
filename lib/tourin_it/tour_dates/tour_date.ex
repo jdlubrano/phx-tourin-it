@@ -7,6 +7,8 @@ defmodule TourinIt.TourDates.TourDate do
 
     belongs_to :tour_stop, TourinIt.TourStops.TourStop
 
+    has_many :tour_date_surveys, TourinIt.TourDates.TourDateSurvey, on_replace: :raise
+
     timestamps(type: :utc_datetime)
   end
 

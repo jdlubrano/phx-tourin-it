@@ -22,4 +22,10 @@
       </div>
     </div>
   </div>
+
+  <div :if={invited?(@current_user, @tour_session)} class="mt-16">
+    <.link navigate={~p"/tour_stops/#{@tour_stop.id}/survey"}>
+      <.button class="w-full">Provide Availability</.button>
+    </.link>
+  </div>
 <% end %>

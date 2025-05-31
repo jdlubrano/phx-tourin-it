@@ -9,8 +9,11 @@ defmodule TourinIt.TourGoers do
   alias TourinIt.TourGoers.TourGoer
 
   def invited?(user_id, tour_session_id) do
-    query = from tg in TourGoer, where: tg.user_id == ^user_id and tg.tour_session_id == ^tour_session_id
-    Repo.exists?(query)
+    Repo.exists?(invited_query(user_id, tour_session_id))
+  end
+
+  defp invited_query(user_id, tour_session_id) do
+    from tg in TourGoer, where: tg.user_id == ^user_id and tg.tour_session_id == ^tour_session_id
   end
 
   @doc """
@@ -28,6 +31,10 @@ defmodule TourinIt.TourGoers do
 
   """
   def get_tour_goer!(id), do: Repo.get!(TourGoer, id)
+
+  def get_tour_goer!(user_id, tour_session_id) do
+    Repo.one!(invited_query(user_id, tour_session_id))
+  end
 
   @doc """
   Creates a tour_goer.

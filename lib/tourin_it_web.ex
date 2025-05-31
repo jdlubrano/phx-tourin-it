@@ -90,6 +90,8 @@ defmodule TourinItWeb do
       # Core UI components
       import TourinItWeb.CoreComponents
 
+      import TourinIt.DateAndTimeHelpers
+
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
 
