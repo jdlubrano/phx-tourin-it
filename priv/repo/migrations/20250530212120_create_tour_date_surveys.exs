@@ -3,11 +3,11 @@ defmodule TourinIt.Repo.Migrations.CreateTourDateSurveys do
 
   def change do
     create table(:tour_date_surveys) do
-      add :availability, :string
+      add :availability, :string, null: false
       add :note, :string
 
-      add :tour_date_id, references(:tour_dates, on_delete: :delete_all)
-      add :tour_goer_id, references(:tour_goers, on_delete: :delete_all)
+      add :tour_date_id, references(:tour_dates, on_delete: :delete_all), null: false
+      add :tour_goer_id, references(:tour_goers, on_delete: :delete_all), null: false
 
       timestamps(type: :utc_datetime)
     end
