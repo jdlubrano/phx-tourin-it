@@ -8,7 +8,7 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
   </head>
   <body class="bg-white">
-    <.navbar />
+    <.navbar current_user={@current_user} />
     <main class="px-4 py-20 sm:px-6 lg:px-8">
       <div class="flex items-center justify-center">
         <p>You are not authorized to view this page.</p>

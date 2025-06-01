@@ -1,6 +1,8 @@
 defmodule TourinItWeb.Navbar do
   use TourinItWeb, :html
 
+  attr :current_user, :any, required: true
+
   def navbar(assigns) do
     ~H"""
     <header class="px-4 sm:px-6 lg:px-8 border-b border-zinc-100">
