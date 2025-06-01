@@ -5,7 +5,6 @@ defmodule TourinItWeb.TourStopLive.Show do
   alias TourinIt.{Accounts, Organize, TourDates, TourGoers ,TourStops}
   alias TourinIt.TourDates.TourDate
   alias TourinIt.TourGoers.TourGoer
-  alias TourinIt.TourStops.TourStop
 
   @availability_classes %{
     available:   ["capitalize", "bg-green-100"],

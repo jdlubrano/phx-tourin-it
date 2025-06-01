@@ -1,7 +1,7 @@
 defmodule TourinItWeb.TourStopSurveyLive.Edit do
   use TourinItWeb, :live_view
 
-  alias TourinIt.{Repo, TourDates, TourGoers, TourStops}
+  alias TourinIt.{Accounts, Repo, TourDates, TourGoers, TourStops}
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 

@@ -140,7 +140,7 @@ defmodule TourinIt.TourDates do
     )
   end
 
-  defp surveys_query(tour_dates \\ []) do
+  defp surveys_query(tour_dates) do
     tour_date_ids = Enum.map(tour_dates, &(&1.id))
 
     from s in TourDateSurvey,
