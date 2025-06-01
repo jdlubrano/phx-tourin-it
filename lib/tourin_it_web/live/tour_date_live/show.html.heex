@@ -1,0 +1,26 @@
+<.header>
+  Tour date {@tour_date.id}
+  <:subtitle>This is a tour_date record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/tour_dates/#{@tour_date}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit tour_date</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Date">{@tour_date.date}</:item>
+</.list>
+
+<.back navigate={~p"/tour_dates"}>Back to tour_dates</.back>
+
+<.modal :if={@live_action == :edit} id="tour_date-modal" show on_cancel={JS.patch(~p"/tour_dates/#{@tour_date}")}>
+  <.live_component
+    module={TourinItWeb.TourDateLive.FormComponent}
+    id={@tour_date.id}
+    title={@page_title}
+    action={@live_action}
+    tour_date={@tour_date}
+    patch={~p"/tour_dates/#{@tour_date}"}
+  />
+</.modal>

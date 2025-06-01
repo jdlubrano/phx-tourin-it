@@ -8,9 +8,9 @@ defmodule TourinItWeb.TourStopLive.Show do
   alias TourinIt.TourStops.TourStop
 
   @availability_classes %{
-    "available"   => ["capitalize", "bg-green-100"],
-    "tbd"         => ["uppercase", "bg-yellow-100"],
-    "unavailable" => ["capitalize", "bg-red-100"]
+    available:   ["capitalize", "bg-green-100"],
+    tbd:         ["uppercase", "bg-yellow-100"],
+    unavailable: ["capitalize", "bg-red-100"]
   }
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
@@ -45,7 +45,7 @@ defmodule TourinItWeb.TourStopLive.Show do
   defp availability(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do
     survey = Map.get(surveys, [tour_date.id, tour_goer.id])
 
-    if is_nil(survey), do: "tbd", else: survey.availability
+    if is_nil(survey), do: :tbd, else: survey.availability
   end
 
   defp availability_classes(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do

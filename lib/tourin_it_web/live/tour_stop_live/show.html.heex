@@ -16,7 +16,7 @@
       </div>
     </div>
     <div :for={tour_goer <- @tour_goers} class="contents">
-      <div class="py-1 px-2">{tour_goer.user.username}</div>
+      <div class="capitalize py-1 px-2">{tour_goer.user.username}</div>
       <div :for={tour_date <- @tour_stop.tour_dates} class={availability_classes(@surveys, tour_date, tour_goer)}>
         {availability(@surveys, tour_date, tour_goer)}
       </div>

@@ -1,0 +1,41 @@
+<.header>
+  Listing Tour dates
+  <:actions>
+    <.link patch={~p"/tour_dates/new"}>
+      <.button>New Tour date</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="tour_dates"
+  rows={@streams.tour_dates}
+  row_click={fn {_id, tour_date} -> JS.navigate(~p"/tour_dates/#{tour_date}") end}
+>
+  <:col :let={{_id, tour_date}} label="Date">{tour_date.date}</:col>
+  <:action :let={{_id, tour_date}}>
+    <div class="sr-only">
+      <.link navigate={~p"/tour_dates/#{tour_date}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tour_dates/#{tour_date}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, tour_date}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: tour_date.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="tour_date-modal" show on_cancel={JS.patch(~p"/tour_dates")}>
+  <.live_component
+    module={TourinItWeb.TourDateLive.FormComponent}
+    id={@tour_date.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tour_date={@tour_date}
+    patch={~p"/tour_dates"}
+  />
+</.modal>

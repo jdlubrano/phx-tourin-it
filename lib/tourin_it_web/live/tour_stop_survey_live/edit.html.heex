@@ -15,19 +15,18 @@
     <p class="font-semibold mb-2 text-zinc-700">{day_of_the_week(tour_date.date)} - {format_date(tour_date.date)}</p>
     <input type="hidden" name={"#{form_root}[id]"} value={survey.id} />
     <input type="hidden" name={"#{form_root}[tour_date_id]"} value={survey.tour_date_id} />
-    <input type="hidden" name={"#{form_root}[tour_goer_id]"} value={survey.tour_goer_id} />
 
     <fieldset class="grid grid-cols-3 gap-x-4">
       <label class="cursor-pointer w-full text-center p-2 rounded-md shadow-md bg-green-100 hover:bg-green-200 has-[:checked]:bg-green-300">
-        <input type="radio" name={"#{form_root}[availability]"} value="available" class="hidden">
+        <input type="radio" name={"#{form_root}[availability]"} value="available" class="hidden" checked={survey.availability == :available}>
         Available
       </label>
       <label class="cursor-pointer w-full text-center p-2 rounded-md shadow-md bg-yellow-100 hover:bg-yellow-200 has-[:checked]:bg-yellow-300">
-        <input type="radio" name={"#{form_root}[availability]"} value="tbd" class="hidden">
+        <input type="radio" name={"#{form_root}[availability]"} value="tbd" class="hidden" checked={survey.availability == :tbd}>
         TBD
       </label>
       <label class="cursor-pointer w-full text-center p-2 rounded-md shadow-md bg-red-100 hover:bg-red-200 has-[:checked]:bg-red-300">
-        <input type="radio" name={"#{form_root}[availability]"} value="unavailable" class="hidden">
+        <input type="radio" name={"#{form_root}[availability]"} value="unavailable" class="hidden" checked={survey.availability == :unavailable}>
         Unavailable
       </label>
     </fieldset>

@@ -17,9 +17,31 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
     socket =
       socket
       |> assign(:surveys, surveys)
+      |> assign(:tour_goer, tour_goer)
       |> assign(:tour_stop, tour_stop)
 
     {:ok, socket}
+  end
+
+  def handle_event("save", %{"tour_stop" => %{"tour_date_surveys" => surveys_params}}, socket) do
+    surveys = Enum.map(surveys_params, fn {_tour_date_id, survey_params} ->
+      %{
+        availability: String.to_existing_atom(survey_params["availability"]),
+        tour_date_id: String.to_integer(survey_params["tour_date_id"]),
+        tour_goer_id: socket.assigns.tour_goer.id,
+      }
+    end)
+
+    TourDates.upsert_surveys(surveys)
+
+    tour_session = socket.assigns.tour_stop.tour_session
+
+    socket =
+      socket
+      |> put_flash(:info, "Availability submitted!")
+      |> push_navigate(to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming")
+
+    {:noreply, socket}
   end
 
   defp ensure_invited!(current_user, tour_session_id) do
