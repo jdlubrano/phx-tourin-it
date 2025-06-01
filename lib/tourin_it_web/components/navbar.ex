@@ -6,8 +6,11 @@ defmodule TourinItWeb.Navbar do
     <header class="px-4 sm:px-6 lg:px-8 border-b border-zinc-100">
       <div class="flex items-center justify-between py-3 text-sm">
         <img src={~p"/images/logo.svg"} width="36" />
-        <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
-          v{Application.spec(:tourin_it, :vsn)}
+        <p class="font-medium leading-6">
+          <span :if={@current_user} class="capitalize mr-4">Hello, {@current_user.username}</span>
+          <span class="bg-brand/5 text-brand rounded-full px-2">
+            v{Application.spec(:tourin_it, :vsn)}
+          </span>
         </p>
       </div>
     </header>
