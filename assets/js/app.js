@@ -42,3 +42,25 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+window.addEventListener("phx:copy", (event) => {
+  const copied = event.detail.value;
+  navigator.clipboard.writeText(copied);
+
+  let copiedNotification = document.createElement("div");
+
+  copiedNotification.classList.add(
+    "fixed",
+    "top-3",
+    "w-full",
+    "flex",
+    "justify-center",
+    "transition-all",
+    "delay-1000"
+  );
+
+  copiedNotification.innerHTML = `<span class="rounded-lg p-3 text-sm bg-green-50">Copied ${copied}</span>`;
+
+  document.body.appendChild(copiedNotification);
+
+  setTimeout(() => copiedNotification.classList.add("opacity-0"));
+});

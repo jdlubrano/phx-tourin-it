@@ -7,7 +7,8 @@ defmodule TourinIt.Organize do
   import Ecto.Query, warn: false
   alias TourinIt.Repo
 
-  alias TourinIt.Organize.Tour
+  alias TourinIt.Organize.{Tour, TourSession}
+  alias TourinIt.TourGoers.TourGoer
 
   @doc """
   Returns the list of tours.
@@ -152,8 +153,6 @@ defmodule TourinIt.Organize do
     |> validate_required([:name])
   end
 
-  alias TourinIt.Organize.TourSession
-
   @doc """
   Returns the list of tour_sessions.
 
@@ -163,11 +162,23 @@ defmodule TourinIt.Organize do
       [%TourSession{}, ...]
 
   """
-  def list_tour_sessions(tour) do
+  def list_tour_sessions(%Tour{} = tour) do
     TourSession
     |> where([ts], ts.tour_id == ^tour.id)
     |> order_by(asc: :id)
     |> Repo.all()
+  end
+
+  def default_tour_session(nil), do: nil
+
+  def default_tour_session(%TourinIt.Accounts.User{} = user) do
+    query = from ts in TourSession,
+      join: tg in TourGoer, on: tg.tour_session_id == ts.id,
+      where: tg.user_id == ^user.id,
+      order_by: [asc: ts.id],
+      preload: [:tour]
+
+    Repo.one(query)
   end
 
   @doc """
