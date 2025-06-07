@@ -3,7 +3,7 @@ defmodule TourinItWeb.TourStopLive.Show do
 
   alias TourinIt.Repo
   alias TourinIt.{Accounts, Organize, TourDates, TourGoers ,TourStops}
-  alias TourinIt.TourDates.TourDate
+  alias TourinIt.TourDates.{TourDate, TourDateSurvey}
   alias TourinIt.TourGoers.TourGoer
 
   @availability_classes %{
@@ -41,13 +41,13 @@ defmodule TourinItWeb.TourStopLive.Show do
 
   defp invited?(current_user, tour_session), do: TourGoers.invited?(current_user.id, tour_session.id)
 
-  defp availability(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do
-    survey = Map.get(surveys, [tour_date.id, tour_goer.id])
-
-    if is_nil(survey), do: :tbd, else: survey.availability
+  defp surveys_for(surveys, tour_goer, tour_dates) do
+    Enum.map(tour_dates, fn tour_date ->
+      Map.get(surveys, [tour_date.id, tour_goer.id]) || %TourDateSurvey{availability: :tbd}
+    end)
   end
 
-  defp availability_classes(surveys, %TourDate{} = tour_date, %TourGoer{} = tour_goer) do
+  defp availability_classes(%TourDateSurvey{} = survey) do
     [
       "overflow-hidden",
       "text-center",
@@ -55,7 +55,8 @@ defmodule TourinItWeb.TourStopLive.Show do
       "mx-1",
       "py-1",
       "px-2",
+      "relative",
       "rounded-md"
-    ] ++ @availability_classes[availability(surveys, tour_date, tour_goer)]
+    ] ++ @availability_classes[survey.availability]
   end
 end

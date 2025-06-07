@@ -64,3 +64,56 @@ window.addEventListener("phx:copy", (event) => {
 
   setTimeout(() => copiedNotification.classList.add("opacity-0"));
 });
+
+function hideTooltip(element) {
+  const tooltipContent = element.dataset && element.dataset["tooltip"];
+
+  if (!tooltipContent) {
+    return;
+  }
+
+  const tooltip = document.body.querySelector(".tooltip")
+
+  if (tooltip) {
+    tooltip.remove();
+  }
+}
+
+function showTooltip(element) {
+  const tooltipContent = element.dataset && element.dataset["tooltip"];
+
+  if (!tooltipContent) {
+    return;
+  }
+
+  const boundingBox = element.getBoundingClientRect();
+
+  let tooltip = document.createElement("div");
+
+  tooltip.classList.add(
+    "absolute",
+    "rounded-lg",
+    "bg-gray-100",
+    "p-2",
+    "mt-1",
+    "text-center",
+    "text-sm",
+    "tooltip",
+    "z-99"
+  );
+
+  const width = 120;
+  const left = (boundingBox.right + boundingBox.left - width) / 2;
+
+  tooltip.style.width = `${width}px`;
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${boundingBox.bottom}px`;
+  tooltip.textContent = tooltipContent;
+
+  document.body.appendChild(tooltip);
+}
+
+window.addEventListener("focusin", (event) => showTooltip(event.target));
+window.addEventListener("focusout", (event) => hideTooltip(event.target));
+window.addEventListener("mouseover", (event) => showTooltip(event.target));
+window.addEventListener("mouseout", (event) => hideTooltip(event.target));
