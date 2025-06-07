@@ -18,7 +18,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     <hr class="mt-8 mb-16" />
 
     <section>
-      <.tour_goers_table tour_goers={@tour_session.tour_goers} user_access_tokens={@user_access_tokens} />
+      <.tour_goers_table tour_session={@tour_session} tour_goers={@tour_session.tour_goers} user_access_tokens={@user_access_tokens} />
       <div class="mt-2">
         <.text_link navigate={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}/tour_goers/edit"}>
           Edit tour goers

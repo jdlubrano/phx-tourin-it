@@ -1,6 +1,15 @@
 defmodule TourinItWeb.OrganizeComponents do
   use TourinItWeb, :html
 
+  alias TourinIt.Accounts.UserToken
+  alias TourinIt.Organize.TourSession
+  alias TourinItWeb.Router
+
+  defp login_link(%{encoded_token: encoded_token}, %TourSession{} = tour_session) do
+    "#{TourinItWeb.Endpoint.url()}?token=#{encoded_token}"
+  end
+
+  attr :tour_session, :map, required: true
   attr :tour_goers, :list, required: true
   attr :user_access_tokens, :map, default: %{}
   def tour_goers_table(assigns) do
@@ -23,6 +32,16 @@ defmodule TourinItWeb.OrganizeComponents do
           ]}
         >
           Generate access token
+        </button>
+      </:action>
+      <:action :let={tg}>
+        <button
+          :if={@user_access_tokens[tg.user_id]}
+          type="button"
+          class="rounded-lg bg-gray-200 hover:bg-gray-100 py-1 px-2 text-sm font-semibold leading-6 text-zinc-700 active:text-zinc-700/80"
+          phx-click={JS.dispatch("phx:copy", detail: %{value: login_link(@user_access_tokens[tg.user_id], @tour_session)})}
+          >
+          Copy login link
         </button>
       </:action>
     </.table>
