@@ -83,16 +83,12 @@ defmodule TourinIt.TourStops do
   def set_tour_dates(tour_stop = %TourStop{}) do
     date_range = Date.range(tour_stop.start_date, tour_stop.end_date)
 
-    now = DateTime.now!("Etc/UTC") |> DateTime.truncate(:second)
+    {placeholders, placeholder_attrs} = TourinIt.UpsertPlaceholders.timestamp_placeholders()
 
-    placeholders = %{timestamp: now}
-
-    tour_dates = Enum.map(date_range, &%{
-      date: &1,
-      tour_stop_id: tour_stop.id,
-      inserted_at: {:placeholder, :timestamp},
-      updated_at: {:placeholder, :timestamp}
-    })
+    tour_dates = Enum.map(date_range, &Enum.into(
+      %{date: &1, tour_stop_id: tour_stop.id},
+      placeholder_attrs
+    ))
 
     Repo.insert_all(
       TourDate,

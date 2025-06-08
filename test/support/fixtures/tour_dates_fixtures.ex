@@ -4,6 +4,8 @@ defmodule TourinIt.TourDatesFixtures do
   entities via the `TourinIt.TourDates` context.
   """
 
+  alias TourinIt.TourDates
+
   @doc """
   Generate a tour_date.
   """
@@ -13,8 +15,19 @@ defmodule TourinIt.TourDatesFixtures do
       |> Enum.into(%{
         date: ~D[2025-05-15]
       })
-      |> TourinIt.TourDates.create_tour_date()
+      |> TourDates.create_tour_date()
 
     tour_date
+  end
+
+  def tour_date_survey_fixture(attrs \\ %{}) do
+    {:ok, survey} =
+      attrs
+      |> Enum.into(%{
+        availability: :tbd
+      })
+      |> TourDates.create_tour_date_survey()
+
+    survey
   end
 end

@@ -124,19 +124,14 @@ defmodule TourinIt.TourDates do
   end
 
   def upsert_surveys(surveys \\ []) do
-    now = DateTime.now!("Etc/UTC") |> DateTime.truncate(:second)
-
-    placeholders = %{timestamp: now}
-
-    surveys = Enum.map(surveys, fn survey ->
-      Enum.into(%{inserted_at: {:placeholder, :timestamp}, updated_at: {:placeholder, :timestamp}}, survey)
-    end)
+    {placeholders, placeholder_attrs} = TourinIt.UpsertPlaceholders.timestamp_placeholders()
+    surveys = Enum.map(surveys, &Enum.into(placeholder_attrs, &1))
 
     Repo.insert_all(
       TourDateSurvey,
       surveys,
       placeholders: placeholders,
-      on_conflict: :replace_all
+      on_conflict: {:replace_all_except, [:id]}
     )
   end
 
@@ -155,6 +150,12 @@ defmodule TourinIt.TourDates do
       availability: :tbd,
       tour_goer_id: tour_goer.id
     )
+  end
+
+  def create_tour_date_survey(attrs \\ %{}) do
+    %TourDateSurvey{}
+    |> change_tour_date_survey(attrs)
+    |> Repo.insert()
   end
 
   def change_tour_date_survey(%TourDateSurvey{} = survey, attrs \\ %{}) do
