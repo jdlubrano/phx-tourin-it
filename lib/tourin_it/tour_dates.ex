@@ -156,4 +156,8 @@ defmodule TourinIt.TourDates do
       tour_goer_id: tour_goer.id
     )
   end
+
+  def change_tour_date_survey(%TourDateSurvey{} = survey, attrs \\ %{}) do
+    TourDateSurvey.changeset(survey, attrs)
+  end
 end
