@@ -6,9 +6,9 @@ defmodule TourinItWeb.TourStopLive.Show do
   alias TourinIt.TourDates.TourDateSurvey
 
   @availability_classes %{
-    available:   ["capitalize", "bg-green-100"],
-    tbd:         ["uppercase", "bg-yellow-100"],
-    unavailable: ["capitalize", "bg-red-100"]
+    available:   ["capitalize", "bg-green-100", "focus:ring-green-200"],
+    tbd:         ["uppercase", "bg-yellow-100", "focus:ring-yellow-200"],
+    unavailable: ["capitalize", "bg-red-100", "focus:ring-red-200"]
   }
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
@@ -56,7 +56,8 @@ defmodule TourinItWeb.TourStopLive.Show do
       "py-1",
       "px-2",
       "relative",
-      "rounded-md"
+      "rounded-md",
+      "focus:ring",
     ] ++ @availability_classes[survey.availability]
   end
 end

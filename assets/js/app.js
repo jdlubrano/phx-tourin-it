@@ -103,11 +103,12 @@ function showTooltip(element) {
   );
 
   const width = 120;
-  const left = (boundingBox.right + boundingBox.left - width) / 2;
+  const left = window.scrollX + (boundingBox.right + boundingBox.left - width) / 2;
+  const top = window.scrollY + boundingBox.bottom;
 
   tooltip.style.width = `${width}px`;
   tooltip.style.left = `${left}px`;
-  tooltip.style.top = `${boundingBox.bottom}px`;
+  tooltip.style.top = `${top}px`;
   tooltip.textContent = tooltipContent;
 
   document.body.appendChild(tooltip);
