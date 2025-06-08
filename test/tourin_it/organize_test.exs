@@ -95,8 +95,11 @@ defmodule TourinIt.OrganizeTest do
 
   describe "tour_sessions" do
     alias TourinIt.Organize.TourSession
+    alias TourinIt.TourGoers.TourGoer
 
+    import TourinIt.AccountsFixtures
     import TourinIt.OrganizeFixtures
+    import TourinIt.TourGoersFixtures
 
     @invalid_attrs %{identifier: nil}
 
@@ -150,6 +153,25 @@ defmodule TourinIt.OrganizeTest do
     test "change_tour_session/1 returns a tour_session changeset" do
       tour_session = %TourSession{}
       assert %Ecto.Changeset{} = Organize.change_tour_session(tour_session)
+    end
+
+    test "update_tour_goers/2 upserts tour_goers for the given tour_session" do
+      tour_goer = tour_goer_fixture() |> Repo.preload(:tour_session)
+      tour_session = tour_goer.tour_session
+
+      new_user = user_fixture()
+      user_ids = [tour_goer.user_id, new_user.id]
+
+      {:ok, result} = Organize.update_tour_goers(tour_session, user_ids)
+      assert length(result.tour_goers) == length(user_ids)
+
+      reloaded = Repo.get!(TourGoer, tour_goer.id)
+      assert reloaded.user_id == tour_goer.user_id
+
+      {:ok, _result} = Organize.update_tour_goers(tour_session, [new_user.id])
+
+      reloaded = Repo.get(TourGoer, tour_goer.id)
+      assert is_nil(reloaded)
     end
   end
 end
