@@ -16,6 +16,7 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
 
     socket =
       socket
+      |> assign(:page_title, "#{tour_stop.tour_session.tour.name} #{tour_stop.tour_session.identifier}")
       |> assign(:surveys, surveys)
       |> assign(:tour_goer, tour_goer)
       |> assign(:tour_stop, tour_stop)

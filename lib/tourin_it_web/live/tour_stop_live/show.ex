@@ -24,6 +24,7 @@ defmodule TourinItWeb.TourStopLive.Show do
 
     socket =
       socket
+      |> assign(:page_title, "#{tour_session.tour.name} #{tour_session.identifier}")
       |> assign(:tour_session, tour_session)
       |> assign(:tour_stop, tour_stop)
       |> assign(:tour_goers, tour_goers)
