@@ -12,7 +12,7 @@ defmodule TourinItWeb.Organize.TourGoerController do
 
   def update(conn, %{"tour_session" => tour_session_params}) do
     user_ids =
-      tour_session_params["tour_goer_user_ids"] ||
+      Enum.map(tour_session_params["tour_goer_user_ids"], &String.to_integer(&1)) ||
         Enum.map(conn.assigns.tour_session.tour_goers, &(&1.user_id))
 
     case Organize.update_tour_goers(conn.assigns.tour_session, user_ids) do
@@ -37,7 +37,9 @@ defmodule TourinItWeb.Organize.TourGoerController do
         |> redirect(to: ~p"/organize/tours/#{tour_id}")
         |> halt()
 
-      tour_session -> Plug.Conn.assign(conn, :tour_session, TourinIt.Repo.preload(tour_session, [:tour, :tour_goers]))
+      tour_session ->
+        conn
+        |> assign(:tour_session, TourinIt.Repo.preload(tour_session, [:tour, :tour_goers]))
     end
   end
 end

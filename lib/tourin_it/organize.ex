@@ -292,7 +292,14 @@ defmodule TourinIt.Organize do
   end
 
   def update_tour_goers(%TourSession{} = tour_session, user_ids \\ []) do
-    tour_goers = Enum.map(user_ids, fn id -> %{tour_session_id: tour_session.id, user_id: id} end)
+    existing_tour_goers = Repo.all(from tg in TourGoer, where: tg.tour_session_id == ^tour_session.id)
+                          |> Enum.reduce(%{}, &Map.put(&2, &1.user_id, &1.id))
+
+    tour_goers = Enum.map(user_ids, &%{
+      tour_session_id: tour_session.id,
+      user_id: &1,
+      id: existing_tour_goers[&1]
+    })
 
     tour_session
     |> change_tour_goers(%{tour_goers: tour_goers})
