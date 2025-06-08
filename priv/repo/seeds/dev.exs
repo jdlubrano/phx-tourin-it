@@ -32,7 +32,7 @@ defmodule TourinIt.Seeds.Dev do
   end
 end
 
-Enum.each(["andrew", "scott"], &TourinIt.Seeds.Dev.find_or_create_user/1)
+Enum.each(["andrew", "chris", "scott"], &TourinIt.Seeds.Dev.find_or_create_user/1)
 
 admin = TourinIt.Seeds.Dev.find_or_create_admin("admin")
 TourinIt.Seeds.Dev.generate_access_token(admin)
