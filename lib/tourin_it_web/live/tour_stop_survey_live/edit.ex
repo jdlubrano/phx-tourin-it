@@ -25,11 +25,9 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
 
   def handle_event("save", %{"tour_stop" => %{"tour_date_surveys" => surveys_params}}, socket) do
     surveys = Enum.map(surveys_params, fn {_tour_date_id, survey_params} ->
-      %{
-        availability: String.to_existing_atom(survey_params["availability"]),
-        tour_date_id: String.to_integer(survey_params["tour_date_id"]),
-        tour_goer_id: socket.assigns.tour_goer.id,
-      }
+      survey_params = Enum.into(%{"tour_goer_id" => socket.assigns.tour_goer.id}, survey_params)
+      changes = TourDates.change_tour_date_survey(%TourDates.TourDateSurvey{}, survey_params).changes
+      Map.put_new(changes, :note, nil)
     end)
 
     TourDates.upsert_surveys(surveys)

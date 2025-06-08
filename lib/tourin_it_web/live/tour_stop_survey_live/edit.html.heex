@@ -9,7 +9,7 @@
 </p>
 <p class="font-semibold mb-8 text-zinc-700">{@tour_stop.destination}</p>
 
-<.form phx-submit="save">
+<.form for={nil} phx-submit="save">
   <div :for={{tour_date, survey} <- @surveys} class="mb-8">
     <% form_root = "tour_stop[tour_date_surveys][#{tour_date.id}]" %>
     <p class="font-semibold mb-2 text-zinc-700">{day_of_the_week(tour_date.date)} - {format_date(tour_date.date)}</p>
@@ -30,6 +30,13 @@
         Unavailable
       </label>
     </fieldset>
+
+    <details class="mt-4 bg-gray-50 rounded-lg" {%{open: !is_nil(survey.note)}}>
+      <summary class="w-full p-2 cursor-pointer">Add a note</summary>
+      <div class="w-full p-2">
+        <textarea name={"#{form_root}[note]"} rows="4" class="w-full rounded-lg resize-none">{survey.note}</textarea>
+      </div>
+    </details>
   </div>
   <.button class="mt-4 w-full" type="submit">Save</.button>
 </.form>

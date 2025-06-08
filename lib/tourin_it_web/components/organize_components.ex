@@ -1,12 +1,10 @@
 defmodule TourinItWeb.OrganizeComponents do
   use TourinItWeb, :html
 
-  alias TourinIt.Accounts.UserToken
   alias TourinIt.Organize.TourSession
-  alias TourinItWeb.Router
 
   defp login_link(%{encoded_token: encoded_token}, %TourSession{} = tour_session) do
-    "#{TourinItWeb.Endpoint.url()}?token=#{encoded_token}"
+    "#{TourinItWeb.Endpoint.url()}/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming?token=#{encoded_token}"
   end
 
   attr :tour_session, :map, required: true
