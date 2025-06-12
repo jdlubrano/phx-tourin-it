@@ -4,7 +4,7 @@ defmodule TourinItWeb.TourStopLive.Show do
   import TourinItWeb.Access.TourGoer
 
   alias TourinIt.Repo
-  alias TourinIt.{Organize, TourDates, TourGoers ,TourStops}
+  alias TourinIt.{TourDates, TourGoers ,TourStops}
   alias TourinIt.TourDates.TourDateSurvey
 
   @availability_classes %{
@@ -15,12 +15,11 @@ defmodule TourinItWeb.TourStopLive.Show do
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
-  def mount(%{"tour_slug" => slug, "tour_session_identifier" => identifier}, _session, socket) do
-    tour_session = Organize.get_tour_session!(%{identifier: identifier, slug: slug})
-    ensure_invited!(socket.assigns.current_user, tour_session)
+  def mount(%{"id" => id}, _session, socket) do
+    tour_stop = TourStops.get_tour_stop!(id) |> Repo.preload([:tour_dates, :tour_session])
+    ensure_invited!(socket.assigns.current_user, tour_stop.tour_session)
 
-    tour_session = Repo.preload(tour_session, [:tour, tour_goers: :user])
-    tour_stop = TourStops.upcoming(tour_session.id) |> Repo.preload(:tour_dates)
+    tour_session = Repo.preload(tour_stop.tour_session, [:tour, tour_goers: :user])
     tour_goers = Enum.sort_by(tour_session.tour_goers, &(&1.user.username), :asc)
     surveys = TourDates.map_surveys_by_tour_date_and_tour_goer(tour_stop && tour_stop.tour_dates || [])
 
