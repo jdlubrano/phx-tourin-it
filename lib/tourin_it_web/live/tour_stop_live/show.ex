@@ -1,8 +1,10 @@
 defmodule TourinItWeb.TourStopLive.Show do
   use TourinItWeb, :live_view
 
+  import TourinItWeb.Access.TourGoer
+
   alias TourinIt.Repo
-  alias TourinIt.{Accounts, Organize, TourDates, TourGoers ,TourStops}
+  alias TourinIt.{TourDates, TourGoers ,TourStops}
   alias TourinIt.TourDates.TourDateSurvey
 
   @availability_classes %{
@@ -13,12 +15,11 @@ defmodule TourinItWeb.TourStopLive.Show do
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
-  def mount(%{"tour_slug" => slug, "tour_session_identifier" => identifier}, _session, socket) do
-    tour_session = Organize.get_tour_session!(%{identifier: identifier, slug: slug})
-    ensure_invited!(socket.assigns.current_user, tour_session)
+  def mount(%{"id" => id}, _session, socket) do
+    tour_stop = TourStops.get_tour_stop!(id) |> Repo.preload([:tour_dates, :tour_session])
+    ensure_invited!(socket.assigns.current_user, tour_stop.tour_session)
 
-    tour_session = Repo.preload(tour_session, [:tour, tour_goers: :user])
-    tour_stop = TourStops.upcoming(tour_session.id) |> Repo.preload(:tour_dates)
+    tour_session = Repo.preload(tour_stop.tour_session, [:tour, tour_goers: :user])
     tour_goers = Enum.sort_by(tour_session.tour_goers, &(&1.user.username), :asc)
     surveys = TourDates.map_surveys_by_tour_date_and_tour_goer(tour_stop && tour_stop.tour_dates || [])
 
@@ -31,12 +32,6 @@ defmodule TourinItWeb.TourStopLive.Show do
       |> assign(:surveys, surveys)
 
     {:ok, socket}
-  end
-
-  defp ensure_invited!(current_user, tour_session) do
-    unless invited?(current_user, tour_session) || Accounts.admin?(current_user) do
-      raise TourinItWeb.UserNotInvitedError, "User ##{current_user.id} not invited to TourSession ##{tour_session.id}"
-    end
   end
 
   defp invited?(current_user, tour_session), do: TourGoers.invited?(current_user.id, tour_session.id)
