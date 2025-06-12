@@ -1,8 +1,10 @@
 defmodule TourinItWeb.TourStopLive.Show do
   use TourinItWeb, :live_view
 
+  import TourinItWeb.Access.TourGoer
+
   alias TourinIt.Repo
-  alias TourinIt.{Accounts, Organize, TourDates, TourGoers ,TourStops}
+  alias TourinIt.{Organize, TourDates, TourGoers ,TourStops}
   alias TourinIt.TourDates.TourDateSurvey
 
   @availability_classes %{
@@ -31,12 +33,6 @@ defmodule TourinItWeb.TourStopLive.Show do
       |> assign(:surveys, surveys)
 
     {:ok, socket}
-  end
-
-  defp ensure_invited!(current_user, tour_session) do
-    unless invited?(current_user, tour_session) || Accounts.admin?(current_user) do
-      raise TourinItWeb.UserNotInvitedError, "User ##{current_user.id} not invited to TourSession ##{tour_session.id}"
-    end
   end
 
   defp invited?(current_user, tour_session), do: TourGoers.invited?(current_user.id, tour_session.id)

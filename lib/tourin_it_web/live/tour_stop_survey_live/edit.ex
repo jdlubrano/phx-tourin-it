@@ -1,7 +1,9 @@
 defmodule TourinItWeb.TourStopSurveyLive.Edit do
   use TourinItWeb, :live_view
 
-  alias TourinIt.{Accounts, Repo, TourDates, TourGoers, TourStops}
+  import TourinItWeb.Access.TourGoer
+
+  alias TourinIt.{Repo, TourDates, TourGoers, TourStops}
 
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
@@ -41,11 +43,5 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
       |> push_navigate(to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming")
 
     {:noreply, socket}
-  end
-
-  defp ensure_invited!(current_user, tour_session_id) do
-    unless TourGoers.invited?(current_user.id, tour_session_id) || Accounts.admin?(current_user) do
-      raise TourinItWeb.UserNotInvitedError, "User ##{current_user.id} not invited to TourSession ##{tour_session_id}"
-    end
   end
 end
