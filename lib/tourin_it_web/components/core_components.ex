@@ -482,9 +482,9 @@ defmodule TourinItWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0 mt-11">
+    <div class="mt-11">
       {render_slot(@title)}
-      <table class="w-[40rem] sm:w-full">
+      <table class="w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
