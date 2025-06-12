@@ -36,6 +36,7 @@ defmodule TourinItWeb.Router do
 
     get "/me", MeController, :show
 
+    live "/tours/:tour_slug/:tour_session_identifier", TourStopLive.Index
     live "/tours/:tour_slug/:tour_session_identifier/upcoming", TourStopLive.Show
     live "/tour_stops/:id/survey", TourStopSurveyLive.Edit
   end

@@ -1,3 +1,5 @@
+<.back navigate={~p"/tours/#{@tour_session.tour.slug}/#{@tour_session.identifier}"}>Previous Tour Stops</.back>
+
 <.header class="mb-8">{@tour_session.tour.name} {@tour_session.identifier}</.header>
 
 <%= if is_nil(@tour_stop) do %>
