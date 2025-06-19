@@ -11,7 +11,7 @@ defmodule TourinIt.Accounts.UserToken do
   @reset_password_validity_in_days 1
   @confirm_validity_in_days 7
   @change_email_validity_in_days 7
-  @access_validity_in_days 14
+  @access_validity_in_days 28
   @session_validity_in_days 60
 
   schema "users_tokens" do
