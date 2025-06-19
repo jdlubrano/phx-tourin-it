@@ -12,9 +12,10 @@
         <div>{tour_stop.destination}</div>
         <div>{tour_stop.start_date}</div>
         <div>{tour_stop.end_date}</div>
-        <div>
+        <div class="flex gap-4">
+          <.link navigate={~p"/tour_stops/#{tour_stop}"}>View</.link>
           <button type="button" phx-click="edit" phx-value-id={tour_stop.id} phx-target={@myself}>Edit</button>
-          <button class="ml-2" type="button" phx-click="delete" phx-value-id={tour_stop.id} phx-target={@myself}>Delete</button>
+          <button type="button" phx-click="delete" phx-value-id={tour_stop.id} phx-target={@myself}>Delete</button>
         </div>
       </div>
       <.tour_stop_form :if={@editing_tour_stops[Integer.to_string(tour_stop.id)]} changeset={changeset(tour_stop)} target={@myself} />

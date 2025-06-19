@@ -1,6 +1,6 @@
 <.header class="mb-8">{@tour.name} {@tour_session.identifier}</.header>
 
-<.table id="tour_stops" rows={@tour_session.tour_stops} row_click={&JS.navigate(~p"/tour_stops/#{&1}")} %>
+<.table id="tour_stops" rows={@tour_session.tour_stops} row_click={&JS.navigate(~p"/tour_stops/#{&1}")}>
   <:col :let={tour_stop} label="Location">{tour_stop.destination}</:col>
   <:col :let={tour_stop} label="Dates">
     {format_date(tour_stop.start_date)} - {format_date(tour_stop.end_date)}
