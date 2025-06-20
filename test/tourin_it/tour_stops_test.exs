@@ -3,6 +3,11 @@ defmodule TourinIt.TourStopsTest do
 
   alias TourinIt.{Repo, TourStops}
 
+  defp today do
+    {:ok, now} = DateTime.now("America/New_York")
+    DateTime.to_date(now)
+  end
+
   describe "tour_stops" do
     alias TourinIt.TourStops.TourStop
 
@@ -10,6 +15,19 @@ defmodule TourinIt.TourStopsTest do
     import TourinIt.TourStopsFixtures
 
     @invalid_attrs %{destination: nil, start_date: nil, end_date: nil}
+
+    test "upcoming/1 returns upcoming tour stops" do
+      tour_session = tour_session_fixture()
+      tour_stop = tour_stop_fixture(tour_session)
+      assert TourStops.upcoming(tour_session.id) == nil
+
+      {:ok, tour_stop} = TourStops.update_tour_stop(tour_stop, %{end_date: today()})
+      assert TourStops.upcoming(tour_session.id) == tour_stop
+
+      # Chooses soonest end_date
+      _next_tour_stop = tour_stop_fixture(tour_session, %{end_date: Date.add(today(), 1)})
+      assert TourStops.upcoming(tour_session.id) == tour_stop
+    end
 
     test "list_tour_stops/0 returns all tour_stops" do
       tour_stop = tour_stop_fixture()
