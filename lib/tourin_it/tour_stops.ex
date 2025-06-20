@@ -14,7 +14,7 @@ defmodule TourinIt.TourStops do
     today = DateTime.to_date(now)
 
     query = from tour_stop in TourStop,
-      where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date > ^today,
+      where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date >= ^today,
       order_by: tour_stop.end_date,
       limit: 1
 
