@@ -13,6 +13,10 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     <.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>Back to {@tour_session.tour.name}</.back>
     <.header class="mb-8">Tour Session {@tour_session.identifier}</.header>
 
+    <div class="mb-8">
+      <.link class="underline" target="_blank" navigate={~p"/tours/#{@tour_session.tour.slug}/#{@tour_session.identifier}"}>View as tour goer</.link>
+    </div>
+
     <.live_component module={TourStopsComponent} id="tour_stops" tour_session={@tour_session} />
 
     <hr class="mt-8 mb-16" />
