@@ -70,6 +70,10 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
     {:noreply, reload_tour_session(socket)}
   end
 
+  def occasion_options() do
+    Ecto.Enum.values(TourStop, :occasion)
+  end
+
   defp changeset(%TourStop{} = tour_stop), do: TourStops.change_tour_stop(tour_stop)
 
   defp reload_tour_session(socket) do

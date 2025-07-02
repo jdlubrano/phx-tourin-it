@@ -1,5 +1,6 @@
 <.form :let={f} for={@changeset} phx-submit="save" phx-target={@target} class="contents">
   <.input field={f[:destination]} label="Destination" />
+  <.input field={f[:occasion]} label="Occasion" type="select" options={occasion_options()} />
   <.input field={f[:start_date]} label="Start date" type="date" />
   <.input field={f[:end_date]} label="End date" type="date" />
   <span class="justify-self-center self-end">
