@@ -6,6 +6,7 @@ defmodule TourinIt.TourStops.TourStop do
 
   schema "tour_stops" do
     field :destination, :string
+    field :occasion, Ecto.Enum, default: :dinner, values: [:breakfast, :dinner]
     field :start_date, :date
     field :end_date, :date
 
@@ -19,14 +20,14 @@ defmodule TourinIt.TourStops.TourStop do
   @doc false
   def changeset(tour_stop, attrs) do
     tour_stop
-    |> cast(attrs, [:destination, :start_date, :end_date, :tour_session_id])
-    |> validate_required([:destination, :start_date, :end_date, :tour_session_id])
+    |> cast(attrs, [:destination, :occasion, :start_date, :end_date, :tour_session_id])
+    |> validate_required([:destination, :occasion, :start_date, :end_date, :tour_session_id])
   end
 
   @doc false
   def update_changeset(tour_stop, attrs) do
     tour_stop
-    |> cast(attrs, [:destination, :start_date, :end_date])
-    |> validate_required([:destination, :start_date, :end_date])
+    |> cast(attrs, [:destination, :occasion, :start_date, :end_date])
+    |> validate_required([:destination, :occasion, :start_date, :end_date])
   end
 end
