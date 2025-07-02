@@ -2,6 +2,9 @@
 
 <.table id="tour_stops" rows={@tour_session.tour_stops} row_click={&JS.navigate(~p"/tour_stops/#{&1}")}>
   <:col :let={tour_stop} label="Location">{tour_stop.destination}</:col>
+  <:col :let={tour_stop} label={gettext("tour_stop.occasion")}>
+    <.tour_stop_occasion occasion={tour_stop.occasion} />
+  </:col>
   <:col :let={tour_stop} label="Dates">
     {format_date(tour_stop.start_date)} - {format_date(tour_stop.end_date)}
   </:col>
