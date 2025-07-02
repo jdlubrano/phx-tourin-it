@@ -3,12 +3,25 @@ defmodule TourinItWeb.TourStopComponents do
 
   alias TourinIt.TourStops.TourStop
 
+  attr :tour_stop, TourStop, required: true
+  def tour_stop_details(assigns) do
+    ~H"""
+      <p class="font-semibold mb-8 text-zinc-700">
+        {format_date(@tour_stop.start_date)} - {format_date(@tour_stop.end_date)}
+      </p>
+      <p class="font-semibold mb-2 text-zinc-700">{@tour_stop.destination}</p>
+      <p class="mb-8 text-zinc-500">
+        <.tour_stop_occasion occasion={@tour_stop.occasion} />
+      </p>
+    """
+  end
+
   attr :occasion, :atom, required: true, values: Ecto.Enum.values(TourStop, :occasion)
   def tour_stop_occasion(assigns) do
     ~H"""
     <span class="capitalize">
-      {raw(occasion_emoji(assigns.occasion))}
-      {assigns.occasion}
+      {raw(occasion_emoji(@occasion))}
+      {@occasion}
     </span>
     """
   end
