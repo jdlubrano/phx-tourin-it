@@ -51,6 +51,7 @@ defmodule TourinIt.TourStopsTest do
 
       assert {:ok, %TourStop{} = tour_stop} = TourStops.create_tour_stop(valid_attrs)
       assert tour_stop.destination == "some destination"
+      assert tour_stop.occasion == :dinner
       assert tour_stop.start_date == ~D[2025-05-09]
       assert tour_stop.end_date == ~D[2025-05-09]
 
@@ -108,12 +109,19 @@ defmodule TourinIt.TourStopsTest do
 
     test "update_tour_stop/2 with valid data updates the tour_stop" do
       tour_stop = tour_stop_fixture()
-      update_attrs = %{destination: "some updated destination", start_date: ~D[2025-05-10], end_date: ~D[2025-05-10]}
+
+      update_attrs = %{
+        destination: "some updated destination",
+        occasion: :breakfast,
+        start_date: ~D[2025-05-10],
+        end_date: ~D[2025-05-10]
+      }
 
       assert {:ok, %TourStop{}} = TourStops.update_tour_stop(%TourStop{id: tour_stop.id}, update_attrs)
 
       tour_stop = TourStops.get_tour_stop!(tour_stop.id)
       assert tour_stop.destination == "some updated destination"
+      assert tour_stop.occasion == :breakfast
       assert tour_stop.start_date == ~D[2025-05-10]
       assert tour_stop.end_date == ~D[2025-05-10]
     end

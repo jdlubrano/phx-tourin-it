@@ -2,6 +2,7 @@ defmodule TourinItWeb.TourStopLive.Index do
   use TourinItWeb, :live_view
 
   import TourinItWeb.Access.TourGoer
+  import TourinItWeb.TourStopComponents
 
   alias TourinIt.{Organize, Repo}
 

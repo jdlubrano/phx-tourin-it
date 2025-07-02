@@ -2,6 +2,7 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
   use TourinItWeb, :live_view
 
   import TourinItWeb.Access.TourGoer
+  import TourinItWeb.TourStopComponents
 
   alias TourinIt.{Repo, TourDates, TourGoers, TourStops}
 

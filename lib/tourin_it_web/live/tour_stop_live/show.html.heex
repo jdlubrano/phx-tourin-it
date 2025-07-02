@@ -2,10 +2,7 @@
 
 <.header class="mb-8">{@tour_session.tour.name} {@tour_session.identifier}</.header>
 
-<p class="font-semibold mb-8 text-zinc-700">
-  {format_date(@tour_stop.start_date)} - {format_date(@tour_stop.end_date)}
-</p>
-<p class="font-semibold mb-8 text-zinc-700">{@tour_stop.destination}</p>
+<.tour_stop_details tour_stop={@tour_stop} />
 
 <div class="grid grid-cols-6 gap-y-8 text-sm font-semibold text-zinc-700">
   <div class="contents text-center">

@@ -10,9 +10,7 @@ defmodule TourinItWeb.Navbar do
         <img src={~p"/images/logo.svg"} width="36" />
         <p class="font-medium leading-6">
           <span :if={@current_user} class="capitalize mr-4">Hello, {@current_user.username}</span>
-          <span :if={@current_user && @current_user.admin} class="underline mr-4">
-            <.link navigate={~p"/organize/tours"}>Admin</.link>
-          </span>
+          <.link :if={@current_user && @current_user.admin} class="underline mr-4" navigate={~p"/organize/tours"}>Admin</.link>
           <span class="bg-brand/5 text-brand rounded-full px-2">
             v{Application.spec(:tourin_it, :vsn)}
           </span>

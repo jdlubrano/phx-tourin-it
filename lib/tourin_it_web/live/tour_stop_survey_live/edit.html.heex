@@ -4,10 +4,7 @@
   {@tour_stop.tour_session.tour.name} {@tour_stop.tour_session.identifier}
 </.header>
 
-<p class="font-semibold mb-8 text-zinc-700">
-  {format_date(@tour_stop.start_date)} - {format_date(@tour_stop.end_date)}
-</p>
-<p class="font-semibold mb-8 text-zinc-700">{@tour_stop.destination}</p>
+<.tour_stop_details tour_stop={@tour_stop} />
 
 <.form for={nil} phx-submit="save">
   <div :for={{tour_date, survey} <- @surveys} class="mb-8">
