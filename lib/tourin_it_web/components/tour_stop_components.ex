@@ -9,9 +9,8 @@ defmodule TourinItWeb.TourStopComponents do
       <p class="font-semibold mb-8 text-zinc-700">
         {format_date(@tour_stop.start_date)} - {format_date(@tour_stop.end_date)}
       </p>
-      <p class="font-semibold mb-2 text-zinc-700">{@tour_stop.destination}</p>
-      <p class="mb-8 text-zinc-500">
-        <.tour_stop_occasion occasion={@tour_stop.occasion} />
+      <p class="font-semibold mb-8 text-zinc-700">
+        <.tour_stop_occasion occasion={@tour_stop.occasion} /> @ {@tour_stop.destination}
       </p>
     """
   end
