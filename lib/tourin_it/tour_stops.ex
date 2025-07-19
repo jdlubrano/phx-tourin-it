@@ -21,6 +21,16 @@ defmodule TourinIt.TourStops do
     Repo.one(query)
   end
 
+  def past_and_upcoming(tour_session_id) do
+    up = upcoming(tour_session_id)
+
+    query = from tour_stop in TourStop,
+      where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date <= ^up.end_date,
+      order_by: [desc: tour_stop.end_date]
+
+    Repo.all(query)
+  end
+
   @doc """
   Returns the list of tour_stops.
 

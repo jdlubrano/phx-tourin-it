@@ -29,6 +29,15 @@ defmodule TourinIt.TourStopsTest do
       assert TourStops.upcoming(tour_session.id) == tour_stop
     end
 
+    test "past_and_upcoming/1" do
+      tour_session = tour_session_fixture()
+      past_tour_stop = tour_stop_fixture(tour_session, %{end_date: Date.add(today(), -1)})
+      upcoming_tour_stop = tour_stop_fixture(tour_session, %{end_date: Date.add(today(), 1)})
+      _future_tour_stop = tour_stop_fixture(tour_session, %{end_date: Date.add(today(), 2)})
+
+      assert TourStops.past_and_upcoming(tour_session.id) == [upcoming_tour_stop, past_tour_stop]
+    end
+
     test "list_tour_stops/0 returns all tour_stops" do
       tour_stop = tour_stop_fixture()
       assert TourStops.list_tour_stops() == [tour_stop]
