@@ -5,3 +5,4 @@
     {@inner_content}
   </div>
 </main>
+<.live_component :if={assigns[:show_new_passkey]} module={TourinItWeb.Passkeys.NewComponent} current_user={@current_user} id={@current_user} />
