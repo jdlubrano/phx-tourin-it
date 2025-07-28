@@ -23,6 +23,13 @@ defmodule TourinIt.Accounts.UserToken do
     timestamps(type: :utc_datetime, updated_at: false)
   end
 
+  def valid_access_token_for_user_query(%TourinIt.Accounts.User{} = user) do
+    from token in by_user_and_contexts_query(user, ["access"]),
+      where: token.inserted_at > ago(@access_validity_in_days, "day"),
+      order_by: [desc: token.inserted_at],
+      limit: 1
+  end
+
   def verify_access_token_query(token) do
     query =
       from token in by_token_and_context_query(token, "access"),

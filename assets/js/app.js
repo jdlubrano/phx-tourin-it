@@ -54,20 +54,23 @@ window.addEventListener("phx:copy", (event) => {
   let copiedNotification = document.createElement("div");
 
   copiedNotification.classList.add(
+    "copied-notification",
     "fixed",
     "top-3",
     "w-full",
     "flex",
     "justify-center",
-    "transition-all",
-    "delay-1000"
   );
 
   copiedNotification.innerHTML = `<span class="rounded-lg p-3 text-sm bg-green-50">Copied ${copied}</span>`;
 
+  Array.from(document.querySelectorAll(".copied-notification")).forEach((notification) => {
+    notification.remove()
+  });
+
   document.body.appendChild(copiedNotification);
 
-  setTimeout(() => copiedNotification.classList.add("opacity-0"));
+  setTimeout(() => copiedNotification.classList.add("transition-all", "opacity-0"), 1000);
 });
 
 function hideTooltip(element) {

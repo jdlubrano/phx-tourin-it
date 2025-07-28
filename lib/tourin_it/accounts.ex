@@ -17,6 +17,13 @@ defmodule TourinIt.Accounts do
     Repo.one(query)
   end
 
+  def find_or_create_valid_user_access_token(user) do
+    query = UserToken.valid_access_token_for_user_query(user)
+    token = Repo.one(query) || generate_user_access_token(user)
+
+    encode_token(token.token)
+  end
+
   def generate_user_access_token(user) do
     {token, user_token} = UserToken.build_access_token(user)
     Repo.insert!(user_token)

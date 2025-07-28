@@ -58,7 +58,8 @@ defmodule TourinIt.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:tz, "~> 0.28"}
+      {:tz, "~> 0.28"},
+      {:wax_, "~> 0.7.0"} # Webauthn
     ]
   end
 
