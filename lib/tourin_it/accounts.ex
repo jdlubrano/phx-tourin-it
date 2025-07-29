@@ -6,7 +6,7 @@ defmodule TourinIt.Accounts do
   import Ecto.Query, warn: false
   alias TourinIt.Repo
 
-  alias TourinIt.Accounts.{User, UserToken}
+  alias TourinIt.Accounts.{User, UserPasskey, UserToken}
 
   ## Database getters
   def get_user_by_access_token(nil), do: nil
@@ -140,5 +140,11 @@ defmodule TourinIt.Accounts do
 
   defp encode_token(token) do
     Base.url_encode64(token, padding: false)
+  end
+
+  def create_user_passkey(attrs) do
+    %UserPasskey{}
+    |> UserPasskey.changeset(attrs)
+    |> Repo.insert()
   end
 end

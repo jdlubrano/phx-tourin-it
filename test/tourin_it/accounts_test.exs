@@ -70,4 +70,28 @@ defmodule TourinIt.AccountsTest do
       refute Accounts.get_user_by_session_token(token)
     end
   end
+
+  describe "create_user_passkey/1" do
+    test "creates passkey for the user" do
+      user = user_fixture()
+      {:ok, passkey} = Accounts.create_user_passkey(%{credential_id: "test", public_key_binary: "test", user_id: user.id})
+      passkey = Repo.preload(passkey, :user)
+
+      assert passkey.credential_id == "test"
+      assert passkey.public_key_binary == "test"
+      assert passkey.user == user
+    end
+
+    test "converts a public_key to binary" do
+      user = user_fixture()
+      {:ok, passkey} = Accounts.create_user_passkey(%{credential_id: "test", public_key: %{foo: "bar"}, user_id: user.id})
+
+      assert :erlang.binary_to_term(passkey.public_key_binary) == %{foo: "bar"}
+    end
+
+    test "rejects invalid attributes" do
+      user = user_fixture()
+      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user_passkey(%{credential_id: "", public_key: "test", user_id: user.id})
+    end
+  end
 end

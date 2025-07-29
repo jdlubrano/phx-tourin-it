@@ -30,10 +30,25 @@ defmodule TourinItWeb.User.PasskeyLive.Index do
   def handle_event("passkey_added", %{"client_data" => client_data, "attestation_object" => attestation_object}, socket) do
     passkey_result = case Wax.register(Base.decode64!(attestation_object), client_data, socket.assigns.challenge_struct) do
       {:ok, {authenticator_data, _attestation_result}} ->
-        credential_id = authenticator_data.attested_credential_data.credential_id
-        public_key = authenticator_data.attested_credential_data.credential_public_key
         Logger.info("Wax.register succeeded (user_id: #{socket.assigns.current_user.id})")
-        %{status: :success}
+
+        passkey_attrs = %{
+          credential_id: authenticator_data.attested_credential_data.credential_id,
+          public_key: authenticator_data.attested_credential_data.credential_public_key,
+          user_id: socket.assigns.current_user.id
+        }
+
+        case Accounts.create_user_passkey(passkey_attrs) do
+          {:ok, _passkey} ->
+            %{status: :success}
+
+          {:error, changeset} ->
+            error_messages = Enum.map(changeset.errors, fn {attr, error_tuple} ->
+              "#{attr} #{elem(error_tuple, 0)}"
+            end)
+
+            %{status: :error, error: "#{Enum.join(error_messages, ", ")}."}
+        end
 
       {:error, e} ->
         Logger.error("Wax.register error: #{inspect(e)}")
