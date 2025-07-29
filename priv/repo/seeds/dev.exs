@@ -28,7 +28,7 @@ defmodule TourinIt.Seeds.Dev do
 
   def generate_access_token(user = %TourinIt.Accounts.User{}) do
     access_token = Accounts.generate_user_access_token(user)
-    Logger.info("Login as #{user.username} at http://localhost:4000/organize/tours?token=#{access_token}")
+    Logger.info("Login as #{user.username} at #{TourinItWeb.Endpoint.url()}/organize/tours?token=#{access_token}")
   end
 end
 
