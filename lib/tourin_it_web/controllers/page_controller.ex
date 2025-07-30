@@ -4,20 +4,13 @@ defmodule TourinItWeb.PageController do
   alias TourinIt.Organize
   alias TourinIt.Organize.TourSession
 
-  plug :redirect_to_upcoming_tour_date
+  plug TourinItWeb.Plugs.UpcomingTourStop
 
   def home(conn, _params) do
-    render(conn, :home)
-  end
-
-  defp redirect_to_upcoming_tour_date(conn, _options) do
-    case Organize.default_tour_session(conn.assigns.current_user) do
-      %TourSession{} = tour_session ->
-        conn
-        |> redirect(to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming")
-        |> halt()
-
-      _ -> conn
+    if conn.assigns.current_user do
+      render(conn, :home)
+    else
+      redirect(conn, to: ~p"/log_in")
     end
   end
 end

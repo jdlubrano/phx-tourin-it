@@ -29,6 +29,8 @@ defmodule TourinItWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/log_in", UserSessionController, :new
+    delete "/log_out", UserSessionController, :destroy
   end
 
   scope "/", TourinItWeb do

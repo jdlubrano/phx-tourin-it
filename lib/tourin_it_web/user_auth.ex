@@ -95,7 +95,7 @@ defmodule TourinItWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: ~p"/")
+    |> redirect(to: ~p"/log_in")
   end
 
   @doc """
@@ -170,7 +170,7 @@ defmodule TourinItWeb.UserAuth do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/")
+        |> Phoenix.LiveView.redirect(to: ~p"/log_in")
 
       {:halt, socket}
     end
@@ -230,10 +230,9 @@ defmodule TourinItWeb.UserAuth do
       conn
     else
       conn
-      |> put_status(403)
+      |> put_flash(:error, "You must be logged in to access this page.")
       |> maybe_store_return_to()
-      |> put_view(ErrorHTML)
-      |> render("403.html")
+      |> redirect(to: ~p"/log_in")
       |> halt()
     end
   end

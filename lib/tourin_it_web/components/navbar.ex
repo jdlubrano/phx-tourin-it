@@ -18,6 +18,9 @@ defmodule TourinItWeb.Navbar do
             <li>
               <.link navigate={~p"/user/passkeys"} class="inline-block p-2 hover:bg-zinc-200 rounded-md w-full">Passkeys</.link>
             </li>
+            <li>
+              <.link href={~p"/log_out"} method="delete" class="inline-block p-2 hover:bg-zinc-200 rounded-md w-full">Log out</.link>
+            </li>
           </ul>
 
           <.link :if={@current_user && @current_user.admin} class="underline mr-4" navigate={~p"/organize/tours"}>Admin</.link>
