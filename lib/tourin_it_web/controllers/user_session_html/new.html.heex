@@ -1,1 +1,4 @@
-<.header>Log in</.header>
+<.form action={~p"/log_in"} method="post" phx-hook="PasskeyLogIn" id="log_in" data-challenge={@challenge}>
+  <p class="error empty:hidden my-4 px-2 py-3 bg-red-200 rounded-lg">{@error}</p>
+  <.button type="button" class="w-full disabled:cursor-not-allowed disabled:opacity-50">Log in with passkey</.button>
+</.form>

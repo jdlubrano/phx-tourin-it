@@ -55,12 +55,12 @@ function registrationOptions({ userId, username, challenge }) {
       name: "Tourin' It!",
     },
     user: {
-      id: userId,
-      name: username,
+      id: stringToArrayBuffer(userId || ""),
+      name: username || "",
       // Required, but we don't have anything better to display than the username.
       displayName: "",
     },
-    challenge: challenge,
+    challenge: base64ToArrayBuffer(challenge),
     pubKeyCredParams: [
       {
         type: "public-key",
@@ -82,23 +82,66 @@ function registrationOptions({ userId, username, challenge }) {
 }
 
 const PasskeyLogInHook = {
-  mounted() {
-    console.log("PasskeysLogInHook mounted", this);
+  async mounted() {
+    console.info("PasskeysLogInHook mounted", this);
+    this.form = this.el;
+    this.button = this.form.querySelector("button");
+
+    const available = await platformAuthenticatorIsAvailable();
+
+    if (available) {
+      this.button.addEventListener("click", this.askForPasskey.bind(this));
+    } else {
+      this.form.querySelector(".error").innerHTML = "Passkeys are not available on this device."
+      this.form.querySelector("button[type='submit']").disabled = true;
+    }
+  },
+
+  async askForPasskey() {
+    const challenge = this.form.dataset.challenge;
+    const publicKeyOpts = registrationOptions({ challenge });
+
+    const credentialOptions = {
+      publicKey: {
+        challenge: publicKeyOpts.challenge,
+        rp: publicKeyOpts.rp,
+        allowedCredentials: []
+      }
+    };
+
+    const credential = await navigator.credentials.get(credentialOptions);
+    const { authenticatorData, clientDataJSON, signature } = credential.response;
+
+    this.addHiddenInput({ name: "authenticator_data", value: arrayBufferToBase64(authenticatorData) });
+    this.addHiddenInput({ name: "client_data", value: arrayBufferToString(clientDataJSON) });
+    this.addHiddenInput({ name: "credential_id", value: arrayBufferToBase64(credential.rawId) });
+    this.addHiddenInput({ name: "signature", value: arrayBufferToBase64(signature) });
+
+    this.form.submit();
+  },
+
+  addHiddenInput({ name, value }) {
+    let input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+
+    this.form.appendChild(input);
   }
 }
 
 const PasskeyNewHook = {
   async mounted() {
-    console.log("PasskeysNewHook mounted", this);
+    console.info("PasskeysNewHook mounted", this);
     this.button = this.el.querySelector("button");
     this.error = this.el.querySelector(".error");
 
     const available = await platformAuthenticatorIsAvailable();
 
     if (available) {
-      const userId = stringToArrayBuffer(this.el.dataset["user-id"]);
+      const userId = this.el.dataset["user-id"];
       const username = this.el.dataset.username;
-      const challenge = base64ToArrayBuffer(this.el.dataset.challenge);
+      const challenge = this.el.dataset.challenge;
 
       this.credentialOptions = {
         publicKey: registrationOptions({ userId, username, challenge })
