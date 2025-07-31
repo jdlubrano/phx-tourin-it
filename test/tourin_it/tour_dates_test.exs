@@ -24,7 +24,7 @@ defmodule TourinIt.TourDatesTest do
     end
 
     test "create_tour_date/1 with valid data creates a tour_date" do
-      valid_attrs = %{date: ~D[2025-05-15]}
+      valid_attrs = %{date: ~D[2025-05-15], tour_stop_id: tour_stop_fixture().id}
 
       assert {:ok, %TourDate{} = tour_date} = TourDates.create_tour_date(valid_attrs)
       assert tour_date.date == ~D[2025-05-15]
@@ -62,7 +62,7 @@ defmodule TourinIt.TourDatesTest do
     test "upsert_surveys/1 inserts new surveys" do
       tour_goer = tour_goer_fixture() |> Repo.preload(:tour_session)
       tour_stop = tour_stop_fixture(tour_goer.tour_session)
-      tour_date = tour_date_fixture(%{tour_stop_id: tour_stop.id})
+      tour_date = tour_date_fixture(tour_stop)
 
       {count, _} = TourDates.upsert_surveys([%{
         availability: :tbd,
@@ -77,13 +77,13 @@ defmodule TourinIt.TourDatesTest do
     test "upsert_surveys/1 updates existing surveys" do
       tour_goer = tour_goer_fixture() |> Repo.preload(:tour_session)
       tour_stop = tour_stop_fixture(tour_goer.tour_session)
-      tour_date = tour_date_fixture(%{tour_stop_id: tour_stop.id})
+      tour_date = tour_date_fixture(tour_stop)
 
       tour_date_survey = tour_date_survey_fixture(%{tour_goer_id: tour_goer.id, tour_date_id: tour_date.id})
 
       new_survey_attrs = %{
         availability: :tbd,
-        tour_date_id: tour_date_fixture(%{tour_stop_id: tour_stop.id, date: Date.add(tour_date.date, 1)}).id,
+        tour_date_id: tour_date_fixture(tour_stop, %{date: Date.add(tour_date.date, 1)}).id,
         tour_goer_id: tour_goer.id
       }
 
