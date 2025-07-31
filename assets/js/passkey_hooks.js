@@ -42,13 +42,13 @@ function stringToArrayBuffer(str) {
 
 async function platformAuthenticatorIsAvailable() {
   if (typeof PublicKeyCredential === "undefined" || typeof PublicKeyCredential !== "function") {
-    return new Promise((resolve) => resolve(false));
+    return Promise.resolve(false);
   }
 
   return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
 }
 
-function registrationOptions({ userId, username, challenge }) {
+function publicKeyOptions({ userId, username, challenge }) {
   return {
     rp: {
       id: window.location.hostname,
@@ -98,18 +98,16 @@ const PasskeyLogInHook = {
   },
 
   async askForPasskey() {
-    const challenge = this.form.dataset.challenge;
-    const publicKeyOpts = registrationOptions({ challenge });
+    const { challenge, rp } = publicKeyOptions({ challenge: this.form.dataset.challenge });
 
-    const credentialOptions = {
+    const credential = await navigator.credentials.get({
       publicKey: {
-        challenge: publicKeyOpts.challenge,
-        rp: publicKeyOpts.rp,
+        challenge,
+        rp,
         allowedCredentials: []
       }
-    };
+    });
 
-    const credential = await navigator.credentials.get(credentialOptions);
     const { authenticatorData, clientDataJSON, signature } = credential.response;
 
     this.addHiddenInput({ name: "authenticator_data", value: arrayBufferToBase64(authenticatorData) });
@@ -139,21 +137,20 @@ const PasskeyNewHook = {
     const available = await platformAuthenticatorIsAvailable();
 
     if (available) {
-      const userId = this.el.dataset["user-id"];
-      const username = this.el.dataset.username;
-      const challenge = this.el.dataset.challenge;
-
-      this.credentialOptions = {
-        publicKey: registrationOptions({ userId, username, challenge })
-      };
-
       this.button.addEventListener("click", this.registerPasskey.bind(this));
+    } else {
+      this.button.remove();
+      this.error.innerHTML = "Passkeys are not available on this device."
     }
   },
 
   async registerPasskey() {
     try {
-      const credential = await navigator.credentials.create(this.credentialOptions);
+      const { challenge, username, "user-id": userId } = this.el.dataset;
+
+      const credential = await navigator.credentials.create({
+        publicKey: publicKeyOptions({ userId, username, challenge })
+      });
 
       this.pushEventTo(this.el, "passkey_added", {
         attestation_object: arrayBufferToBase64(credential.response.attestationObject),
