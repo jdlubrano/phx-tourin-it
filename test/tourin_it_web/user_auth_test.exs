@@ -60,7 +60,7 @@ defmodule TourinItWeb.UserAuthTest do
       refute get_session(conn, :user_token)
       refute conn.cookies[@remember_me_cookie]
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/log_in"
       refute Accounts.get_user_by_session_token(user_token)
     end
 
@@ -79,7 +79,7 @@ defmodule TourinItWeb.UserAuthTest do
       conn = conn |> fetch_cookies() |> UserAuth.log_out_user()
       refute get_session(conn, :user_token)
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/log_in"
     end
   end
 
@@ -227,14 +227,12 @@ defmodule TourinItWeb.UserAuthTest do
   end
 
   describe "require_authenticated_user/2" do
-    @tag :skip
     test "redirects if user is not authenticated", %{conn: conn} do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
-      assert html_response(conn, 403) =~ "You are not authorized"
+      assert redirected_to(conn) == ~p"/log_in"
     end
 
-    @tag :skip
     test "stores the path to redirect to on GET", %{conn: conn} do
       halted_conn =
         %{conn | path_info: ["foo"], query_string: ""}
