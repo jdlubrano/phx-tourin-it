@@ -158,7 +158,7 @@ const PasskeyNewHook = {
       });
     } catch(e) {
       console.error("startRegistration error", e);
-      this.error.innerHTML = e;
+      this.error.textContent = e.toString();
       return;
     }
   },
