@@ -13,10 +13,11 @@ defmodule TourinIt.TourStops do
     {:ok, now} = DateTime.now("America/New_York")
     today = DateTime.to_date(now)
 
-    query = from tour_stop in TourStop,
-      where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date >= ^today,
-      order_by: tour_stop.end_date,
-      limit: 1
+    query =
+      from tour_stop in TourStop,
+        where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date >= ^today,
+        order_by: tour_stop.end_date,
+        limit: 1
 
     Repo.one(query)
   end
@@ -24,9 +25,11 @@ defmodule TourinIt.TourStops do
   def past_and_upcoming(tour_session_id) do
     up = upcoming(tour_session_id)
 
-    query = from tour_stop in TourStop,
-      where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date <= ^up.end_date,
-      order_by: [desc: tour_stop.end_date]
+    query =
+      from tour_stop in TourStop,
+        where:
+          tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date <= ^up.end_date,
+        order_by: [desc: tour_stop.end_date]
 
     Repo.all(query)
   end
@@ -95,10 +98,14 @@ defmodule TourinIt.TourStops do
 
     {placeholders, placeholder_attrs} = TourinIt.UpsertPlaceholders.timestamp_placeholders()
 
-    tour_dates = Enum.map(date_range, &Enum.into(
-      %{date: &1, tour_stop_id: tour_stop.id},
-      placeholder_attrs
-    ))
+    tour_dates =
+      Enum.map(
+        date_range,
+        &Enum.into(
+          %{date: &1, tour_stop_id: tour_stop.id},
+          placeholder_attrs
+        )
+      )
 
     Repo.insert_all(
       TourDate,
@@ -110,7 +117,7 @@ defmodule TourinIt.TourStops do
 
     Repo.delete_all(
       from td in TourDate,
-      where: td.tour_stop_id == ^tour_stop.id and td.date not in ^Enum.to_list(date_range)
+        where: td.tour_stop_id == ^tour_stop.id and td.date not in ^Enum.to_list(date_range)
     )
 
     tour_stop

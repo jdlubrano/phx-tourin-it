@@ -60,7 +60,8 @@ defmodule TourinItWeb.Organize.TourSessionController do
         |> redirect(to: ~p"/organize/tours")
         |> halt()
 
-      tour -> Plug.Conn.assign(conn, :tour, tour)
+      tour ->
+        Plug.Conn.assign(conn, :tour, tour)
     end
   end
 

@@ -17,7 +17,8 @@ defmodule TourinItWeb.PageController do
         |> redirect(to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming")
         |> halt()
 
-      _ -> conn
+      _ ->
+        conn
     end
   end
 end

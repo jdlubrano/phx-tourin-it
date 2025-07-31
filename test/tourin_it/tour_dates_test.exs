@@ -64,12 +64,15 @@ defmodule TourinIt.TourDatesTest do
       tour_stop = tour_stop_fixture(tour_goer.tour_session)
       tour_date = tour_date_fixture(tour_stop)
 
-      {count, _} = TourDates.upsert_surveys([%{
-        availability: :tbd,
-        note:         "test note",
-        tour_goer_id: tour_goer.id,
-        tour_date_id: tour_date.id
-      }])
+      {count, _} =
+        TourDates.upsert_surveys([
+          %{
+            availability: :tbd,
+            note: "test note",
+            tour_goer_id: tour_goer.id,
+            tour_date_id: tour_date.id
+          }
+        ])
 
       assert count == 1
     end
@@ -79,7 +82,8 @@ defmodule TourinIt.TourDatesTest do
       tour_stop = tour_stop_fixture(tour_goer.tour_session)
       tour_date = tour_date_fixture(tour_stop)
 
-      tour_date_survey = tour_date_survey_fixture(%{tour_goer_id: tour_goer.id, tour_date_id: tour_date.id})
+      tour_date_survey =
+        tour_date_survey_fixture(%{tour_goer_id: tour_goer.id, tour_date_id: tour_date.id})
 
       new_survey_attrs = %{
         availability: :tbd,

@@ -10,11 +10,19 @@ defmodule TourinItWeb.Organize.TourSessionLive do
 
   def render(assigns) do
     ~H"""
-    <.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>Back to {@tour_session.tour.name}</.back>
+    <.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>
+      Back to {@tour_session.tour.name}
+    </.back>
     <.header class="mb-8">Tour Session {@tour_session.identifier}</.header>
 
     <div class="mb-8">
-      <.link class="underline" target="_blank" navigate={~p"/tours/#{@tour_session.tour.slug}/#{@tour_session.identifier}"}>View as tour goer</.link>
+      <.link
+        class="underline"
+        target="_blank"
+        navigate={~p"/tours/#{@tour_session.tour.slug}/#{@tour_session.identifier}"}
+      >
+        View as tour goer
+      </.link>
     </div>
 
     <.live_component module={TourStopsComponent} id="tour_stops" tour_session={@tour_session} />
@@ -22,9 +30,15 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     <hr class="mt-8 mb-16" />
 
     <section>
-      <.tour_goers_table tour_session={@tour_session} tour_goers={@tour_session.tour_goers} user_access_tokens={@user_access_tokens} />
+      <.tour_goers_table
+        tour_session={@tour_session}
+        tour_goers={@tour_session.tour_goers}
+        user_access_tokens={@user_access_tokens}
+      />
       <div class="mt-2">
-        <.text_link navigate={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}/tour_goers/edit"}>
+        <.text_link navigate={
+          ~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}/tour_goers/edit"
+        }>
           Edit tour goers
         </.text_link>
       </div>
@@ -33,13 +47,14 @@ defmodule TourinItWeb.Organize.TourSessionLive do
   end
 
   def mount(%{"tour_id" => tour_id, "id" => id}, _session, socket) do
-    tour_session = Organize.get_tour_session!(%{id: id, tour_id: tour_id})
-                   |> Repo.preload([:tour, :tour_stops, tour_goers: :user])
+    tour_session =
+      Organize.get_tour_session!(%{id: id, tour_id: tour_id})
+      |> Repo.preload([:tour, :tour_stops, tour_goers: :user])
 
     user_access_tokens =
       tour_session.tour_goers
-      |> Enum.map(&(&1.user_id))
-      |> Accounts.newest_tokens_for_users
+      |> Enum.map(& &1.user_id)
+      |> Accounts.newest_tokens_for_users()
 
     {
       :ok,
@@ -53,9 +68,10 @@ defmodule TourinItWeb.Organize.TourSessionLive do
     user = Accounts.get_user!(user_id)
     encoded_token = Accounts.generate_user_access_token(user)
 
-    updated = update(socket, :user_access_tokens, fn user_access_tokens ->
-      Map.put(user_access_tokens, user.id, %{encoded_token: encoded_token})
-    end)
+    updated =
+      update(socket, :user_access_tokens, fn user_access_tokens ->
+        Map.put(user_access_tokens, user.id, %{encoded_token: encoded_token})
+      end)
 
     {:noreply, updated}
   end

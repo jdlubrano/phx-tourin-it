@@ -14,7 +14,8 @@ defmodule TourinIt.TourGoersTest do
       tour_session = tour_session_fixture(tour_fixture())
       user = user_fixture()
 
-      {:ok, tour_goer = %TourGoer{}} = TourGoers.create_tour_goer(%{tour_session_id: tour_session.id, user_id: user.id})
+      {:ok, tour_goer = %TourGoer{}} =
+        TourGoers.create_tour_goer(%{tour_session_id: tour_session.id, user_id: user.id})
 
       assert tour_goer.tour_session_id == tour_session.id
       assert tour_goer.user_id == user.id

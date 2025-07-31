@@ -3,7 +3,6 @@ defmodule TourinIt.TourGoers.TourGoer do
   import Ecto.Changeset
 
   schema "tour_goers" do
-
     belongs_to :user, TourinIt.Accounts.User
     belongs_to :tour_session, TourinIt.Organize.TourSession
 

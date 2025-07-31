@@ -6,6 +6,14 @@
   <span class="justify-self-center self-end">
     <.input field={f[:id]} type="hidden" />
     <.button type="submit">Save</.button>
-    <button class="ml-2" type="button" phx-click="cancel" phx-target={@target} phx-value-id={@changeset.data.id}>Cancel</button>
+    <button
+      class="ml-2"
+      type="button"
+      phx-click="cancel"
+      phx-target={@target}
+      phx-value-id={@changeset.data.id}
+    >
+      Cancel
+    </button>
   </span>
 </.form>

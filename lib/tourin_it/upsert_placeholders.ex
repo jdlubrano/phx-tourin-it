@@ -3,9 +3,10 @@ defmodule TourinIt.UpsertPlaceholders do
     fields = Keyword.get(opts, :fields, [:inserted_at, :updated_at])
     time = Keyword.get(opts, :time, DateTime.now!("Etc/UTC")) |> DateTime.truncate(:second)
 
-    attrs = Enum.reduce(fields, %{}, fn field, placeholders ->
-      Map.put(placeholders, field, {:placeholder, :timestamp})
-    end)
+    attrs =
+      Enum.reduce(fields, %{}, fn field, placeholders ->
+        Map.put(placeholders, field, {:placeholder, :timestamp})
+      end)
 
     {%{timestamp: time}, attrs}
   end

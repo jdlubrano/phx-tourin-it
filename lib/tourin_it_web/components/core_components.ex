@@ -293,7 +293,8 @@ defmodule TourinItWeb.CoreComponents do
                 multiple pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    errors = if !assigns[:live] || Phoenix.Component.used_input?(field), do: field.errors, else: []
+    errors =
+      if !assigns[:live] || Phoenix.Component.used_input?(field), do: field.errors, else: []
 
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
@@ -331,7 +332,7 @@ defmodule TourinItWeb.CoreComponents do
 
   def input(%{type: "hidden"} = assigns) do
     ~H"""
-      <input name={@name} type="hidden" value={@value} />
+    <input name={@name} type="hidden" value={@value} />
     """
   end
 

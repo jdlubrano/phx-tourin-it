@@ -20,7 +20,8 @@ defmodule TourinItWeb.Organize.TourGoerHTML do
 
   defp determine_selected_user_ids(changeset) do
     case changeset.action do
-      nil -> Enum.map(changeset.data.tour_goers, &(&1.user_id))
+      nil ->
+        Enum.map(changeset.data.tour_goers, & &1.user_id)
 
       _ ->
         changeset
