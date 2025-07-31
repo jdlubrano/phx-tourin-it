@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/tourin_it_web/components/core_components.ex:492
+#: lib/tourin_it_web/components/core_components.ex:493
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -56,3 +56,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tour_stop.occasion"
 msgstr "Meal"
+
+#: lib/tourin_it_web/controllers/page_html/home.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "page.home.logged_out"
+msgstr "You are not logged in. Reach out to your organizer for a login link."
+
+#: lib/tourin_it_web/controllers/page_html/home.html.heex:4
+#, elixir-autogen, elixir-format
+msgid "page.home.no_tours"
+msgstr "You have no active tours. Contact your organizer for help."

@@ -113,8 +113,9 @@ defmodule TourinIt.TourDates do
   def load_or_build_surveys(%TourGoer{} = tour_goer, tour_dates \\ []) do
     query = from s in surveys_query(tour_dates), where: s.tour_goer_id == ^tour_goer.id
 
-    existing_surveys = Repo.all(query)
-                       |> Enum.reduce(%{}, fn s, acc -> Map.put(acc, s.tour_date_id, s) end)
+    existing_surveys =
+      Repo.all(query)
+      |> Enum.reduce(%{}, fn s, acc -> Map.put(acc, s.tour_date_id, s) end)
 
     tour_dates
     |> Enum.reduce(%{}, fn tour_date, acc ->
@@ -136,10 +137,11 @@ defmodule TourinIt.TourDates do
   end
 
   defp surveys_query(tour_dates) do
-    tour_date_ids = Enum.map(tour_dates, &(&1.id))
+    tour_date_ids = Enum.map(tour_dates, & &1.id)
 
     from s in TourDateSurvey,
-      join: td in TourDate, on: s.tour_date_id == td.id,
+      join: td in TourDate,
+      on: s.tour_date_id == td.id,
       where: s.tour_date_id in ^tour_date_ids
   end
 

@@ -134,13 +134,18 @@ defmodule TourinIt.OrganizeTest do
       tour_session = tour_session_fixture(tour)
       update_attrs = %{identifier: "some updated identifier"}
 
-      assert {:ok, %TourSession{} = tour_session} = Organize.update_tour_session(tour_session, update_attrs)
+      assert {:ok, %TourSession{} = tour_session} =
+               Organize.update_tour_session(tour_session, update_attrs)
+
       assert tour_session.identifier == "some updated identifier"
     end
 
     test "update_tour_session/2 with invalid data returns error changeset", %{tour: tour} do
       tour_session = tour_session_fixture(tour)
-      assert {:error, %Ecto.Changeset{}} = Organize.update_tour_session(tour_session, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Organize.update_tour_session(tour_session, @invalid_attrs)
+
       assert tour_session == Organize.get_tour_session!(tour_session.id)
     end
 

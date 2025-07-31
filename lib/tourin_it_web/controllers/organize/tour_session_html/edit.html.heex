@@ -1,7 +1,12 @@
-<.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>Back to {@tour_session.tour.name}</.back>
+<.back navigate={~p"/organize/tours/#{@tour_session.tour}"}>
+  Back to {@tour_session.tour.name}
+</.back>
 
 <.header>
   Edit Tour Session {@tour_session.identifier}
 </.header>
 
-<.tour_session_form changeset={@changeset} action={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}"} />
+<.tour_session_form
+  changeset={@changeset}
+  action={~p"/organize/tours/#{@tour_session.tour}/tour_sessions/#{@tour_session}"}
+/>

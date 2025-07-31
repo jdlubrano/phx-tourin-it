@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 
-#: lib/tourin_it_web/components/core_components.ex:492
+#: lib/tourin_it_web/components/core_components.ex:493
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -55,4 +55,14 @@ msgstr ""
 #: lib/tourin_it_web/live/tour_stop_live/index.html.heex:5
 #, elixir-autogen, elixir-format
 msgid "tour_stop.occasion"
+msgstr ""
+
+#: lib/tourin_it_web/controllers/page_html/home.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "page.home.logged_out"
+msgstr ""
+
+#: lib/tourin_it_web/controllers/page_html/home.html.heex:4
+#, elixir-autogen, elixir-format
+msgid "page.home.no_tours"
 msgstr ""

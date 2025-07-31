@@ -11,8 +11,7 @@ defmodule TourinIt.Application do
       TourinItWeb.Telemetry,
       TourinIt.Repo,
       {Ecto.Migrator,
-        repos: Application.fetch_env!(:tourin_it, :ecto_repos),
-        skip: skip_migrations?()},
+       repos: Application.fetch_env!(:tourin_it, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:tourin_it, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TourinIt.PubSub},
       # Start the Finch HTTP client for sending emails

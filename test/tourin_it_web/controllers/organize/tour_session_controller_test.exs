@@ -46,7 +46,11 @@ defmodule TourinItWeb.Organize.TourSessionControllerTest do
   describe "edit tour session" do
     setup [:create_tour_session]
 
-    test "renders form for editing chosen tour", %{conn: conn, tour: tour, tour_session: tour_session} do
+    test "renders form for editing chosen tour", %{
+      conn: conn,
+      tour: tour,
+      tour_session: tour_session
+    } do
       conn = get(conn, ~p"/organize/tours/#{tour}/tour_sessions/#{tour_session}/edit")
       assert html_response(conn, 200) =~ "Edit Tour Session"
     end
@@ -56,15 +60,27 @@ defmodule TourinItWeb.Organize.TourSessionControllerTest do
     setup [:create_tour_session]
 
     test "redirects when data is valid", %{conn: conn, tour: tour, tour_session: tour_session} do
-      conn = put(conn, ~p"/organize/tours/#{tour}/tour_sessions/#{tour_session}", tour_session: @update_attrs)
+      conn =
+        put(conn, ~p"/organize/tours/#{tour}/tour_sessions/#{tour_session}",
+          tour_session: @update_attrs
+        )
+
       assert redirected_to(conn) == ~p"/organize/tours/#{tour}"
 
       updated_session = Organize.get_tour_session!(tour_session.id)
       assert updated_session.identifier == "some updated identifier"
     end
 
-    test "renders errors when data is invalid", %{conn: conn, tour: tour, tour_session: tour_session} do
-      conn = put(conn, ~p"/organize/tours/#{tour}/tour_sessions/#{tour_session}", tour_session: @invalid_attrs)
+    test "renders errors when data is invalid", %{
+      conn: conn,
+      tour: tour,
+      tour_session: tour_session
+    } do
+      conn =
+        put(conn, ~p"/organize/tours/#{tour}/tour_sessions/#{tour_session}",
+          tour_session: @invalid_attrs
+        )
+
       assert html_response(conn, 200) =~ "cannot be blank"
       assert html_response(conn, 200) =~ "Edit Tour Session"
     end

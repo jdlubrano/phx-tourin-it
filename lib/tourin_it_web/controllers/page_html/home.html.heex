@@ -1,7 +1,7 @@
 <.header>Tourin' it!</.header>
 
 <%= if @current_user do %>
-  <p>You have no active tours. Contact your organizer for help.</p>
+  <p>{gettext("page.home.no_tours")}</p>
 <% else %>
-  <p>You are not logged in. Reach out to your organizer for a login link.</p>
+  <p>{gettext("page.home.logged_out")}</p>
 <% end %>
