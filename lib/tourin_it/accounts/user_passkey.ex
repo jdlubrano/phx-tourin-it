@@ -29,6 +29,6 @@ defmodule TourinIt.Accounts.UserPasskey do
     user_passkey
     |> cast(attributes, [:credential_id, :public_key_binary, :user_id])
     |> validate_required([:credential_id, :public_key_binary, :user_id])
-    |> unique_constraint([:user_id, :credential_id])
+    |> unique_constraint([:credential_id])
   end
 end

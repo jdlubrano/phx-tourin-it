@@ -10,6 +10,12 @@ defmodule TourinIt.Repo.Migrations.CreateUserPasskeys do
       timestamps(type: :utc_datetime)
     end
 
-    create(unique_index(:user_passkeys, [:user_id, :credential_id]))
+    # We should require unique passkeys per user, but the passkey flow
+    # in the app does not ask for a username.  We need the credential_id
+    # to uniquely identify a user. This app is not intended for many users, so
+    # we'll hope this works out.  Requiring unique credential_ids is better
+    # than letting a user impersonate someone else.
+    # create(unique_index(:user_passkeys, [:user_id, :credential_id]))
+    create(unique_index(:user_passkeys, [:credential_id]))
   end
 end
