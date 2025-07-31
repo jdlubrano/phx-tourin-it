@@ -24,7 +24,7 @@ defmodule TourinIt.OrganizeFixtures do
       attrs
       |> Enum.into(%{
         identifier: "some identifier",
-        tour_id:    tour.id
+        tour_id: tour.id
       })
       |> TourinIt.Organize.create_tour_session()
 

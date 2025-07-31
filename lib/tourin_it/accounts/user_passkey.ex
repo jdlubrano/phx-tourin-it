@@ -14,16 +14,17 @@ defmodule TourinIt.Accounts.UserPasskey do
 
   @doc false
   def changeset(user_passkey, attrs) do
-    attributes = case attrs do
-      %{public_key: public_key_map} ->
-        Map.put(attrs, :public_key_binary, :erlang.term_to_binary(public_key_map))
+    attributes =
+      case attrs do
+        %{public_key: public_key_map} ->
+          Map.put(attrs, :public_key_binary, :erlang.term_to_binary(public_key_map))
 
-      %{"public_key" => public_key_map} ->
-        Map.put(attrs, "public_key_binary", :erlang.term_to_binary(public_key_map))
+        %{"public_key" => public_key_map} ->
+          Map.put(attrs, "public_key_binary", :erlang.term_to_binary(public_key_map))
 
-      _ ->
-        attrs
-    end
+        _ ->
+          attrs
+      end
 
     user_passkey
     |> cast(attributes, [:credential_id, :public_key_binary, :user_id])

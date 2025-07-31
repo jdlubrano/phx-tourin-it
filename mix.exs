@@ -5,7 +5,7 @@ defmodule TourinIt.MixProject do
     [
       app: :tourin_it,
       version: "0.3.2",
-      elixir: "~> 1.14",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -59,7 +59,8 @@ defmodule TourinIt.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:tz, "~> 0.28"},
-      {:wax_, "~> 0.7.0"} # Webauthn
+      # Webauthn
+      {:wax_, "~> 0.7.0"}
     ]
   end
 
@@ -74,6 +75,7 @@ defmodule TourinIt.MixProject do
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "seed"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      gettext: ["gettext.extract", "gettext.merge priv/gettext"],
       seed: ["run priv/repo/seeds.exs"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],

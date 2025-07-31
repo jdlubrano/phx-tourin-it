@@ -12,8 +12,8 @@
 env_seeds = "#{Path.dirname(__ENV__.file)}/seeds/#{Mix.env()}.exs"
 
 if File.exists?(env_seeds) do
-  IO.puts "Loading #{env_seeds}"
+  IO.puts("Loading #{env_seeds}")
   Code.require_file(env_seeds)
 else
-  IO.puts "No seeds file found at #{env_seeds}"
+  IO.puts("No seeds file found at #{env_seeds}")
 end

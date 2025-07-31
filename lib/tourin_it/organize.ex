@@ -72,9 +72,10 @@ defmodule TourinIt.Organize do
     name = get_change(changeset, :name)
     changeset = put_change(changeset, :slug, generate_slug(name, attempt))
 
-    result = %Tour{}
-             |> Tour.changeset(changeset.changes)
-             |> Repo.insert()
+    result =
+      %Tour{}
+      |> Tour.changeset(changeset.changes)
+      |> Repo.insert()
 
     case result do
       {:error, changeset} ->
@@ -83,7 +84,9 @@ defmodule TourinIt.Organize do
         else
           result
         end
-      _ -> result
+
+      _ ->
+        result
     end
   end
 
@@ -172,11 +175,13 @@ defmodule TourinIt.Organize do
   def default_tour_session(nil), do: nil
 
   def default_tour_session(%TourinIt.Accounts.User{} = user) do
-    query = from ts in TourSession,
-      join: tg in TourGoer, on: tg.tour_session_id == ts.id,
-      where: tg.user_id == ^user.id,
-      order_by: [asc: ts.id],
-      preload: [:tour]
+    query =
+      from ts in TourSession,
+        join: tg in TourGoer,
+        on: tg.tour_session_id == ts.id,
+        where: tg.user_id == ^user.id,
+        order_by: [asc: ts.id],
+        preload: [:tour]
 
     Repo.one(query)
   end
@@ -184,7 +189,8 @@ defmodule TourinIt.Organize do
   @doc """
   Gets a single tour_session.
   """
-  def get_tour_session(%{id: id, tour_id: tour_id}), do: Repo.get_by(TourSession, %{id: id, tour_id: tour_id})
+  def get_tour_session(%{id: id, tour_id: tour_id}),
+    do: Repo.get_by(TourSession, %{id: id, tour_id: tour_id})
 
   @doc """
   Gets a single tour_session.
@@ -213,9 +219,11 @@ defmodule TourinIt.Organize do
   end
 
   def get_tour_session!(%{identifier: identifier, slug: slug}) do
-    query = from ts in TourSession,
-      join: t in Tour, on: ts.tour_id == t.id,
-      where: t.slug == ^slug and ts.identifier == ^identifier
+    query =
+      from ts in TourSession,
+        join: t in Tour,
+        on: ts.tour_id == t.id,
+        where: t.slug == ^slug and ts.identifier == ^identifier
 
     Repo.one!(query)
   end
@@ -292,14 +300,19 @@ defmodule TourinIt.Organize do
   end
 
   def update_tour_goers(%TourSession{} = tour_session, user_ids \\ []) do
-    existing_tour_goers = Repo.all(from tg in TourGoer, where: tg.tour_session_id == ^tour_session.id)
-                          |> Enum.reduce(%{}, &Map.put(&2, &1.user_id, &1.id))
+    existing_tour_goers =
+      Repo.all(from tg in TourGoer, where: tg.tour_session_id == ^tour_session.id)
+      |> Enum.reduce(%{}, &Map.put(&2, &1.user_id, &1.id))
 
-    tour_goers = Enum.map(user_ids, &%{
-      tour_session_id: tour_session.id,
-      user_id: &1,
-      id: existing_tour_goers[&1]
-    })
+    tour_goers =
+      Enum.map(
+        user_ids,
+        &%{
+          tour_session_id: tour_session.id,
+          user_id: &1,
+          id: existing_tour_goers[&1]
+        }
+      )
 
     tour_session
     |> change_tour_goers(%{tour_goers: tour_goers})

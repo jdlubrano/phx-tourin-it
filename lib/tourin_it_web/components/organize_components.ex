@@ -10,6 +10,7 @@ defmodule TourinItWeb.OrganizeComponents do
   attr :tour_session, :map, required: true
   attr :tour_goers, :list, required: true
   attr :user_access_tokens, :map, default: %{}
+
   def tour_goers_table(assigns) do
     ~H"""
     <.table id="tour_goers" rows={@tour_goers}>
@@ -23,10 +24,13 @@ defmodule TourinItWeb.OrganizeComponents do
         </span>
       </:col>
       <:action :let={tg}>
-        <button type="button" phx-click="generate_access_token" phx-value-user_id={tg.user_id}
+        <button
+          type="button"
+          phx-click="generate_access_token"
+          phx-value-user_id={tg.user_id}
           class={[
             "phx-submit-loading:opacity-75 rounded-lg bg-green-200 hover:bg-green-100 py-1 px-2",
-            "text-sm font-semibold leading-6 text-zinc-700 active:text-zinc-700/80",
+            "text-sm font-semibold leading-6 text-zinc-700 active:text-zinc-700/80"
           ]}
         >
           Generate access token
@@ -37,8 +41,12 @@ defmodule TourinItWeb.OrganizeComponents do
           :if={@user_access_tokens[tg.user_id]}
           type="button"
           class="rounded-lg bg-gray-200 hover:bg-gray-100 py-1 px-2 text-sm font-semibold leading-6 text-zinc-700 active:text-zinc-700/80"
-          phx-click={JS.dispatch("phx:copy", detail: %{value: login_link(@user_access_tokens[tg.user_id], @tour_session)})}
-          >
+          phx-click={
+            JS.dispatch("phx:copy",
+              detail: %{value: login_link(@user_access_tokens[tg.user_id], @tour_session)}
+            )
+          }
+        >
           Copy login link
         </button>
       </:action>

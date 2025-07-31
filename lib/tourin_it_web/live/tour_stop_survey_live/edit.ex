@@ -14,12 +14,17 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
 
     tour_stop = Repo.preload(tour_stop, [:tour_dates, tour_session: :tour])
 
-    tour_goer = TourGoers.get_tour_goer!(socket.assigns.current_user.id, tour_stop.tour_session_id)
+    tour_goer =
+      TourGoers.get_tour_goer!(socket.assigns.current_user.id, tour_stop.tour_session_id)
+
     surveys = TourDates.load_or_build_surveys(tour_goer, tour_stop.tour_dates)
 
     socket =
       socket
-      |> assign(:page_title, "#{tour_stop.tour_session.tour.name} #{tour_stop.tour_session.identifier}")
+      |> assign(
+        :page_title,
+        "#{tour_stop.tour_session.tour.name} #{tour_stop.tour_session.identifier}"
+      )
       |> assign(:surveys, surveys)
       |> assign(:tour_goer, tour_goer)
       |> assign(:tour_stop, tour_stop)
@@ -28,11 +33,15 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
   end
 
   def handle_event("save", %{"tour_stop" => %{"tour_date_surveys" => surveys_params}}, socket) do
-    surveys = Enum.map(surveys_params, fn {_tour_date_id, survey_params} ->
-      survey_params = Enum.into(%{"tour_goer_id" => socket.assigns.tour_goer.id}, survey_params)
-      changes = TourDates.change_tour_date_survey(%TourDates.TourDateSurvey{}, survey_params).changes
-      Map.put_new(changes, :note, nil)
-    end)
+    surveys =
+      Enum.map(surveys_params, fn {_tour_date_id, survey_params} ->
+        survey_params = Enum.into(%{"tour_goer_id" => socket.assigns.tour_goer.id}, survey_params)
+
+        changes =
+          TourDates.change_tour_date_survey(%TourDates.TourDateSurvey{}, survey_params).changes
+
+        Map.put_new(changes, :note, nil)
+      end)
 
     TourDates.upsert_surveys(surveys)
 
@@ -41,7 +50,9 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
     socket =
       socket
       |> put_flash(:info, "Availability submitted!")
-      |> push_navigate(to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming")
+      |> push_navigate(
+        to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming"
+      )
 
     {:noreply, socket}
   end

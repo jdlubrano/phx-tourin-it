@@ -16,14 +16,31 @@ defmodule TourinItWeb.Navbar do
 
           <ul class="hidden peer-focus:block has-[:active]:block absolute left-0 top-6 rounded-md drop-shadow-md bg-zinc-100 w-full">
             <li>
-              <.link navigate={~p"/user/passkeys"} class="inline-block p-2 hover:bg-zinc-200 rounded-md w-full">Passkeys</.link>
+              <.link
+                navigate={~p"/user/passkeys"}
+                class="inline-block p-2 hover:bg-zinc-200 rounded-md w-full"
+              >
+                Passkeys
+              </.link>
             </li>
             <li>
-              <.link href={~p"/log_out"} method="delete" class="inline-block p-2 hover:bg-zinc-200 rounded-md w-full">Log out</.link>
+              <.link
+                href={~p"/log_out"}
+                method="delete"
+                class="inline-block p-2 hover:bg-zinc-200 rounded-md w-full"
+              >
+                Log out
+              </.link>
             </li>
           </ul>
 
-          <.link :if={@current_user && @current_user.admin} class="underline mr-4" navigate={~p"/organize/tours"}>Admin</.link>
+          <.link
+            :if={@current_user && @current_user.admin}
+            class="underline mr-4"
+            navigate={~p"/organize/tours"}
+          >
+            Admin
+          </.link>
           <span class="bg-brand/5 text-brand rounded-full px-2">
             v{Application.spec(:tourin_it, :vsn)}
           </span>

@@ -6,7 +6,9 @@
       <div>Occasion</div>
       <div>Start date</div>
       <div>End date</div>
-      <div><!-- Actions --></div>
+      <div>
+        <!-- Actions -->
+      </div>
     </div>
     <div :for={tour_stop <- @tour_session.tour_stops} class="grid grid-cols-5 gap-4 mb-4">
       <div :if={!@editing_tour_stops[Integer.to_string(tour_stop.id)]} class="contents">
@@ -16,16 +18,34 @@
         <div>{tour_stop.end_date}</div>
         <div class="flex gap-4 underline">
           <.link navigate={~p"/tour_stops/#{tour_stop}"}>View</.link>
-          <button type="button" phx-click="edit" phx-value-id={tour_stop.id} phx-target={@myself}>Edit</button>
-          <button type="button" phx-click="delete" phx-value-id={tour_stop.id} phx-target={@myself}>Delete</button>
+          <button type="button" phx-click="edit" phx-value-id={tour_stop.id} phx-target={@myself}>
+            Edit
+          </button>
+          <button
+            type="button"
+            phx-click="delete"
+            phx-value-id={tour_stop.id}
+            phx-target={@myself}
+          >
+            Delete
+          </button>
         </div>
       </div>
-      <.tour_stop_form :if={@editing_tour_stops[Integer.to_string(tour_stop.id)]} changeset={changeset(tour_stop)} target={@myself} />
+      <.tour_stop_form
+        :if={@editing_tour_stops[Integer.to_string(tour_stop.id)]}
+        changeset={changeset(tour_stop)}
+        target={@myself}
+      />
     </div>
   </div>
 
   <%= if is_nil(@new_tour_stop) do %>
-    <button type="button" class="rounded-lg bg-green-200 py-2 px-2" phx-click="add_tour_stop" phx-target={@myself}>
+    <button
+      type="button"
+      class="rounded-lg bg-green-200 py-2 px-2"
+      phx-click="add_tour_stop"
+      phx-target={@myself}
+    >
       Add tour stop
     </button>
   <% else %>

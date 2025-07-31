@@ -1,5 +1,4 @@
 defmodule TourinIt.TourStopsFixtures do
-
   import TourinIt.OrganizeFixtures
 
   @moduledoc """

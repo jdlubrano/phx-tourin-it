@@ -17,7 +17,12 @@ defmodule TourinItWeb.UserSessionController do
     end
   end
 
-  def create(conn, %{"authenticator_data" => auth_data_b64, "client_data" => client_data, "credential_id" => credential_id_b64, "signature" => signature_b64 }) do
+  def create(conn, %{
+        "authenticator_data" => auth_data_b64,
+        "client_data" => client_data,
+        "credential_id" => credential_id_b64,
+        "signature" => signature_b64
+      }) do
     challenge = get_session(conn, :challenge)
 
     auth_data = Base.decode64!(auth_data_b64)
@@ -26,14 +31,15 @@ defmodule TourinItWeb.UserSessionController do
 
     passkey = Accounts.get_user_passkey_by_credential_id(credential_id)
 
-    result = Wax.authenticate(
-      credential_id,
-      auth_data,
-      signature,
-      client_data,
-      challenge,
-      [{passkey.credential_id, passkey.public_key}]
-    )
+    result =
+      Wax.authenticate(
+        credential_id,
+        auth_data,
+        signature,
+        client_data,
+        challenge,
+        [{passkey.credential_id, passkey.public_key}]
+      )
 
     case result do
       {:ok, _} ->
@@ -56,6 +62,4 @@ defmodule TourinItWeb.UserSessionController do
     put_session(conn, :challenge, challenge)
     |> assign(:challenge, Base.encode64(challenge.bytes))
   end
-
 end
-

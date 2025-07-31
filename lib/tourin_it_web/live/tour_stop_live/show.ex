@@ -5,12 +5,12 @@ defmodule TourinItWeb.TourStopLive.Show do
   import TourinItWeb.TourStopComponents
 
   alias TourinIt.Repo
-  alias TourinIt.{TourDates, TourGoers ,TourStops}
+  alias TourinIt.{TourDates, TourGoers, TourStops}
   alias TourinIt.TourDates.TourDateSurvey
 
   @availability_classes %{
-    available:   ["capitalize", "bg-green-100", "focus:ring-green-200"],
-    tbd:         ["uppercase", "bg-yellow-100", "focus:ring-yellow-200"],
+    available: ["capitalize", "bg-green-100", "focus:ring-green-200"],
+    tbd: ["uppercase", "bg-yellow-100", "focus:ring-yellow-200"],
     unavailable: ["capitalize", "bg-red-100", "focus:ring-red-200"]
   }
 
@@ -21,8 +21,10 @@ defmodule TourinItWeb.TourStopLive.Show do
     ensure_invited!(socket.assigns.current_user, tour_stop.tour_session)
 
     tour_session = Repo.preload(tour_stop.tour_session, [:tour, tour_goers: :user])
-    tour_goers = Enum.sort_by(tour_session.tour_goers, &(&1.user.username), :asc)
-    surveys = TourDates.map_surveys_by_tour_date_and_tour_goer(tour_stop && tour_stop.tour_dates || [])
+    tour_goers = Enum.sort_by(tour_session.tour_goers, & &1.user.username, :asc)
+
+    surveys =
+      TourDates.map_surveys_by_tour_date_and_tour_goer((tour_stop && tour_stop.tour_dates) || [])
 
     socket =
       socket
@@ -35,7 +37,8 @@ defmodule TourinItWeb.TourStopLive.Show do
     {:ok, socket}
   end
 
-  defp invited?(current_user, tour_session), do: TourGoers.invited?(current_user.id, tour_session.id)
+  defp invited?(current_user, tour_session),
+    do: TourGoers.invited?(current_user.id, tour_session.id)
 
   defp surveys_for(surveys, tour_goer, tour_dates) do
     Enum.map(tour_dates, fn tour_date ->
@@ -53,7 +56,7 @@ defmodule TourinItWeb.TourStopLive.Show do
       "px-2",
       "relative",
       "rounded-md",
-      "focus:ring",
+      "focus:ring"
     ] ++ @availability_classes[survey.availability]
   end
 end
