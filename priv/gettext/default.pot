@@ -57,12 +57,7 @@ msgstr ""
 msgid "tour_stop.occasion"
 msgstr ""
 
-#: lib/tourin_it_web/controllers/page_html/home.html.heex:6
-#, elixir-autogen, elixir-format
-msgid "page.home.logged_out"
-msgstr ""
-
-#: lib/tourin_it_web/controllers/page_html/home.html.heex:4
+#: lib/tourin_it_web/controllers/page_html/home.html.heex:3
 #, elixir-autogen, elixir-format
 msgid "page.home.no_tours"
 msgstr ""

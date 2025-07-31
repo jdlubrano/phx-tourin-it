@@ -57,12 +57,7 @@ msgstr ""
 msgid "tour_stop.occasion"
 msgstr "Meal"
 
-#: lib/tourin_it_web/controllers/page_html/home.html.heex:6
-#, elixir-autogen, elixir-format
-msgid "page.home.logged_out"
-msgstr "You are not logged in. Reach out to your organizer for a login link."
-
-#: lib/tourin_it_web/controllers/page_html/home.html.heex:4
+#: lib/tourin_it_web/controllers/page_html/home.html.heex:3
 #, elixir-autogen, elixir-format
 msgid "page.home.no_tours"
 msgstr "You have no active tours. Contact your organizer for help."
