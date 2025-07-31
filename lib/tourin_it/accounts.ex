@@ -151,9 +151,18 @@ defmodule TourinIt.Accounts do
   end
 
   def get_user_passkey_by_credential_id(credential_id) do
-    query = from p in UserPasskey, where: p.credential_id == ^credential_id
+    query =
+      from p in UserPasskey,
+        where: p.credential_id == ^credential_id,
+        order_by: [asc: :id],
+        limit: 1
+
     passkey = Repo.one(query) |> Repo.preload(:user)
 
-    Map.put(passkey, :public_key, :erlang.binary_to_term(passkey.public_key_binary))
+    if passkey do
+      Map.put(passkey, :public_key, :erlang.binary_to_term(passkey.public_key_binary))
+    else
+      nil
+    end
   end
 end

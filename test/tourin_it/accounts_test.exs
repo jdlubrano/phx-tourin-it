@@ -113,4 +113,19 @@ defmodule TourinIt.AccountsTest do
                })
     end
   end
+
+  describe "get_user_passkey_by_credential_id/1" do
+    test "returns nil when no credential exists for the given credential_id" do
+      passkey = Accounts.get_user_passkey_by_credential_id("test")
+      assert is_nil(passkey)
+    end
+
+    test "returns the matching passkey" do
+      fixture = user_passkey_fixture(user_fixture(), %{public_key: %{foo: :bar}})
+      passkey = Accounts.get_user_passkey_by_credential_id(fixture.credential_id)
+
+      assert passkey.id == fixture.id
+      assert passkey.public_key == %{foo: :bar}
+    end
+  end
 end
