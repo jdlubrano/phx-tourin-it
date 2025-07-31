@@ -9,7 +9,12 @@ defmodule TourinItWeb.Navbar do
       <div class="flex items-center justify-between py-3 text-sm">
         <img src={~p"/images/logo.svg"} width="36" />
         <div class="inline-flex font-medium leading-6 relative">
-          <button :if={@current_user} class="capitalize cursor-pointer mr-4 peer" type="button">
+          <button
+            :if={@current_user}
+            class="capitalize cursor-pointer mr-4 peer"
+            type="button"
+            phx-click={JS.focus()}
+          >
             Hello, {@current_user.username}
             <.icon name="hero-chevron-down" class="size-3" />
           </button>
