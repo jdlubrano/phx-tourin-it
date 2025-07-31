@@ -12,7 +12,7 @@ defmodule TourinItWeb.MeControllerTest do
 
     test "rejects unauthenticated users", %{conn: conn} do
       conn = get(conn, ~p"/me")
-      assert html_response(conn, 403) =~ "You are not authorized"
+      assert redirected_to(conn) == ~p"/log_in"
     end
   end
 end
