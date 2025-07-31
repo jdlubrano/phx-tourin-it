@@ -70,4 +70,62 @@ defmodule TourinIt.AccountsTest do
       refute Accounts.get_user_by_session_token(token)
     end
   end
+
+  describe "create_user_passkey/1" do
+    test "creates passkey for the user" do
+      user = user_fixture()
+
+      {:ok, passkey} =
+        Accounts.create_user_passkey(%{
+          credential_id: "test",
+          public_key_binary: "test",
+          user_id: user.id
+        })
+
+      passkey = Repo.preload(passkey, :user)
+
+      assert passkey.credential_id == "test"
+      assert passkey.public_key_binary == "test"
+      assert passkey.user == user
+    end
+
+    test "converts a public_key to binary" do
+      user = user_fixture()
+
+      {:ok, passkey} =
+        Accounts.create_user_passkey(%{
+          credential_id: "test",
+          public_key: %{foo: "bar"},
+          user_id: user.id
+        })
+
+      assert :erlang.binary_to_term(passkey.public_key_binary) == %{foo: "bar"}
+    end
+
+    test "rejects invalid attributes" do
+      user = user_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.create_user_passkey(%{
+                 credential_id: "",
+                 public_key: "test",
+                 user_id: user.id
+               })
+    end
+  end
+
+  describe "get_user_passkey_by_credential_id/1" do
+    test "returns nil when no credential exists for the given credential_id" do
+      passkey = Accounts.get_user_passkey_by_credential_id("test")
+      assert is_nil(passkey)
+    end
+
+    test "returns the matching passkey" do
+      fixture = user_passkey_fixture(user_fixture(), %{public_key: %{foo: :bar}})
+      passkey = Accounts.get_user_passkey_by_credential_id(fixture.credential_id)
+
+      assert passkey.id == fixture.id
+      assert passkey.public_key == %{foo: :bar}
+    end
+  end
 end

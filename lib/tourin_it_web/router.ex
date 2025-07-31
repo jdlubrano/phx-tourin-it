@@ -29,6 +29,9 @@ defmodule TourinItWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/log_in", UserSessionController, :new
+    post "/log_in", UserSessionController, :create
+    delete "/log_out", UserSessionController, :destroy
   end
 
   scope "/", TourinItWeb do
@@ -41,6 +44,8 @@ defmodule TourinItWeb.Router do
 
     live "/tour_stops/:id", TourStopLive.Show
     live "/tour_stops/:id/survey", TourStopSurveyLive.Edit
+
+    live "/user/passkeys", User.PasskeyLive.Index
   end
 
   scope "/organize", TourinItWeb.Organize do

@@ -21,9 +21,14 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import { PasskeyLogInHook, PasskeyNewHook } from "./passkey_hooks"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
+  hooks: {
+    PasskeyLogIn: PasskeyLogInHook,
+    PasskeyNew: PasskeyNewHook,
+  },
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken}
 })
@@ -49,20 +54,23 @@ window.addEventListener("phx:copy", (event) => {
   let copiedNotification = document.createElement("div");
 
   copiedNotification.classList.add(
+    "copied-notification",
     "fixed",
     "top-3",
     "w-full",
     "flex",
     "justify-center",
-    "transition-all",
-    "delay-1000"
   );
 
   copiedNotification.innerHTML = `<span class="rounded-lg p-3 text-sm bg-green-50">Copied ${copied}</span>`;
 
+  Array.from(document.querySelectorAll(".copied-notification")).forEach((notification) => {
+    notification.remove()
+  });
+
   document.body.appendChild(copiedNotification);
 
-  setTimeout(() => copiedNotification.classList.add("opacity-0"));
+  setTimeout(() => copiedNotification.classList.add("transition-all", "opacity-0"), 1000);
 });
 
 function hideTooltip(element) {

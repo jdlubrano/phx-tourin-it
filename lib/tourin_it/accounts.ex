@@ -6,7 +6,7 @@ defmodule TourinIt.Accounts do
   import Ecto.Query, warn: false
   alias TourinIt.Repo
 
-  alias TourinIt.Accounts.{User, UserToken}
+  alias TourinIt.Accounts.{User, UserPasskey, UserToken}
 
   ## Database getters
   def get_user_by_access_token(nil), do: nil
@@ -15,6 +15,13 @@ defmodule TourinIt.Accounts do
     {:ok, decoded_token} = Base.url_decode64(token, padding: false)
     {:ok, query} = UserToken.verify_access_token_query(decoded_token)
     Repo.one(query)
+  end
+
+  def find_or_create_valid_user_access_token(user) do
+    query = UserToken.valid_access_token_for_user_query(user)
+    token = Repo.one(query) || generate_user_access_token(user)
+
+    encode_token(token.token)
   end
 
   def generate_user_access_token(user) do
@@ -135,5 +142,27 @@ defmodule TourinIt.Accounts do
 
   defp encode_token(token) do
     Base.url_encode64(token, padding: false)
+  end
+
+  def create_user_passkey(attrs) do
+    %UserPasskey{}
+    |> UserPasskey.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def get_user_passkey_by_credential_id(credential_id) do
+    query =
+      from p in UserPasskey,
+        where: p.credential_id == ^credential_id,
+        order_by: [asc: :id],
+        limit: 1
+
+    passkey = Repo.one(query) |> Repo.preload(:user)
+
+    if passkey do
+      Map.put(passkey, :public_key, :erlang.binary_to_term(passkey.public_key_binary))
+    else
+      nil
+    end
   end
 end

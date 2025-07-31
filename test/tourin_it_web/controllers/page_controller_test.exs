@@ -6,11 +6,6 @@ defmodule TourinItWeb.PageControllerTest do
   import TourinIt.TourGoersFixtures
 
   describe "GET /" do
-    test "shows a message indicating the user is not logged in", %{conn: conn} do
-      conn = get(conn, ~p"/")
-      assert html_response(conn, 200) =~ gettext("page.home.logged_out")
-    end
-
     test "shows a message indicating the user has no tours", %{conn: conn} do
       %{conn: conn} = register_and_log_in_user(%{conn: conn})
       conn = get(conn, ~p"/")
