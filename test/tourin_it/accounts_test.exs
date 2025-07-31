@@ -105,7 +105,7 @@ defmodule TourinIt.AccountsTest do
     test "rejects invalid attributes" do
       user = user_fixture()
 
-      assert {:error, %Ecto.Changeset{} = changeset} =
+      assert {:error, %Ecto.Changeset{}} =
                Accounts.create_user_passkey(%{
                  credential_id: "",
                  public_key: "test",
