@@ -7,7 +7,9 @@ defmodule TourinItWeb.Navbar do
     ~H"""
     <header class="px-4 sm:px-6 lg:px-8 border-b border-zinc-100">
       <div class="flex items-center justify-between py-3 text-sm">
-        <img src={~p"/images/logo.svg"} width="36" />
+        <.link navigate={~p"/"}>
+          <img src={~p"/images/logo.svg"} width="36" />
+        </.link>
         <div class="inline-flex font-medium leading-6 relative">
           <button
             :if={@current_user}
