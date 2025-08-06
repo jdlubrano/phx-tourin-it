@@ -48,9 +48,15 @@ defmodule TourinItWeb.Navbar do
           >
             Admin
           </.link>
-          <span class="bg-brand/5 text-brand rounded-full px-2">
-            v{Application.spec(:tourin_it, :vsn)}
-          </span>
+          <a
+            href="https://github.com/jdlubrano/phx-tourin-it/releases"
+            target="_blank"
+            rel="noopener noreferer"
+          >
+            <span class="bg-brand/5 text-brand rounded-full px-2">
+              v{Application.spec(:tourin_it, :vsn)}
+            </span>
+          </a>
         </div>
       </div>
     </header>
