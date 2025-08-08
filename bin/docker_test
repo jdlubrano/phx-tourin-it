@@ -1,4 +1,13 @@
 #!/bin/bash
 
 docker build . -t tourin_it
-docker container run -it --env "DATABASE_PATH=tourin_it_prod.db" --env "SECRET_KEY_BASE=secret" tourin_it sh
+
+docker container run \
+  --env "DATABASE_PATH=/app/data/tourin_it_prod.db" \
+  --env "SECRET_KEY_BASE=secret" \
+  --env "PHX_HOST=tourin-it.fly.dev" \
+  --env "PHX_SERVER=true" \
+  --env "FLY_APP_NAME=tourin-it" \
+  --env "FLY_PRIVATE_IP=127.0.0.1" \
+  -it tourin_it \
+  bin/tourin_it start_iex
