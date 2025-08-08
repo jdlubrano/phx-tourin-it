@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker build . -t tourin_it
+docker container run -it --env "DATABASE_PATH=tourin_it_prod.db" --env "SECRET_KEY_BASE=secret" tourin_it sh

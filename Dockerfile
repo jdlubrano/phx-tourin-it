@@ -12,8 +12,8 @@
 #   - Ex: hexpm/elixir:1.17.3-erlang-26.2.5.8-debian-bullseye-20250203-slim
 #
 ARG ELIXIR_VERSION=1.17.3
-ARG OTP_VERSION=26.2.5.8
-ARG DEBIAN_VERSION=bullseye-20250203-slim
+ARG OTP_VERSION=26.2.5.14
+ARG DEBIAN_VERSION=bookworm-20250721-slim
 
 ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
 ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
@@ -108,3 +108,4 @@ USER nobody
 ENTRYPOINT ["/bin/bash", "/app/bin/litestream.sh"]
 
 CMD ["/app/bin/server"]
+# CMD ["/bin/sh"]
