@@ -30,7 +30,7 @@
 
 <div
   :if={invited?(@current_user, @tour_session)}
-  class="mt-16 -mb-8 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 sticky bottom-0 bg-white"
+  class="mt-16 -mb-8 lg:-mb-20 py-4 sticky bottom-0 bg-white"
 >
   <.link navigate={~p"/tour_stops/#{@tour_stop.id}/survey"}>
     <.button class="w-full">Provide Availability</.button>
