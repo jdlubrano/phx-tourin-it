@@ -21,14 +21,37 @@ defmodule TourinIt.TourStops.TourStop do
   @doc false
   def changeset(tour_stop, attrs) do
     tour_stop
-    |> cast(attrs, [:destination, :occasion, :start_date, :end_date, :tour_session_id])
-    |> validate_required([:destination, :occasion, :start_date, :end_date, :tour_session_id])
+    |> cast(attrs, [
+      :destination,
+      :guest_picker_id,
+      :occasion,
+      :start_date,
+      :end_date,
+      :tour_session_id
+    ])
+    |> validate_required([:occasion, :start_date, :end_date, :tour_session_id])
+    |> validate_destination_or_guest_picker()
   end
 
   @doc false
   def update_changeset(tour_stop, attrs) do
     tour_stop
-    |> cast(attrs, [:destination, :occasion, :start_date, :end_date])
-    |> validate_required([:destination, :occasion, :start_date, :end_date])
+    |> cast(attrs, [:destination, :guest_picker_id, :occasion, :start_date, :end_date])
+    |> validate_required([:occasion, :start_date, :end_date])
+    |> validate_destination_or_guest_picker()
+  end
+
+  @doc false
+  defp validate_destination_or_guest_picker(changeset) do
+    destination = get_field(changeset, :destination)
+    guest_picker_id = get_field(changeset, :guest_picker_id)
+
+    case destination || guest_picker_id do
+      nil ->
+        add_error(changeset, :destination, "required")
+
+      _ ->
+        changeset
+    end
   end
 end

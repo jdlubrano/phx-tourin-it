@@ -12,6 +12,7 @@ defmodule TourinIt.TourStopsTest do
     alias TourinIt.TourStops.TourStop
 
     import TourinIt.OrganizeFixtures
+    import TourinIt.TourGoersFixtures
     import TourinIt.TourStopsFixtures
 
     @invalid_attrs %{destination: nil, start_date: nil, end_date: nil}
@@ -66,6 +67,35 @@ defmodule TourinIt.TourStopsTest do
 
       tour_stop = Repo.preload(tour_stop, :tour_session)
       assert tour_stop.tour_session == tour_session
+    end
+
+    test "create_tour_stop/1 destination can be blank only for guest picks" do
+      tour_session = tour_session_fixture()
+      tour_goer = tour_goer_fixture()
+
+      valid_attrs = %{
+        start_date: ~D[2025-05-09],
+        end_date: ~D[2025-05-09],
+        guest_picker_id: tour_goer.id,
+        tour_session_id: tour_session.id
+      }
+
+      assert {:ok, %TourStop{} = tour_stop} = TourStops.create_tour_stop(valid_attrs)
+
+      tour_stop = Repo.preload(tour_stop, :guest_picker)
+
+      assert tour_stop.occasion == :dinner
+      assert tour_stop.start_date == ~D[2025-05-09]
+      assert tour_stop.end_date == ~D[2025-05-09]
+      assert tour_stop.guest_picker == tour_goer
+
+      invalid_attrs = %{
+        start_date: ~D[2025-05-09],
+        end_date: ~D[2025-05-09],
+        tour_session_id: tour_session.id
+      }
+
+      assert {:error, %Ecto.Changeset{}} = TourStops.create_tour_stop(invalid_attrs)
     end
 
     test "create_tour_stop/1 with invalid data returns error changeset" do
@@ -140,6 +170,38 @@ defmodule TourinIt.TourStopsTest do
       assert tour_stop.occasion == :breakfast
       assert tour_stop.start_date == ~D[2025-05-10]
       assert tour_stop.end_date == ~D[2025-05-10]
+    end
+
+    test "update_tour_stop/2 destination can only be blank for guest picks" do
+      tour_stop = tour_stop_fixture()
+      tour_goer = tour_goer_fixture()
+
+      update_attrs = %{
+        destination: nil,
+        start_date: ~D[2025-05-10],
+        end_date: ~D[2025-05-10],
+        guest_picker_id: tour_goer.id
+      }
+
+      assert {:ok, %TourStop{}} =
+               TourStops.update_tour_stop(tour_stop, update_attrs)
+
+      tour_stop =
+        TourStops.get_tour_stop!(tour_stop.id)
+        |> Repo.preload(:guest_picker)
+
+      assert tour_stop.destination == nil
+      assert tour_stop.start_date == ~D[2025-05-10]
+      assert tour_stop.end_date == ~D[2025-05-10]
+      assert tour_stop.guest_picker == tour_goer
+
+      invalid_attrs = %{
+        start_date: ~D[2025-05-10],
+        end_date: ~D[2025-05-10],
+        guest_picker_id: nil
+      }
+
+      assert {:error, %Ecto.Changeset{}} = TourStops.update_tour_stop(tour_stop, invalid_attrs)
     end
 
     test "update_tour_stop/2 with invalid data returns error changeset" do
