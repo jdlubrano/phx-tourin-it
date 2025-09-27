@@ -56,7 +56,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   def handle_event("save", %{"tour_stop" => %{"id" => id} = tour_stop_params}, socket) do
     Repo.transaction(fn ->
       {:ok, %TourStop{} = tour_stop} =
-        TourStops.update_tour_stop(%TourStop{id: String.to_integer(id)}, tour_stop_params)
+        TourStops.update_tour_stop(TourStops.get_tour_stop!(id), tour_stop_params)
 
       TourStops.set_tour_dates(tour_stop)
     end)
