@@ -7,7 +7,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   def mount(socket) do
     socket =
       socket
-      |> assign(:new_tour_stop, nil)
+      |> assign(:new_tour_stop_changeset, nil)
       |> assign(:editing_tour_stops, %{})
 
     {:ok, socket}
@@ -18,7 +18,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("add_tour_stop", _params, socket) do
-    socket = assign(socket, :new_tour_stop, %TourStop{})
+    socket = assign(socket, :new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
 
     {:noreply, socket}
   end
@@ -30,7 +30,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("cancel", _params, socket) do
-    {:noreply, assign(socket, :new_tour_stop, nil)}
+    {:noreply, assign(socket, :new_tour_stop_changeset, nil)}
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
@@ -48,9 +48,19 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
 
   def handle_event("save", %{"tour_stop" => %{"id" => ""} = tour_stop_params}, socket) do
     create_params = Map.put(tour_stop_params, "tour_session_id", socket.assigns.tour_session.id)
-    {:ok, _tour_stop} = TourStops.create_tour_stop_with_dates(create_params)
 
-    {:noreply, reload_tour_session(socket)}
+    socket = case TourStops.create_tour_stop_with_dates(create_params) do
+      {:ok, _tour_stop} ->
+        socket
+        |> assign(:new_tour_stop_changeset, nil)
+        |> reload_tour_session()
+
+      {:error, changeset = %Ecto.Changeset{}} ->
+        socket
+        |> assign(:new_tour_stop_changeset, changeset)
+    end
+
+    {:noreply, socket}
   end
 
   def handle_event("save", %{"tour_stop" => %{"id" => id} = tour_stop_params}, socket) do

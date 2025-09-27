@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <%= if is_nil(@new_tour_stop) do %>
+  <%= if is_nil(@new_tour_stop_changeset) do %>
     <button
       type="button"
       class="rounded-lg bg-green-200 py-2 px-2"
@@ -50,7 +50,7 @@
     </button>
   <% else %>
     <div class="grid grid-cols-4 gap-4">
-      <.tour_stop_form changeset={changeset(@new_tour_stop)} target={@myself} />
+      <.tour_stop_form changeset={@new_tour_stop_changeset} target={@myself} />
     </div>
   <% end %>
 </section>
