@@ -77,7 +77,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
       reload_tour_session(socket)
       |> assign(:editing_tour_stops, editing_tour_stops)
 
-    {:noreply, reload_tour_session(socket)}
+    {:noreply, socket}
   end
 
   def occasion_options() do
