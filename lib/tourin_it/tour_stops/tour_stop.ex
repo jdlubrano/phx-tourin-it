@@ -10,6 +10,7 @@ defmodule TourinIt.TourStops.TourStop do
     field :start_date, :date
     field :end_date, :date
 
+    belongs_to :guest_picker, TourinIt.TourGoers.TourGoer
     belongs_to :tour_session, TourinIt.Organize.TourSession
 
     has_many :tour_dates, TourDate, preload_order: [asc: :date]
