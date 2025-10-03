@@ -49,7 +49,7 @@ defmodule TourinItWeb.Organize.TourSessionLive do
   def mount(%{"tour_id" => tour_id, "id" => id}, _session, socket) do
     tour_session =
       Organize.get_tour_session!(%{id: id, tour_id: tour_id})
-      |> Repo.preload([:tour, tour_stops: [guest_picker: :user], tour_goers: :user])
+      |> Repo.preload([:tour, tour_goers: :user])
 
     user_access_tokens =
       tour_session.tour_goers

@@ -13,6 +13,14 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
     {:ok, socket}
   end
 
+def update(assigns, socket) do
+  socket =
+    assign(socket, :tour_session, assigns.tour_session)
+    |> reload_tour_session()
+
+  {:ok, socket}
+end
+
   def handle_event("add_tour_stop", _params, socket) do
     socket = assign(socket, :new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
 
@@ -94,7 +102,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   defp reload_tour_session(socket) do
     tour_session =
       Organize.get_tour_session!(socket.assigns.tour_session.id)
-      |> Repo.preload(:tour_stops)
+      |> Repo.preload(tour_stops: [guest_picker: :user])
 
     assign(socket, :tour_session, tour_session)
   end
