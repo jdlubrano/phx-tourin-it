@@ -17,7 +17,9 @@ defmodule TourinItWeb.TourStopLive.Show do
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
   def mount(%{"id" => id}, _session, socket) do
-    tour_stop = TourStops.get_tour_stop!(id) |> Repo.preload([:tour_dates, :tour_session])
+    tour_stop =
+      TourStops.get_tour_stop!(id) |> Repo.preload([:guest_picker, :tour_dates, :tour_session])
+
     ensure_invited!(socket.assigns.current_user, tour_stop.tour_session)
 
     tour_session = Repo.preload(tour_stop.tour_session, [:tour, tour_goers: :user])
@@ -39,6 +41,9 @@ defmodule TourinItWeb.TourStopLive.Show do
 
   defp invited?(current_user, tour_session),
     do: TourGoers.invited?(current_user.id, tour_session.id)
+
+  defp guest_picker?(tour_stop, current_user),
+    do: TourStops.guest_picker?(tour_stop, current_user)
 
   defp surveys_for(surveys, tour_goer, tour_dates) do
     Enum.map(tour_dates, fn tour_date ->

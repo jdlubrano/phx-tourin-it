@@ -32,6 +32,14 @@
   :if={invited?(@current_user, @tour_session)}
   class="mt-16 -mb-8 lg:-mb-20 py-4 sticky bottom-0 bg-white"
 >
+  <.link
+    :if={guest_picker?(@tour_stop, @current_user)}
+    navigate={~p"/tour_stops/#{@tour_stop.id}/survey"}
+  >
+    <.button class="w-full mb-6">
+      {if is_nil(@tour_stop.destination), do: "Submit", else: "Edit"} Your Pick
+    </.button>
+  </.link>
   <.link navigate={~p"/tour_stops/#{@tour_stop.id}/survey"}>
     <.button class="w-full">Provide Availability</.button>
   </.link>
