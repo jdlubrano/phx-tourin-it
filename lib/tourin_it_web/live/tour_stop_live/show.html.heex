@@ -4,7 +4,7 @@
 
 <.header class="mb-8">{@tour_session.tour.name} {@tour_session.identifier}</.header>
 
-<.tour_stop_details tour_stop={@tour_stop} />
+<.tour_stop_details current_user={@current_user} tour_stop={@tour_stop} />
 
 <div class="grid grid-cols-6 gap-y-8 text-sm font-semibold text-zinc-700">
   <div class="contents text-center">

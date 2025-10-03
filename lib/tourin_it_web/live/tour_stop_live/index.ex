@@ -13,7 +13,10 @@ defmodule TourinItWeb.TourStopLive.Index do
     ensure_invited!(socket.assigns.current_user, tour_session)
 
     tour_session = Repo.preload(tour_session, [:tour])
-    tour_stops = TourStops.past_and_upcoming(tour_session.id)
+
+    tour_stops =
+      TourStops.past_and_upcoming(tour_session.id)
+      |> Repo.preload(guest_picker: :user)
 
     socket =
       socket
