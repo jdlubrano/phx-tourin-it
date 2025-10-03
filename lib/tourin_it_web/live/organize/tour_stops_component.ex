@@ -111,6 +111,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
 
   attr :changeset, :any, required: true
   attr :target, :any, required: true
+  attr :tour_session, Organize.TourSession, required: true
 
   def tour_stop_form(assigns)
 end
