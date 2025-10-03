@@ -10,11 +10,11 @@
   <.input field={f[:occasion]} label="Occasion" type="select" options={occasion_options()} />
   <.input field={f[:start_date]} label="Start date" type="date" />
   <.input field={f[:end_date]} label="End date" type="date" />
-  <span class="justify-self-center self-end">
+  <div class="flex items-end">
     <.input field={f[:id]} type="hidden" />
     <.button type="submit">Save</.button>
     <button
-      class="ml-2 rounded-lg leading-6 text-sm hover:bg-gray-50 py-2 px-3 border"
+      class="ml-2 rounded-lg leading-6 text-sm font-semibold py-2 px-3"
       type="button"
       phx-click="cancel"
       phx-target={@target}
@@ -22,5 +22,5 @@
     >
       Cancel
     </button>
-  </span>
+  </div>
 </.form>

@@ -13,7 +13,7 @@ defmodule TourinItWeb.OrganizeComponents do
 
   def tour_goers_table(assigns) do
     ~H"""
-    <.table id="tour_goers" rows={@tour_goers}>
+    <.table id="tour_goers" wrapper_class="overflow-x-auto overflow-y-hidden" rows={@tour_goers}>
       <:title>
         <p class="mb-6 leading-6 text-zinc-800">Tour goers</p>
       </:title>

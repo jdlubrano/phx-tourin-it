@@ -49,16 +49,17 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   def handle_event("save", %{"tour_stop" => %{"id" => ""} = tour_stop_params}, socket) do
     create_params = Map.put(tour_stop_params, "tour_session_id", socket.assigns.tour_session.id)
 
-    socket = case TourStops.create_tour_stop_with_dates(create_params) do
-      {:ok, _tour_stop} ->
-        socket
-        |> assign(:new_tour_stop_changeset, nil)
-        |> reload_tour_session()
+    socket =
+      case TourStops.create_tour_stop_with_dates(create_params) do
+        {:ok, _tour_stop} ->
+          socket
+          |> assign(:new_tour_stop_changeset, nil)
+          |> reload_tour_session()
 
-      {:error, changeset = %Ecto.Changeset{}} ->
-        socket
-        |> assign(:new_tour_stop_changeset, changeset)
-    end
+        {:error, changeset = %Ecto.Changeset{}} ->
+          socket
+          |> assign(:new_tour_stop_changeset, changeset)
+      end
 
     {:noreply, socket}
   end
