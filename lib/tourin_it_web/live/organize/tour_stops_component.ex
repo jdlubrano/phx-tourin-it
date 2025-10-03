@@ -13,9 +13,9 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
-    {:ok, assign(socket, :tour_session, assigns.tour_session)}
-  end
+  # def update(assigns, socket) do
+  #   {:ok, assign(socket, :tour_session, assigns.tour_session)}
+  # end
 
   def handle_event("add_tour_stop", _params, socket) do
     socket = assign(socket, :new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
@@ -82,6 +82,14 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
 
   def occasion_options() do
     Ecto.Enum.values(TourStop, :occasion)
+  end
+
+  def guest_picker_options(tour_session) do
+    tour_goers = Repo.preload(tour_session, tour_goers: :user).tour_goers
+
+    Enum.map(tour_goers, fn tour_goer ->
+      [key: tour_goer.user.username, value: tour_goer.id]
+    end)
   end
 
   defp changeset(%TourStop{} = tour_stop), do: TourStops.change_tour_stop(tour_stop)
