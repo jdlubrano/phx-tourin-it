@@ -63,6 +63,10 @@ defmodule TourinIt.TourStops do
   """
   def get_tour_stop!(id), do: Repo.get!(TourStop, id)
 
+  def guest_picker?(tour_stop = %TourStop{}, user = %TourinIt.Accounts.User{}) do
+    user.id == (tour_stop.guest_picker && tour_stop.guest_picker.user_id)
+  end
+
   @doc """
   Creates a tour_stop.
 
@@ -138,6 +142,12 @@ defmodule TourinIt.TourStops do
   def update_tour_stop(%TourStop{} = tour_stop, attrs) do
     tour_stop
     |> TourStop.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_guest_pick(%TourStop{} = tour_stop, attrs \\ %{}) do
+    tour_stop
+    |> TourStop.guest_pick_changeset(attrs)
     |> Repo.update()
   end
 

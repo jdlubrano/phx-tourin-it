@@ -4,7 +4,7 @@
   {@tour_stop.tour_session.tour.name} {@tour_stop.tour_session.identifier}
 </.header>
 
-<.tour_stop_details tour_stop={@tour_stop} />
+<.tour_stop_details current_user={@current_user} tour_stop={@tour_stop} />
 
 <.form for={nil} phx-submit="save">
   <div :for={{tour_date, survey} <- @surveys} class="mb-8">

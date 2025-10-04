@@ -9,7 +9,10 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
   on_mount {TourinItWeb.UserAuth, :mount_current_user}
 
   def mount(%{"id" => id}, _session, socket) do
-    tour_stop = TourStops.get_tour_stop!(id)
+    tour_stop =
+      TourStops.get_tour_stop!(id)
+      |> Repo.preload(guest_picker: :user)
+
     ensure_invited!(socket.assigns.current_user, tour_stop.tour_session_id)
 
     tour_stop = Repo.preload(tour_stop, [:tour_dates, tour_session: :tour])
