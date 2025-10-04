@@ -1,0 +1,12 @@
+<.back navigate={~p"/tour_stops/#{@tour_stop}"}>Back</.back>
+
+<.header class="mb-8">
+  {@tour_stop.tour_session.tour.name} {@tour_stop.tour_session.identifier}
+</.header>
+
+<.tour_stop_details current_user={@current_user} tour_stop={@tour_stop} />
+
+<.form :let={f} for={@changeset} phx-submit="save">
+  <.input field={f[:destination]} label={gettext("guest_pick.destination")} />
+  <.button class="mt-4 w-full" type="submit">{gettext("guest_pick.submit")}</.button>
+</.form>

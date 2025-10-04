@@ -44,6 +44,7 @@ defmodule TourinItWeb.Router do
 
     live "/tour_stops/:id", TourStopLive.Show
     live "/tour_stops/:id/survey", TourStopSurveyLive.Edit
+    live "/tour_stops/:tour_stop_id/guest_pick/edit", GuestPickLive.Edit
 
     live "/user/passkeys", User.PasskeyLive.Index
   end

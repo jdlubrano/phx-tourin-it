@@ -42,6 +42,13 @@ defmodule TourinIt.TourStops.TourStop do
   end
 
   @doc false
+  def guest_pick_changeset(tour_stop, attrs) do
+    tour_stop
+    |> cast(attrs, [:destination])
+    |> validate_required([:destination])
+  end
+
+  @doc false
   defp validate_destination_or_guest_picker(changeset) do
     destination = get_field(changeset, :destination)
     guest_picker_id = get_field(changeset, :guest_picker_id)

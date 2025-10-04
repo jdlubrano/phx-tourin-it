@@ -21,7 +21,9 @@ defmodule TourinItWeb.TourStopComponents do
 
       true ->
         ~H"""
-        <span class="p-2 rounded-lg bg-neutral-100 capitalize">{@tour_stop.guest_picker.user.username}'s pick!</span>
+        <span class="p-2 rounded-lg bg-neutral-100 capitalize">
+          {@tour_stop.guest_picker.user.username}'s pick!
+        </span>
         """
     end
   end

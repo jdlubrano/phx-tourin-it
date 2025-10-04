@@ -18,7 +18,8 @@ defmodule TourinItWeb.TourStopLive.Show do
 
   def mount(%{"id" => id}, _session, socket) do
     tour_stop =
-      TourStops.get_tour_stop!(id) |> Repo.preload([:tour_dates, :tour_session, guest_picker: :user])
+      TourStops.get_tour_stop!(id)
+      |> Repo.preload([:tour_dates, :tour_session, guest_picker: :user])
 
     ensure_invited!(socket.assigns.current_user, tour_stop.tour_session)
 

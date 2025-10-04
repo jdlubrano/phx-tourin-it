@@ -34,7 +34,7 @@
 >
   <.link
     :if={guest_picker?(@tour_stop, @current_user)}
-    navigate={~p"/tour_stops/#{@tour_stop.id}/survey"}
+    navigate={~p"/tour_stops/#{@tour_stop.id}/guest_pick/edit"}
   >
     <.button class="w-full mb-6">
       {if is_nil(@tour_stop.destination), do: "Submit", else: "Edit"} Your Pick

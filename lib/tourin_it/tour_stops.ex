@@ -145,6 +145,12 @@ defmodule TourinIt.TourStops do
     |> Repo.update()
   end
 
+  def update_guest_pick(%TourStop{} = tour_stop, attrs \\ %{}) do
+    tour_stop
+    |> TourStop.guest_pick_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a tour_stop.
 

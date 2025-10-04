@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/tourin_it_web/components/core_components.ex:493
+#: lib/tourin_it_web/components/core_components.ex:495
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -52,7 +52,7 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: lib/tourin_it_web/live/tour_stop_live/index.html.heex:5
+#: lib/tourin_it_web/live/tour_stop_live/index.html.heex:7
 #, elixir-autogen, elixir-format
 msgid "tour_stop.occasion"
 msgstr "Meal"
@@ -61,3 +61,13 @@ msgstr "Meal"
 #, elixir-autogen, elixir-format
 msgid "page.home.no_tours"
 msgstr "You have no active tours. Contact your organizer for help."
+
+#: lib/tourin_it_web/live/guest_pick_live/edit.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "guest_pick.destination"
+msgstr "Where should the tour meet?"
+
+#: lib/tourin_it_web/live/guest_pick_live/edit.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "guest_pick.submit"
+msgstr "Submit guest pick"
