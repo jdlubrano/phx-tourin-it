@@ -16,6 +16,13 @@ with open("mix.exs", mode="r+") as f:
   version_match = re.search(r'version: "(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)"', contents)
   version = version_match.groupdict()
   version[bump_type] = int(version[bump_type]) + 1
+
+  if bump_type == "major":
+    version["minor"] = 0
+    version["patch"] = 0
+  elif bump_type == "minor":
+    version["patch"] = 0
+
   version_string = f"{version['major']}.{version['minor']}.{version['patch']}"
   updated_contents = contents.replace(version_match.group(), f'version: "{version_string}"')
   f.seek(0, 0)
