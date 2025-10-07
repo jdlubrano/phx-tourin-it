@@ -7,6 +7,10 @@ app = 'tourin-it'
 primary_region = 'iad'
 kill_signal = 'SIGTERM'
 
+# litestream restore provides a copy of the database to the ephemeral fly machine
+console_command = '/bin/bash -c "litestream restore -if-replica-exists $DATABASE_PATH && /bin/bash"'
+# console_command = '/bin/bash -c "litestream restore -if-replica-exists $DATABASE_PATH && bin/tourin_it start_iex"'
+
 [build]
 
 [env]
