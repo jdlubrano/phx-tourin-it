@@ -108,4 +108,3 @@ USER nobody
 ENTRYPOINT ["/bin/bash", "/app/bin/litestream.sh"]
 
 CMD ["/app/bin/server"]
-# CMD ["/bin/sh"]
