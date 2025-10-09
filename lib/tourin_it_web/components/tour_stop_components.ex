@@ -8,20 +8,28 @@ defmodule TourinItWeb.TourStopComponents do
   attr :tour_stop, TourStop, required: true
 
   def destination(assigns) do
+    ~H"""
+    {@tour_stop.destination}<.guest_picker_badge current_user={@current_user} tour_stop={@tour_stop} />
+    """
+  end
+
+  attr :current_user, TourinIt.Accounts.User, required: true
+  attr :tour_stop, TourStop, required: true
+
+  defp guest_picker_badge(%{current_user: current_user, tour_stop: tour_stop} = assigns) do
     cond do
-      assigns.tour_stop.destination || is_nil(assigns.tour_stop.guest_picker) ->
+      is_nil(tour_stop.guest_picker) ->
         ~H"""
-        {@tour_stop.destination}
         """
 
-      TourStops.guest_picker?(assigns.tour_stop, assigns.current_user) ->
+      TourStops.guest_picker?(tour_stop, current_user) ->
         ~H"""
-        <span class="p-2 rounded-lg bg-yellow-200">Your pick!</span>
+        <span class="ml-1 p-1 rounded-lg bg-yellow-200">Your pick!</span>
         """
 
       true ->
         ~H"""
-        <span class="p-2 rounded-lg bg-neutral-100 capitalize">
+        <span class="ml-1 p-1 rounded-lg bg-neutral-200 capitalize">
           {@tour_stop.guest_picker.user.username}'s pick!
         </span>
         """
