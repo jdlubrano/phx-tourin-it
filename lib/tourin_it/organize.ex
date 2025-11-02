@@ -180,8 +180,9 @@ defmodule TourinIt.Organize do
         join: tg in TourGoer,
         on: tg.tour_session_id == ts.id,
         where: tg.user_id == ^user.id,
-        order_by: [asc: ts.id],
-        preload: [:tour]
+        order_by: [desc: ts.id],
+        preload: [:tour],
+        limit: 1
 
     Repo.one(query)
   end

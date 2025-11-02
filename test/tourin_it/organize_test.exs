@@ -6,7 +6,9 @@ defmodule TourinIt.OrganizeTest do
   describe "tours" do
     alias TourinIt.Organize.Tour
 
+    import TourinIt.AccountsFixtures
     import TourinIt.OrganizeFixtures
+    import TourinIt.TourGoersFixtures
 
     @invalid_attrs %{name: nil}
 
@@ -112,6 +114,28 @@ defmodule TourinIt.OrganizeTest do
       other_tour = tour_fixture()
       assert Organize.list_tour_sessions(tour) == [tour_session]
       assert Organize.list_tour_sessions(other_tour) == []
+    end
+
+    test "default_tour_session/1 returns the newest tour session the user is invited to", %{
+      tour: tour
+    } do
+      user = user_fixture()
+      default_tour_session = Organize.default_tour_session(user)
+      assert is_nil(default_tour_session)
+
+      tour_session = tour_session_fixture(tour)
+      tour_goer_fixture(user, tour_session)
+
+      default_tour_session = Organize.default_tour_session(user)
+      assert default_tour_session.id == tour_session.id
+
+      new_tour_session = tour_session_fixture(tour, %{identifier: "new session"})
+      default_tour_session = Organize.default_tour_session(user)
+      assert default_tour_session.id == tour_session.id
+
+      tour_goer_fixture(user, new_tour_session)
+      default_tour_session = Organize.default_tour_session(user)
+      assert default_tour_session.id == new_tour_session.id
     end
 
     test "get_tour_session!/1 returns the tour_session with given id", %{tour: tour} do
