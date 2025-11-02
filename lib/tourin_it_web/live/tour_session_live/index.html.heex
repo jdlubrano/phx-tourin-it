@@ -1,0 +1,11 @@
+<.header class="mb-8">{@tour.name}</.header>
+
+<.table
+  id="tour_sessions"
+  rows={@tour_sessions}
+  row_click={&JS.navigate(~p"/tours/#{@tour.slug}/#{&1.identifier}")}
+>
+  <:col :let={tour_session} label="Year">
+    {tour_session.identifier}
+  </:col>
+</.table>
