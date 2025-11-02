@@ -3,6 +3,7 @@ defmodule TourinItWeb.TourSessionLive.Index do
 
   alias TourinIt.Organize
   alias TourinIt.Organize.Tour
+  alias TourinIt.TourAccess
 
   def mount(%{"tour_slug" => slug}, _session, socket) do
     %{tour: tour, tour_sessions: tour_sessions} =
@@ -27,7 +28,7 @@ defmodule TourinItWeb.TourSessionLive.Index do
   defp load_tour_sessions(user, slug) do
     case Organize.get_tour_by_slug(slug) do
       %Tour{} = tour ->
-        %{tour: tour, tour_sessions: TourinIt.TourAccess.user_tour_sessions(user, tour)}
+        %{tour: tour, tour_sessions: TourAccess.user_tour_sessions(user, tour)}
 
       nil ->
         %{tour: nil, tour_sessions: nil}

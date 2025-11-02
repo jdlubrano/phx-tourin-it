@@ -41,6 +41,7 @@ defmodule TourinItWeb.Router do
 
     live_session :tour_goer, on_mount: {TourinItWeb.UserAuth, :ensure_authenticated} do
       live "/tours/:tour_slug", TourSessionLive.Index
+      live "/tours", TourLive.Index
     end
 
     live "/tours/:tour_slug/:tour_session_identifier", TourStopLive.Index
