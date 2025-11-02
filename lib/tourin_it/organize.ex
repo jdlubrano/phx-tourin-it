@@ -55,6 +55,11 @@ defmodule TourinIt.Organize do
   """
   def get_tour!(id), do: Repo.get!(Tour, id)
 
+  def get_tour_by_slug(slug) do
+    query = from t in Tour, where: t.slug == ^slug
+    Repo.one(query)
+  end
+
   @doc """
   Creates a tour.
 
