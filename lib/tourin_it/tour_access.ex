@@ -6,21 +6,27 @@ defmodule TourinIt.TourAccess do
   alias TourinIt.Organize.{Tour, TourSession}
   alias TourinIt.TourGoers.TourGoer
 
+  def user_tours(%User{} = user) do
+    query =
+      from t in Tour,
+        join: ts in TourSession,
+        on: ts.tour_id == t.id,
+        join: tg in TourGoer,
+        on: tg.tour_session_id == ts.id,
+        where: tg.user_id == ^user.id,
+        order_by: [asc: t.name]
+
+    Repo.all(query)
+  end
+
   def user_tour_sessions(%User{} = user, %Tour{} = tour) do
     query =
       from ts in TourSession,
         where: ts.tour_id == ^tour.id,
+        join: tg in TourGoer,
+        on: tg.tour_session_id == ts.id,
+        where: tg.user_id == ^user.id,
         order_by: [desc: ts.identifier]
-
-    query =
-      if TourinIt.Accounts.admin?(user) do
-        query
-      else
-        from ts in query,
-          join: tg in TourGoer,
-          on: tg.tour_session_id == ts.id,
-          where: tg.user_id == ^user.id
-      end
 
     Repo.all(query)
   end
