@@ -9,13 +9,15 @@ defmodule TourinIt.TourStops do
   alias TourinIt.TourDates.TourDate
   alias TourinIt.TourStops.TourStop
 
-  def upcoming(tour_session_id) do
+  defp today() do
     {:ok, now} = DateTime.now("America/New_York")
-    today = DateTime.to_date(now)
+    DateTime.to_date(now)
+  end
 
+  def upcoming(tour_session_id) do
     query =
       from tour_stop in TourStop,
-        where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date >= ^today,
+        where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date >= ^today(),
         order_by: tour_stop.end_date,
         limit: 1
 
@@ -24,11 +26,11 @@ defmodule TourinIt.TourStops do
 
   def past_and_upcoming(tour_session_id) do
     up = upcoming(tour_session_id)
+    end_date = if is_nil(up), do: today(), else: up.end_date
 
     query =
       from tour_stop in TourStop,
-        where:
-          tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date <= ^up.end_date,
+        where: tour_stop.tour_session_id == ^tour_session_id and tour_stop.end_date <= ^end_date,
         order_by: [desc: tour_stop.end_date]
 
     Repo.all(query)

@@ -30,11 +30,11 @@ defmodule TourinIt.Organize do
 
   ## Examples
 
-      iex> get_tour!(123)
+      iex> get_tour(123)
       %Tour{}
 
-      iex> get_tour!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_tour(456)
+      nil
 
   """
   def get_tour(id), do: Repo.get(Tour, id)
