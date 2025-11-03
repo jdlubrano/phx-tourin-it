@@ -6,8 +6,6 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
 
   alias TourinIt.{Repo, TourDates, TourGoers, TourStops}
 
-  on_mount {TourinItWeb.UserAuth, :mount_current_user}
-
   def mount(%{"id" => id}, _session, socket) do
     tour_stop =
       TourStops.get_tour_stop!(id)

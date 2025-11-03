@@ -5,8 +5,6 @@ defmodule TourinItWeb.GuestPickLive.Edit do
 
   alias TourinIt.{Repo, TourStops}
 
-  on_mount {TourinItWeb.UserAuth, :mount_current_user}
-
   def mount(%{"tour_stop_id" => tour_stop_id}, _session, socket) do
     tour_stop =
       TourStops.get_tour_stop!(tour_stop_id)
