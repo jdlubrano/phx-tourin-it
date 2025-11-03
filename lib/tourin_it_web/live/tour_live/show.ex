@@ -1,4 +1,4 @@
-defmodule TourinItWeb.TourSessionLive.Index do
+defmodule TourinItWeb.TourLive.Show do
   use TourinItWeb, :live_view
 
   alias TourinIt.Organize

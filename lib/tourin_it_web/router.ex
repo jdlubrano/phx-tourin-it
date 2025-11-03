@@ -43,8 +43,8 @@ defmodule TourinItWeb.Router do
       live "/tours/:tour_slug/:tour_session_identifier", TourStopLive.Index
       live "/tours/:tour_slug/:tour_session_identifier/upcoming", TourStopLive.Upcoming
 
-      live "/tours/:tour_slug", TourSessionLive.Index
       live "/tours", TourLive.Index
+      live "/tours/:tour_slug", TourLive.Show
 
       live "/tour_stops/:id", TourStopLive.Show
       live "/tour_stops/:id/survey", TourStopSurveyLive.Edit
