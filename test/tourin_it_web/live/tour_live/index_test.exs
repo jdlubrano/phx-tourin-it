@@ -1,12 +1,9 @@
 defmodule TourinItWeb.TourLive.IndexTest do
-  use TourinItWeb.ConnCase
+  use TourinItWeb.LiveViewCase
 
-  import Phoenix.LiveViewTest
   import TourinIt.AccountsFixtures
   import TourinIt.OrganizeFixtures
   import TourinIt.TourGoersFixtures
-
-  use Gettext, backend: TourinItWeb.Gettext
 
   alias TourinIt.Repo
 
