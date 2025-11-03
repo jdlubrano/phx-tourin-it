@@ -31,7 +31,7 @@ defmodule TourinItWeb.TourLive.Show do
         %{tour: tour, tour_sessions: TourAccess.user_tour_sessions(user, tour)}
 
       nil ->
-        %{tour: nil, tour_sessions: nil}
+        %{tour: nil, tour_sessions: []}
     end
   end
 end

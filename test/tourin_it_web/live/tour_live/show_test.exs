@@ -17,6 +17,10 @@ defmodule TourinItWeb.TourLive.ShowTest do
     {:error, {:redirect, %{to: "/log_in"}}} = visit(conn, tour)
   end
 
+  test "redirects if the tour cannot be found", %{conn: conn} do
+    {:error, {:redirect, %{to: "/"}}} = live(conn, ~p"/tours/does_not_exist")
+  end
+
   test "redirects if the user is not invited to any tour sessions", %{
     conn: conn,
     tour: tour
