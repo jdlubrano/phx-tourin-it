@@ -46,14 +46,10 @@ defmodule TourinItWeb.TourStopSurveyLive.Edit do
 
     TourDates.upsert_surveys(surveys)
 
-    tour_session = socket.assigns.tour_stop.tour_session
-
     socket =
       socket
       |> put_flash(:info, "Availability submitted!")
-      |> push_navigate(
-        to: ~p"/tours/#{tour_session.tour.slug}/#{tour_session.identifier}/upcoming"
-      )
+      |> push_navigate(to: ~p"/tour_stops/#{socket.assigns.tour_stop}")
 
     {:noreply, socket}
   end
