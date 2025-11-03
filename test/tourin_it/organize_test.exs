@@ -22,6 +22,12 @@ defmodule TourinIt.OrganizeTest do
       assert Organize.get_tour!(tour.id) == tour
     end
 
+    test "get_tour_by_slug/1 returns the tour with the given slug" do
+      tour = tour_fixture()
+      assert Organize.get_tour_by_slug(tour.slug) == tour
+      assert Organize.get_tour_by_slug("") == nil
+    end
+
     test "create_tour/1 with valid data creates a tour" do
       valid_attrs = %{name: "some name"}
 

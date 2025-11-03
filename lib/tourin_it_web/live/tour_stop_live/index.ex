@@ -6,8 +6,6 @@ defmodule TourinItWeb.TourStopLive.Index do
 
   alias TourinIt.{Organize, Repo, TourStops}
 
-  on_mount {TourinItWeb.UserAuth, :mount_current_user}
-
   def mount(%{"tour_slug" => slug, "tour_session_identifier" => identifier}, _session, socket) do
     tour_session = Organize.get_tour_session!(%{identifier: identifier, slug: slug})
     ensure_invited!(socket.assigns.current_user, tour_session)

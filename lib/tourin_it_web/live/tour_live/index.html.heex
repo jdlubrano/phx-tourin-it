@@ -1,0 +1,14 @@
+<.header class="mb-8">All tours</.header>
+
+<p :if={length(@tours) == 0}>{gettext("page.home.no_tours")}</p>
+
+<.table
+  :if={length(@tours) > 0}
+  id="tours"
+  rows={@tours}
+  row_click={&JS.navigate(~p"/tours/#{&1.slug}")}
+>
+  <:col :let={tour_session} label="Tour">
+    {tour_session.name}
+  </:col>
+</.table>

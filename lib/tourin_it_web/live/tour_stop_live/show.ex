@@ -14,8 +14,6 @@ defmodule TourinItWeb.TourStopLive.Show do
     unavailable: ["capitalize", "bg-red-100", "focus:ring-red-200"]
   }
 
-  on_mount {TourinItWeb.UserAuth, :mount_current_user}
-
   def mount(%{"id" => id}, _session, socket) do
     tour_stop =
       TourStops.get_tour_stop!(id)

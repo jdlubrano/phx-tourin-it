@@ -39,12 +39,17 @@ defmodule TourinItWeb.Router do
 
     get "/me", MeController, :show
 
-    live "/tours/:tour_slug/:tour_session_identifier", TourStopLive.Index
-    live "/tours/:tour_slug/:tour_session_identifier/upcoming", TourStopLive.Upcoming
+    live_session :tour_goer, on_mount: {TourinItWeb.UserAuth, :ensure_authenticated} do
+      live "/tours/:tour_slug/:tour_session_identifier", TourStopLive.Index
+      live "/tours/:tour_slug/:tour_session_identifier/upcoming", TourStopLive.Upcoming
 
-    live "/tour_stops/:id", TourStopLive.Show
-    live "/tour_stops/:id/survey", TourStopSurveyLive.Edit
-    live "/tour_stops/:tour_stop_id/guest_pick/edit", GuestPickLive.Edit
+      live "/tours", TourLive.Index
+      live "/tours/:tour_slug", TourLive.Show
+
+      live "/tour_stops/:id", TourStopLive.Show
+      live "/tour_stops/:id/survey", TourStopSurveyLive.Edit
+      live "/tour_stops/:tour_stop_id/guest_pick/edit", GuestPickLive.Edit
+    end
 
     live "/user/passkeys", User.PasskeyLive.Index
   end
