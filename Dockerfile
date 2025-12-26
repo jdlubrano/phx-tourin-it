@@ -56,14 +56,14 @@ COPY lib lib
 
 COPY assets assets
 
-# compile assets
-RUN mix assets.deploy
-
 # Compile the release
 RUN mix compile
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
+
+# compile assets
+RUN mix assets.deploy
 
 COPY rel rel
 RUN mix release
