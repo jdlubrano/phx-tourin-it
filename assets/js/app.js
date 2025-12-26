@@ -20,6 +20,7 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
+import {hooks as colocatedHooks} from "phoenix-colocated/tourin_it"
 import topbar from "../vendor/topbar"
 import { PasskeyLogInHook, PasskeyNewHook } from "./passkey_hooks"
 
@@ -28,6 +29,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   hooks: {
     PasskeyLogIn: PasskeyLogInHook,
     PasskeyNew: PasskeyNewHook,
+    ...colocatedHooks
   },
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken}
