@@ -27,10 +27,6 @@ defmodule TourinItWeb.Organize.TourSessionLive do
 
     <.live_component module={TourStopsComponent} id="tour_stops" tour_session={@tour_session} />
 
-    <div class="my-8">
-      <button type="button" class="rounded-lg bg-red-200 p-2" phx-click="crash">Crash LiveView</button>
-    </div>
-
     <hr class="mt-8 mb-16" />
 
     <section>
@@ -66,10 +62,6 @@ defmodule TourinItWeb.Organize.TourSessionLive do
       |> assign(:tour_session, tour_session)
       |> assign(:user_access_tokens, user_access_tokens)
     }
-  end
-
-  def handle_event("crash", _data, _socket) do
-    raise "Crashing.  Hit a wall"
   end
 
   def handle_event("generate_access_token", %{"user_id" => user_id}, socket) do
