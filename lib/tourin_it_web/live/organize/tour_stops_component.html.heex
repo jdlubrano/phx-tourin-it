@@ -13,7 +13,7 @@
         </div>
       </div>
       <%= for tour_stop <- @tour_session.tour_stops do %>
-        <div :if={!@editing_tour_stops[Integer.to_string(tour_stop.id)]} class="contents">
+        <div :if={!@editing_tour_stops[tour_stop.id]} class="contents">
           <div>{tour_stop.destination}</div>
           <div>
             {if is_nil(tour_stop.guest_picker),
@@ -44,7 +44,7 @@
           </div>
         </div>
         <.tour_stop_form
-          :if={@editing_tour_stops[Integer.to_string(tour_stop.id)]}
+          :if={@editing_tour_stops[tour_stop.id]}
           id={"edit_#{tour_stop.id}"}
           changeset={changeset(tour_stop)}
           target={@myself}

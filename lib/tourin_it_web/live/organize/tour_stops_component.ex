@@ -32,7 +32,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("cancel", %{"id" => id}, socket) do
-    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, false)
+    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, String.to_integer(id), false)
 
     {:noreply, assign(socket, :editing_tour_stops, editing_tour_stops)}
   end
@@ -49,7 +49,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("edit", %{"id" => id}, socket) do
-    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, true)
+    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, String.to_integer(id), true)
 
     {:noreply, assign(socket, :editing_tour_stops, editing_tour_stops)}
   end
@@ -80,7 +80,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
       TourStops.set_tour_dates(tour_stop)
     end)
 
-    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, false)
+    editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, String.to_integer(id), false)
 
     socket =
       reload_tour_session(socket)
