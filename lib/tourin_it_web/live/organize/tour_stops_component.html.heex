@@ -65,7 +65,7 @@
     Add tour stop
   </button>
 
-  <div class={"grid gap-4 #{!@new_tour_stop? && "hidden"}"}>
+  <div id="foo" class={if @new_tour_stop?, do: "grid gap-4", else: "hidden"}>
     <.tour_stop_form
       id="new_tour_stop"
       changeset={@new_tour_stop_changeset}

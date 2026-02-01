@@ -64,6 +64,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
       case TourStops.create_tour_stop_with_dates(create_params) do
         {:ok, _tour_stop} ->
           socket
+          |> assign(:new_tour_stop?, false)
           |> assign(:new_tour_stop_changeset, changeset(%TourStop{}))
           |> reload_tour_session()
 
