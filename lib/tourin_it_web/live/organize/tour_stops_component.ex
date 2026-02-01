@@ -90,17 +90,17 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event(
-    "recover_new_tour_stop",
-    %{
-      "new_tour_stop" => new_tour_stop,
-      "tour_stop" => tour_stop_params
-    },
-    socket
-  ) do
+        "recover_new_tour_stop",
+        %{"new_tour_stop" => new_tour_stop, "tour_stop" => tour_stop_params},
+        socket
+      ) do
     socket =
       socket
       |> assign(:new_tour_stop?, new_tour_stop == "true")
-      |> assign(:new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}, tour_stop_params))
+      |> assign(
+        :new_tour_stop_changeset,
+        TourStops.change_tour_stop(%TourStop{}, tour_stop_params)
+      )
 
     {:noreply, socket}
   end
