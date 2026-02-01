@@ -2,7 +2,8 @@
   :let={f}
   id={@id}
   for={@changeset}
-  phx-change="validate"
+  phx-auto-recover="recover_form"
+  phx-change
   phx-submit="save"
   phx-target={@target}
   class="contents"

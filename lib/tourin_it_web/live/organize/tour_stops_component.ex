@@ -90,10 +90,10 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event(
-    "validate",
+    "recover_form",
     %{
       "new_tour_stop" => new_tour_stop,
-      "tour_stop" => %{"id" => ""} = tour_stop_params
+      "tour_stop" => tour_stop_params
     },
     socket
   ) do
