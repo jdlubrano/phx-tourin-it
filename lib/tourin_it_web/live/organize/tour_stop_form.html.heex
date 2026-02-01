@@ -1,4 +1,12 @@
-<.form :let={f} for={@changeset} phx-submit="save" phx-target={@target} class="contents">
+<.form
+  :let={f}
+  id={@id}
+  for={@changeset}
+  phx-change="validate"
+  phx-submit="save"
+  phx-target={@target}
+  class="contents"
+>
   <.input field={f[:destination]} label="Destination" />
   <.input
     field={f[:guest_picker_id]}
@@ -23,4 +31,5 @@
       Cancel
     </button>
   </div>
+  {render_slot(@hidden_fields)}
 </.form>

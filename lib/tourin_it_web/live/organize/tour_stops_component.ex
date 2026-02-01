@@ -7,7 +7,8 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   def mount(socket) do
     socket =
       socket
-      |> assign(:new_tour_stop_changeset, nil)
+      |> assign(:new_tour_stop?, false)
+      |> assign(:new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
       |> assign(:editing_tour_stops, %{})
 
     {:ok, socket}
@@ -22,7 +23,10 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("add_tour_stop", _params, socket) do
-    socket = assign(socket, :new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
+    socket =
+      socket
+      |> assign(:new_tour_stop?, true)
+      |> assign(:new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
 
     {:noreply, socket}
   end
@@ -34,7 +38,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("cancel", _params, socket) do
-    {:noreply, assign(socket, :new_tour_stop_changeset, nil)}
+    {:noreply, assign(socket, :new_tour_stop?, false)}
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
@@ -85,6 +89,22 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
     {:noreply, socket}
   end
 
+  def handle_event(
+    "validate",
+    %{
+      "new_tour_stop" => new_tour_stop,
+      "tour_stop" => %{"id" => ""} = tour_stop_params
+    },
+    socket
+  ) do
+    socket =
+      socket
+      |> assign(:new_tour_stop?, new_tour_stop == "true")
+      |> assign(:new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}, tour_stop_params))
+
+    {:noreply, socket}
+  end
+
   def occasion_options() do
     Ecto.Enum.values(TourStop, :occasion)
   end
@@ -109,9 +129,12 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
 
   embed_templates "*"
 
+  attr :id, :any, required: true
   attr :changeset, :any, required: true
   attr :target, :any, required: true
   attr :tour_session, Organize.TourSession, required: true
+
+  slot :hidden_fields, required: false
 
   def tour_stop_form(assigns)
 end
