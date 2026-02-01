@@ -90,7 +90,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event(
-    "recover_form",
+    "recover_new_tour_stop",
     %{
       "new_tour_stop" => new_tour_stop,
       "tour_stop" => tour_stop_params
@@ -133,6 +133,7 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   attr :changeset, :any, required: true
   attr :target, :any, required: true
   attr :tour_session, Organize.TourSession, required: true
+  attr :rest, :global, include: ~w(phx-auto-recover phx-change phx-submit)
 
   slot :hidden_fields, required: false
 

@@ -49,6 +49,7 @@
           changeset={changeset(tour_stop)}
           target={@myself}
           tour_session={@tour_session}
+          phx-submit="save"
         />
       <% end %>
     </div>
@@ -70,6 +71,9 @@
       changeset={@new_tour_stop_changeset}
       target={@myself}
       tour_session={@tour_session}
+      phx-auto-recover="recover_new_tour_stop"
+      phx-change
+      phx-submit="save"
     >
       <:hidden_fields>
         <input type="hidden" name="new_tour_stop" value={@new_tour_stop? && "true"} />

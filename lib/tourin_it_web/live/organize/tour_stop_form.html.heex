@@ -2,11 +2,9 @@
   :let={f}
   id={@id}
   for={@changeset}
-  phx-auto-recover="recover_form"
-  phx-change
-  phx-submit="save"
-  phx-target={@target}
   class="contents"
+  phx-target={@target}
+  {@rest}
 >
   <.input field={f[:destination]} label="Destination" />
   <.input
