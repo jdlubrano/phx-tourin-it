@@ -14,6 +14,31 @@ defmodule TourinIt.TourStops do
     DateTime.to_date(now)
   end
 
+  def next_dates(tour_session_id, date \\ today()) do
+    max_end_date_query =
+      from tour_stop in TourStop,
+        where: tour_stop.tour_session_id == ^tour_session_id,
+        select: max(tour_stop.end_date)
+
+    max_end_date = Repo.one(max_end_date_query)
+
+    start_on =
+      [max_end_date, date]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.max()
+
+    next_available_monday =
+      if Date.day_of_week(start_on, :monday) == 1 do
+        start_on
+      else
+        start_on
+        |> Date.beginning_of_week(:monday)
+        |> Date.shift(day: 7)
+      end
+
+    %{start_date: next_available_monday, end_date: Date.shift(next_available_monday, day: 4)}
+  end
+
   def upcoming(tour_session_id) do
     query =
       from tour_stop in TourStop,

@@ -17,6 +17,50 @@ defmodule TourinIt.TourStopsTest do
 
     @invalid_attrs %{destination: nil, start_date: nil, end_date: nil}
 
+    test "next_dates/2 returns the next Monday - Friday for the given date" do
+      sunday = ~D"2026-02-01"
+      monday = ~D"2026-02-02"
+      tuesday = ~D"2026-02-03"
+      friday = ~D"2026-02-06"
+
+      %{start_date: start_date, end_date: end_date} = TourStops.next_dates(0, sunday)
+
+      assert start_date == monday
+      assert end_date == friday
+
+      %{start_date: start_date, end_date: end_date} = TourStops.next_dates(0, monday)
+
+      assert start_date == monday
+      assert end_date == friday
+
+      %{start_date: start_date, end_date: end_date} = TourStops.next_dates(0, tuesday)
+
+      assert start_date == Date.shift(monday, day: 7)
+      assert end_date == Date.shift(friday, day: 7)
+    end
+
+    test "next_dates/2 returns the next Monday - Friday after the last scheduled tour stop" do
+      sunday = ~D"2026-02-01"
+      monday = ~D"2026-02-02"
+      friday = ~D"2026-02-06"
+
+      tour_session = tour_session_fixture()
+
+      %{start_date: start_date, end_date: end_date} =
+        TourStops.next_dates(tour_session.id, sunday)
+
+      assert start_date == monday
+      assert end_date == friday
+
+      tour_stop_fixture(tour_session, %{start_date: monday, end_date: friday})
+
+      %{start_date: start_date, end_date: end_date} =
+        TourStops.next_dates(tour_session.id, sunday)
+
+      assert start_date == Date.shift(monday, day: 7)
+      assert end_date == Date.shift(friday, day: 7)
+    end
+
     test "upcoming/1 returns upcoming tour stops" do
       tour_session = tour_session_fixture()
       assert TourStops.upcoming(tour_session.id) == nil

@@ -22,7 +22,18 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("add_tour_stop", _params, socket) do
-    socket = assign(socket, :new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
+    dates = TourStops.next_dates(socket.assigns.tour_session.id)
+
+    socket =
+      socket
+      |> assign(:new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}, dates))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("recover_new_tour_stop", %{"tour_stop" => tour_stop_params}, socket) do
+    changeset = TourStops.change_tour_stop(%TourStop{}, tour_stop_params)
+    socket = assign(socket, :new_tour_stop_changeset, changeset)
 
     {:noreply, socket}
   end
@@ -109,9 +120,11 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
 
   embed_templates "*"
 
+  attr :id, :string, required: true
   attr :changeset, :any, required: true
   attr :target, :any, required: true
   attr :tour_session, Organize.TourSession, required: true
+  attr :rest, :global, include: ~w(phx-auto-recover phx-change phx-submit)
 
   def tour_stop_form(assigns)
 end
