@@ -1,26 +1,35 @@
-<.form :let={f} for={@changeset} phx-submit="save" phx-target={@target} class="contents">
-  <.input field={f[:destination]} label="Destination" />
-  <.input
-    field={f[:guest_picker_id]}
-    label="Guest picker"
-    type="select"
-    options={guest_picker_options(@tour_session)}
-    prompt=""
-  />
-  <.input field={f[:occasion]} label="Occasion" type="select" options={occasion_options()} />
-  <.input field={f[:start_date]} label="Start date" type="date" />
-  <.input field={f[:end_date]} label="End date" type="date" />
-  <div class="flex items-end">
-    <.input field={f[:id]} type="hidden" />
-    <.button type="submit">Save</.button>
-    <button
-      class="ml-2 rounded-lg leading-6 text-sm font-semibold py-2 px-3"
-      type="button"
-      phx-click="cancel"
-      phx-target={@target}
-      phx-value-id={@changeset.data.id}
-    >
-      Cancel
-    </button>
-  </div>
+<.form
+  :let={f}
+  id={@id}
+  for={@changeset}
+  phx-target={@target}
+  class="contents"
+  {@rest}
+>
+  <%= if !is_nil(@changeset) do %>
+    <.input field={f[:destination]} label="Destination" />
+    <.input
+      field={f[:guest_picker_id]}
+      label="Guest picker"
+      type="select"
+      options={guest_picker_options(@tour_session)}
+      prompt=""
+    />
+    <.input field={f[:occasion]} label="Occasion" type="select" options={occasion_options()} />
+    <.input field={f[:start_date]} label="Start date" type="date" />
+    <.input field={f[:end_date]} label="End date" type="date" />
+    <div class="flex items-end">
+      <.input field={f[:id]} type="hidden" />
+      <.button type="submit">Save</.button>
+      <button
+        class="ml-2 rounded-lg leading-6 text-sm font-semibold py-2 px-3"
+        type="button"
+        phx-click="cancel"
+        phx-target={@target}
+        phx-value-id={@changeset.data.id}
+      >
+        Cancel
+      </button>
+    </div>
+  <% end %>
 </.form>
