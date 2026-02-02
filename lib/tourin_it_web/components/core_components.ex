@@ -702,4 +702,10 @@ defmodule TourinItWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  def crash_button(assigns) do
+    ~H"""
+    <button type="button" class="bg-red-200 rounded-lg p-2" phx-click="crash">Crash</button>
+    """
+  end
 end
