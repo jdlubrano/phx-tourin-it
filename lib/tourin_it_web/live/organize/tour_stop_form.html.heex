@@ -6,7 +6,7 @@
   class="contents"
   {@rest}
 >
-  <%= if !is_nil(@changeset) do %>
+  <%= if @changeset do %>
     <.input field={f[:destination]} label="Destination" />
     <.input
       field={f[:guest_picker_id]}
