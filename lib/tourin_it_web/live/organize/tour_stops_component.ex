@@ -31,6 +31,13 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
     {:noreply, socket}
   end
 
+  def handle_event("recover_new_tour_stop", %{"tour_stop" => tour_stop_params}, socket) do
+    changeset = TourStops.change_tour_stop(%TourStop{}, tour_stop_params)
+    socket = assign(socket, :new_tour_stop_changeset, changeset)
+
+    {:noreply, socket}
+  end
+
   def handle_event("cancel", %{"id" => id}, socket) do
     editing_tour_stops = Map.put(socket.assigns.editing_tour_stops, id, false)
 
@@ -113,9 +120,11 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
 
   embed_templates "*"
 
+  attr :id, :string, required: true
   attr :changeset, :any, required: true
   attr :target, :any, required: true
   attr :tour_session, Organize.TourSession, required: true
+  attr :rest, :global, include: ~w(phx-auto-recover phx-change phx-submit)
 
   def tour_stop_form(assigns)
 end
