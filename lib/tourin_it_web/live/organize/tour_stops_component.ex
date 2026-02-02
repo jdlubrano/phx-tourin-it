@@ -22,7 +22,11 @@ defmodule TourinItWeb.Organize.TourStopsComponent do
   end
 
   def handle_event("add_tour_stop", _params, socket) do
-    socket = assign(socket, :new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}))
+    dates = TourStops.next_dates(socket.assigns.tour_session.id)
+
+    socket =
+      socket
+      |> assign(:new_tour_stop_changeset, TourStops.change_tour_stop(%TourStop{}, dates))
 
     {:noreply, socket}
   end
