@@ -25,9 +25,9 @@ RUN apt-get update -y && apt-get install -y build-essential wget git \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Install litestream
-ARG LITESTREAM_VERSION=0.3.13
-RUN wget https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-v${LITESTREAM_VERSION}-linux-amd64.deb \
-    && dpkg -i litestream-v${LITESTREAM_VERSION}-linux-amd64.deb
+ARG LITESTREAM_VERSION=0.5.7
+RUN wget https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-${LITESTREAM_VERSION}-linux-x86_64.deb \
+    && dpkg -i litestream-${LITESTREAM_VERSION}-linux-x86_64.deb
 
 # prepare build dir
 WORKDIR /app
