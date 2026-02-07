@@ -8,13 +8,13 @@ primary_region = 'iad'
 kill_signal = 'SIGTERM'
 
 # litestream restore provides a copy of the database to the ephemeral fly machine
-console_command = '/bin/bash -c "litestream restore -if-replica-exists $DATABASE_PATH && /bin/bash"'
+# console_command = '/bin/bash -c "litestream restore -if-replica-exists $DATABASE_PATH && /bin/bash"'
 # console_command = '/bin/bash -c "litestream restore -if-replica-exists $DATABASE_PATH && bin/tourin_it start_iex"'
 
 [build]
 
 [env]
-  DATABASE_PATH = '/mnt/name/name.db'
+  DATABASE_PATH = '/mnt/name/tourin_it_prod.db'
   PHX_HOST = 'tourin-it.fly.dev'
   PORT = '8080'
 
