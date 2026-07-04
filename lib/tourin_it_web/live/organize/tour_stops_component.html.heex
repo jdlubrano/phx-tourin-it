@@ -35,6 +35,7 @@
             </button>
             <button
               type="button"
+              data-confirm={"Are you sure you wish to delete #{tour_stop.destination}?"}
               phx-click="delete"
               phx-value-id={tour_stop.id}
               phx-target={@myself}
