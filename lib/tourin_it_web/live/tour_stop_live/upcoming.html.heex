@@ -3,3 +3,11 @@
 <.header class="mb-8">{@tour.name} {@tour_session.identifier}</.header>
 
 <p>Your organizer is still deciding on the next tour stop.</p>
+
+<.link
+  :if={@current_user.admin}
+  class="inline-block mt-4 underline"
+  navigate={~p"/organize/tours/#{@tour.id}/tour_sessions/#{@tour_session.id}"}
+>
+  Add tour stop
+</.link>
