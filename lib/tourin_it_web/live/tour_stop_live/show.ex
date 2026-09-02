@@ -23,9 +23,7 @@ defmodule TourinItWeb.TourStopLive.Show do
 
     tour_session = Repo.preload(tour_stop.tour_session, [:tour, tour_goers: :user])
     tour_goers = Enum.sort_by(tour_session.tour_goers, & &1.user.username, :asc)
-
-    surveys =
-      TourDates.map_surveys_by_tour_date_and_tour_goer((tour_stop && tour_stop.tour_dates) || [])
+    surveys = TourDates.map_surveys_by_tour_date_and_tour_goer(tour_stop.tour_dates)
 
     socket =
       socket

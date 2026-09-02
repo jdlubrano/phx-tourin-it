@@ -5,7 +5,7 @@ defmodule TourinIt.MixProject do
     [
       app: :tourin_it,
       version: "0.5.12",
-      elixir: "~> 1.19",
+      elixir: "~> 1.20",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
