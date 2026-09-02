@@ -4,7 +4,7 @@ defmodule TourinIt.MixProject do
   def project do
     [
       app: :tourin_it,
-      version: "0.5.12",
+      version: "0.5.13",
       elixir: "~> 1.20",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
