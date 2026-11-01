@@ -6,6 +6,14 @@
 
 <.tour_stop_details current_user={@current_user} tour_stop={@tour_stop} />
 
+<.link
+  :if={@current_user.admin}
+  class="inline-block mb-8 underline"
+  navigate={~p"/organize/tours/#{@tour_session.tour_id}/tour_sessions/#{@tour_session.id}"}
+>
+  Edit tour stop
+</.link>
+
 <div class="grid grid-cols-6 gap-y-8 text-sm font-semibold text-zinc-700">
   <div class="contents text-center">
     <div></div>
